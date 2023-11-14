@@ -1,0 +1,13 @@
+package booklet.menuhere;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class MenuhereApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
