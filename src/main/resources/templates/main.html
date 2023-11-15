@@ -7,31 +7,12 @@
         div.mainImage {
             text-align: center;
         }
-
         img#backImage {
             max-width: 100%;
-            height: auto;
+            height: 10%;
             filter: brightness(80%);
+            background-color: white;
         }
-
-        img#kakao {
-            position: absolute;
-            top: 73.2%;
-            left: 51%;
-            width: 5.5%;
-            height: auto;
-            filter: brightness(100%);
-        }
-
-        img#google {
-            position: absolute;
-            top: 73%;
-            left: 46%;
-            width: 3%;
-            height: auto;
-            filter: brightness(100%);
-        }
-
         .btn-lg {
             position: absolute;
             top: 50%;
@@ -40,24 +21,42 @@
             width: 20%;
             max-height: 50px;
             padding: 10px;
+            background-color: rgb(178, 147, 113);
+            border-color: rgb(190, 150, 85);
         }
-
-        @media screen and (min-width: 1024px) {
+        .btn-lg:hover {
+            background: rgb(178, 147, 113);
+        }
+        #Sign_in {
+            position: absolute;
+            top: 21%;
+            left: 65%;
+            transform: translate(-50%, -450%);
+            color: white;
+            border-color: gray;
+        }
+        #Sign_up {
+            position: absolute;
+            top: 21%;
+            left: 70%;
+            transform: translate(-50%, -450%);
+            color: white;
+            border-color: gray;
+        }
+        @media screen and (min-width: 1024px){
             img {
                 max-width: 100%;
                 height: auto;
                 filter: brightness(80%);
             }
         }
-
         /* tablet 규격 */
-        @media screen and (max-width: 1023px) {
+        @media screen and (max-width: 1023px){
             img {
                 max-width: 100%;
                 height: auto;
                 filter: brightness(80%);
             }
-
             .btn-lg {
                 position: absolute;
                 top: 50%;
@@ -67,15 +66,13 @@
                 padding: 10px;
             }
         }
-
         /* mobile 규격 */
-        @media screen and (max-width: 540px) {
+        @media screen and (max-width: 540px){
             img {
                 max-width: 100%;
-                height: auto;
+                height: 100%;
                 filter: brightness(80%);
             }
-
             .btn-lg {
                 position: absolute;
                 top: 50%;
@@ -89,35 +86,42 @@
                 padding: 10px;
                 line-height: 0.5;
             }
-
-            img#kakao {
+            #Sign_in {
                 position: absolute;
-                top: 38.5%;
-                left: 51.5%;
-                width: 9.5%;
-                height: auto;
-                filter: brightness(100%);
+                top: 12.5%;
+                left: 65%;
+                color: white;
+                border-color: gray;
+                min-width: 13%;
+                max-height: 23px;
+                font-size: 11px;
+                line-height: 0.5;
+                border-right: 5px;
+                border-left: 5px;
             }
-
-            img#google {
+            #Sign_up {
                 position: absolute;
-                top: 38.5%;
-                left: 44%;
-                width: 5%;
-                height: auto;
-                filter: brightness(100%);
+                top: 12.5%;
+                left: 83%;
+                color: white;
+                border-color: gray;
+                max-height: 23px;
+                font-size: 11px;
+                line-height: 0.5;
+                border-right: 5px;
+                border-left: 5px;
             }
         }
     </style>
 </head>
 <body>
 <div class="mainImage">
-    <img alt="식당 이미지" id="backImage" src="/image/background-main.png">
-    <img alt="kakao_login" id="kakao" src="/image/kakao_login.png">
-    <img alt="google_login" id="google" src="/image/google_login.png">
+    <img src="background-main.jpg" alt="식당 이미지" id="backImage">
 </div>
 <div class="find-btn">
-    <button class="btn btn-primary btn-lg" type="button">Menu</button>
+    <button type="button" class="btn btn-primary btn-lg">Menu</button>
+    <button type="button" class="btn btn-outline-dark" id="Sign_in">Sign in</button>
+    <button type="button" class="btn btn-outline-dark" id="Sign_up">Sign up</button>
 </div>
 </body>
 </html>
