@@ -1,46 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta name="viewport" content="width=device-width,initial-scale=1" charset="UTF-8">
-        <link rel="stylesheet" href="css/bootstrap.css">
-        <link rel="stylesheet" href="css/menu.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
-        <style>
-            /* mobile 규격 */
-            @media screen and (max-width: 540px){
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1" charset="UTF-8">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* mobile 규격 */
+        @media screen and (max-width: 540px){
+            #signature, #coffee, #beverage, #tea, #dessert {
+                width: 150px;
+                height: 60px;
+            }
+            .table-container {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            .table-thead {
+                width: auto;
+            }
+            .table-thead {
 
             }
-        </style>
-    </head>
-    <body>
-        <div class="main-container">
-            <nav class="navbar bg-body-tertiary fixed-top">
-                <div class="container-fluid">
-                <a class="navbar-brand" href="main.html">
-                    <h2><i class="bi bi-house"></i></h2>
-                </a>
-                <div class="center-text">
-                    Menuhere
-                </div>
-                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                </div>
-            </nav>
-            <div class="category">
-                <img src="/image/signature.jpg" alt="Signature" id="signature">
-                <img src="/image/coffee.jpg" alt="Coffee" id="coffee">
-                <img src="/image/beverage.jpg" alt="Beverage" id="beverage">
-                <img src="/image/tea.jpg" alt="Tea" id="tea">
-                <img src="/image/dessert.jpg" alt="Dessert" id="dessert">
-                <div class="categoty-text">
-                    <h4 id="sig">SIGNATURE</h4>
-                    <h4 id="cof">COFFEE</h4>
-                    <h4 id="t">TEA</h4>
-                    <h4 id="bev">BEVERAGE</h4>
-                    <h4 id="des">DESSERT</h4>
-                </div>
-            </div>    
+        }
+    </style>
+</head>
+<body>
+<div class="container" >
+    <div class="container text-center">
+        <div class="row align-items-center">
+            <div class="col">
+                <h2><br>Menuhere<br></h2>
+            </div>
         </div>
-    </body>
+        <div class="table-container">
+            <table class="table table-borderless" >
+                <thead class="table-thead">
+                <tr>
+                    <th><img src="signature.jpg" class="rounded float-start img-fluid" alt="SIGNATURE" id="signature"></th>
+                    <th><img src="coffee.jpg" class="rounded float-none img-fluid" alt="COFFEE" id="coffee"></th>
+                    <th><img src="beverage.jpg" class="rounded float-none img-fluid" alt="BEVERAGE" id="beverage"></th>
+                    <th><img src="tea.jpg" class="rounded float-none img-fluid" alt="TEA" id="tea"></th>
+                    <th><img src="dessert.jpg" class="rounded float-end img-fluid" alt="DESSERT" id="dessert"></th>
+                </tr>
+                <tr>
+                    <th>SIGNATURE</th>
+                    <th>COFFEE</th>
+                    <th>BEVERAGE</th>
+                    <th>TEA</th>
+                    <th>DESSERT</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+        <table class="table table-borderless">
+            <tbody>
+            <tr th:each="menu : ${menus}" data-category="SIGNATURE">
+                <td colspan="5" class="shadow p-3 mb-5 bg-body-tertiary rounded">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <!-- <img th:src="${menu.imageUrl}" alt="Menu Image" class="img-fluid"> -->
+                            <img src="tea.jpg" class="img-fluid">
+                        </div>
+                        <div class="col-md-4">
+                            <!-- <h4 th:text="${menu.name}"></h4> -->
+                            <!-- <p th:text="${menu.description}"></p> -->
+                            <h4>메뉴 이름</h4>
+                            <p>메뉴 설명</p>
+                        </div>
+                        <div class="col-md-4">
+                            <!-- <p th:text="'$' + ${menu.price}"></p> -->
+                            <!-- <button th:text="장바구니에 담기"></button> -->
+                            <p>price 25,000</p>
+                            <button></button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
 </html>

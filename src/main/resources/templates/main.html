@@ -1,60 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta name="viewport" content="width=device-width,initial-scale=1" charset="UTF-8">
-    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
     <style>
-        div.mainImage {
-            text-align: center;
-        }
-        img#backImage {
-            max-width: 100%;
-            height: 10%;
-            filter: brightness(80%);
-            background-color: white;
-        }
-        .btn-lg {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, 300%);
-            width: 20%;
-            max-height: 50px;
-            padding: 10px;
-            background-color: rgb(178, 147, 113);
-            border-color: rgb(190, 150, 85);
-        }
-        .btn-lg:hover {
-            background: rgb(178, 147, 113);
-        }
-        #Sign_in {
-            position: absolute;
-            top: 21%;
-            left: 65%;
-            transform: translate(-50%, -450%);
-            color: white;
-            border-color: gray;
-        }
-        #Sign_up {
-            position: absolute;
-            top: 21%;
-            left: 70%;
-            transform: translate(-50%, -450%);
-            color: white;
-            border-color: gray;
-        }
         /* mobile 규격 */
-        @media screen and (max-width: 767px){
-            img {
-                max-width: 100%;
-                height: auto;
-                filter: brightness(80%);
-            }
-            .btn-lg {
-                position: absolute;
-
-            }
-        }
         @media screen and (max-width: 540px){
             img {
                 max-width: 100%;
@@ -103,13 +54,13 @@
     </style>
 </head>
 <body>
-<div class="mainImage">
-    <img src="background-main.jpg" alt="식당 이미지" id="backImage">
+<div class="text-center">
+    <img src="background-main.jpg" alt="식당 이미지" id="backImage" class="rounded img-fluid">
 </div>
 <div class="find-btn">
     <button type="button" class="btn btn-primary btn-lg">Menu</button>
-    <button type="button" class="btn btn-outline-dark" id="Sign_in">Sign in</button>
-    <button type="button" class="btn btn-outline-dark" id="Sign_up">Sign up</button>
+    <button type="button" class="btn btn-outline-dark" id="Sign_up">Sign in</button>
+    <button type="button" class="btn btn-outline-dark" id="Sign_in">Sign up</button>
 </div>
 </body>
 </html>
