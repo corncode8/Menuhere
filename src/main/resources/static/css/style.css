@@ -17,26 +17,28 @@ body {
     height: 30%;
     max-width: 100%; 
 }
-
+th {
+    font-size: 14px;
+}
 #signature {
-   width: 140px;
-   height: 130px;
+   width: 130px;
+   height: 120px;
 }
 #coffee {
     width: 150px;
-    height: 130px;
+    height: 120px;
 }
 #beverage {
     width: 140px;
-    height: 130px;
+    height: 120px;
 }
 #tea {
     width: 150px;
-    height: 130px;
+    height: 120px;
 }
 #dessert {
     width: 150px;
-    height: 130px;
+    height: 120px;
 }
 img#backImage {
     max-width: 100%;
@@ -45,13 +47,6 @@ img#backImage {
     background-color: white;
 }
 .btn-lg {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, 300%);
-    width: 20%;
-    max-height: 50px;
-    padding: 10px;
     background-color: rgb(178, 147, 113);
     border-color: rgb(190, 150, 85);
 }
