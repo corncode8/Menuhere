@@ -5,10 +5,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
@@ -16,11 +13,15 @@ import java.sql.Timestamp;
 @Getter @Setter
 public class MenuOption {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "menuoption_id")
     private Long id;
 
-    private String content;
-    @NotNull
+    private String option;
     private int price;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "menu_id")
+    private Menu menu;
 
     @CreationTimestamp
     private Timestamp createdDate;

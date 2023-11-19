@@ -1,30 +1,46 @@
 package booklet.menuhere.domain.order;
 
-import booklet.menuhere.domain.Status;
+import booklet.menuhere.domain.OrderMenu;
+import booklet.menuhere.domain.User.User;
+import booklet.menuhere.domain.orderStatus;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Getter
+@Getter @Setter
+@Table(name = "orders")
 public class Order {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_id")
     private Long id;
 
     private LocalDateTime orderDate;
-    @Embedded
-    private Status orderStatus;
-    @NotNull
+
+    @Enumerated(EnumType.STRING)
+    private orderStatus orderStatus;
+
     private String requests;
-    @NotNull
-    private int totalPrice;
+
+    private int orderPrice;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderMenu> orderMenus = new ArrayList<>();
+
+    // 주문 유형 ( 예약, 배달, 매장 내 식사 )
+    private String orderType;
+
+
     @CreationTimestamp
     private Timestamp createdDate;
-    @UpdateTimestamp
-    private Timestamp modifiedDate;
 }
