@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .container {
+            max-width: 560px;
+        }
+
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="py-5 text-center">
+        <h2>회원 가입</h2>
+    </div>
+    <h4 class="mb-3">회원 정보 입력</h4>
+    <form id="signupForm" th:action th:object="${user}" enctype="application/json">
+        <div th:if="${#fields.hasGlobalErrors()}">
+            <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메시지</p>
+        </div>
+        <div>
+            <label for="email">ID</label>
+            <input class="form-control" id="email" th:errorclass="field-error" th:field="*{email}" type="text">
+            <div class="field-error" th:errors="*{email}"/>
+        </div>
+        <div>
+            <label for="password">비밀번호</label>
+            <input class="form-control" id="password" th:errorclass="field-error" th:field="*{password}" type="password">
+            <div class="field-error" th:errors="*{password}"/>
+        </div>
+        <div>
+            <label for="username">이름</label>
+            <input class="form-control" id="username" th:errorclass="field-error" th:field="*{username}" type="text">
+            <div class="field-error" th:errors="*{username}"/>
+        </div>
+        <div>
+            <label for="phone">휴대폰 번호</label>
+            <input class="form-control" id="phone" th:errorclass="field-error" th:field="*{phone}" type="text">
+            <div class="field-error" th:errors="*{phone}"/>
+        </div>
+        <div class="col-sm-10">
+            <label for="zipp_btn" class="form-label">주소 </label><br/>
+            <input type="text" class="form-control mb-2" id="zipp_code_id" name="address.zipcode" maxlength="10" placeholder="우편번호" style="width: 50%; display: inline;">
+            <input type="button" id="zipp_btn" class="btn btn-primary" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
+            <input type="text" class="form-control mb-2" name="address.defaultAddress" id="UserAdd1" maxlength="40" placeholder="기본 주소" required>
+            <div class="invalid-feedback">주소를 입력해주시기 바랍니다!</div>
+            <input type="text" class="form-control" name="address.detailAddress" id="UserAdd2" maxlength="40" placeholder="상세 주소">
+        </div>
+        <hr class="my-4">
+        <div class="row">
+            <div class="col">
+                <button class="w-100 btn btn-primary btn-lg" type="button" onclick="submitForm()">회원 가입</button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-secondary btn-lg" onclick="location.href='items.html'" th:onclick="|location.href='@{/}'|" type="button">취소</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    function execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                var addr = data.userSelectedType === 'R' ? data.roadAddress : data.jibunAddress;
+                if (data.userSelectedType === 'R' && data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                    addr += ' ' + data.bname;
+                }
+                document.getElementById('zipp_code_id').value = data.zonecode;
+                document.getElementById('UserAdd1').value = addr;
+                document.getElementById('UserAdd2').focus();
+            }
+        }).open();
+    }
+
+    function submitForm() {
+        var formData = {
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value,
+            username: document.getElementById('username').value,
+            phone: document.getElementById('phone').value,
+            address: {
+                zipcode: document.getElementById('zipp_code_id').value,
+                defaultAddress: document.getElementById('UserAdd1').value,
+                detailAddress: document.getElementById('UserAdd2').value
+            }
+        };
+
+        fetch('/sign-up', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                window.location.href = '/menu.html';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // TODO 오류 발생 시의 처리를 여기에 추가
+
+            });
+    }
+</script>
+</body>
+</html>

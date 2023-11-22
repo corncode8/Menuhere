@@ -7,14 +7,16 @@ import javax.persistence.Embeddable;
 @Embeddable
 @Getter
 public class Address {
-    private String fullAddress;
     private String zipcode;
+    private String defaultAddress;
+    private String detailAddress;
 
     protected Address() {
     }
 
-    public Address(String fullAddress, String zipcode) {
-        this.fullAddress = fullAddress;
+    public Address(String zipcode, String defaultAddress, String detailAddress) {
         this.zipcode = zipcode;
+        this.defaultAddress = defaultAddress;
+        this.detailAddress = detailAddress;
     }
 }

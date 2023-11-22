@@ -5,10 +5,12 @@ import booklet.menuhere.domain.User.User;
 import booklet.menuhere.domain.User.UserSignUpDto;
 import booklet.menuhere.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -28,6 +30,7 @@ public class UserService {
         User user = User.builder()
                 .email(userSignUpDto.getEmail())
                 .password(userSignUpDto.getPassword())
+                .username(userSignUpDto.getUsername())
                 .phone(userSignUpDto.getPhone())
                 .address(userSignUpDto.getAddress())
                 .role(Role.USER)

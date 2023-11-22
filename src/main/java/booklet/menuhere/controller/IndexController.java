@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Slf4j
 @Controller
 public class IndexController {
-//    @GetMapping("/")
-//    public String main() {
-//        return "main";
-//    }
+    @GetMapping("/")
+    public String main() {
+        return "main";
+    }
+
 }

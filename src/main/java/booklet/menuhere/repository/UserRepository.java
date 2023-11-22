@@ -4,12 +4,14 @@ import booklet.menuhere.domain.User.SocialType;
 import booklet.menuhere.domain.User.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByusername(String username);
     Optional<User> findByEmail(String email);
+
     Optional<User> findByRefreshToken(String refreshToken);
     /**
      * 소셜 타입과 소셜의 식별값으로 회원 찾는 메소드
