@@ -2,6 +2,7 @@ package booklet.menuhere.config.auth;
 
 import booklet.menuhere.config.auth.userinfo.GithubOAuth2UserInfo;
 import booklet.menuhere.config.auth.userinfo.GoogleOAuth2UserInfo;
+import booklet.menuhere.config.auth.userinfo.OAuth2UserInfo;
 import booklet.menuhere.domain.Role;
 import booklet.menuhere.domain.User.SocialType;
 import booklet.menuhere.domain.User.User;

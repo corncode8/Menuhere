@@ -1,4 +1,4 @@
-package booklet.menuhere.config.auth;
+package booklet.menuhere.config.auth.userinfo;
 
 import org.springframework.security.oauth2.core.user.OAuth2User;
 

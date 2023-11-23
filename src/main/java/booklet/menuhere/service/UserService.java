@@ -38,4 +38,11 @@ public class UserService {
         user.passwordEncode(passwordEncoder);
         userRepository.save(user);
     }
+
+    // 로그인 로직
+    public User login(String id, String password) {
+        return userRepository.findByEmail(id)
+                .filter(m -> m.getPassword().equals(password))
+                .orElse(null);
+    }
 }

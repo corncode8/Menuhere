@@ -1,11 +1,14 @@
 package booklet.menuhere.controller;
 
+import booklet.menuhere.domain.User.LoginForm;
+import booklet.menuhere.domain.User.User;
 import booklet.menuhere.domain.User.UserSignUpDto;
 import booklet.menuhere.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -20,13 +23,33 @@ public class UserController {
         return "form/addUserForm";
     }
     @PostMapping("/sign-up")
-    public String signUp (@RequestBody UserSignUpDto userSignUpDto, BindingResult result) throws Exception {
+    public String signUp (@Validated @RequestBody UserSignUpDto userSignUpDto, BindingResult result) throws Exception {
         log.info("userSignUpDto : {}", userSignUpDto);
         if(result.hasErrors()){
             return "login";
         }
         userService.singUp(userSignUpDto);
         return "회원가입 성공";
+    }
+
+    @GetMapping("/sign-in")
+    public String singIn(@ModelAttribute("loginForm") LoginForm loginForm) {
+        return "form/login";
+    }
+
+    @PostMapping("/sign-in")
+    public String login(@Validated @RequestBody LoginForm form, BindingResult result) throws Exception{
+        if (result.hasErrors()) {
+            return "form/login";
+        }
+        User loginUser = userService.login(form.getLoginId(), form.getPassword());
+
+        if (loginUser == null) {
+            result.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다");
+            return "form/login";
+        }
+
+        return "로그인 성공";
     }
 
     @GetMapping("/jwt-test")

@@ -1,7 +1,5 @@
 package booklet.menuhere.config.auth.userinfo;
 
-import booklet.menuhere.config.auth.OAuth2UserInfo;
-
 import java.util.Map;
 
 public class GoogleOAuth2UserInfo extends OAuth2UserInfo {
