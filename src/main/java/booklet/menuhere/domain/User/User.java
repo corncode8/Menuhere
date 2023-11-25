@@ -1,15 +1,12 @@
 package booklet.menuhere.domain.User;
 
-import booklet.menuhere.domain.OrderMenu;
+import booklet.menuhere.domain.BaseEntity;
 import booklet.menuhere.domain.Role;
 import booklet.menuhere.domain.order.Order;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 // form 사용시 validation 원복 -> form에 적용
-public class User {
+public class User extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -35,12 +32,6 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Order> orders = new ArrayList<>();
-
-    @CreationTimestamp
-    private Timestamp createdDate;
-    @UpdateTimestamp
-    private Timestamp modifiedDate;
-
 
     @Enumerated(EnumType.STRING)
     private Role role;              // USER, MANAGER

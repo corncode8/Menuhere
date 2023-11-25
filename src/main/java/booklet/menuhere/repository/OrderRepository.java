@@ -1,4 +1,4 @@
 package booklet.menuhere.repository;
 
-public class OrderRepository {
+public interface OrderRepository {
 }

@@ -1,17 +1,14 @@
-package booklet.menuhere.domain;
+package booklet.menuhere.domain.menu;
 
+import booklet.menuhere.domain.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
 
 @Entity
 @Getter @Setter
-public class MenuOption {
+public class MenuOption extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "menuoption_id")
     private Long id;
@@ -23,8 +20,4 @@ public class MenuOption {
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
-    @CreationTimestamp
-    private Timestamp createdDate;
-    @UpdateTimestamp
-    private Timestamp modifiedDate;
 }

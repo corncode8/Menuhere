@@ -1,4 +1,4 @@
-package booklet.menuhere.controller;
+package booklet.menuhere.domain.User;
 
 import booklet.menuhere.domain.User.LoginForm;
 import booklet.menuhere.domain.User.User;

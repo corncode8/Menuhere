@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" charset="UTF-8">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/tokenManager.js"></script>
     <style>
         .btn-lg {
             position: absolute;
@@ -60,6 +61,18 @@
                 border-right: 5px;
                 border-left: 5px;
             }
+            #Logout {
+                position: absolute;
+                top: 12.5%;
+                left: 83%;
+                color: white;
+                border-color: gray;
+                max-height: 23px;
+                font-size: 11px;
+                line-height: 0.5;
+                border-right: 5px;
+                border-left: 5px;
+            }
         }
     </style>
 </head>
@@ -68,9 +81,34 @@
     <img src="../image/background-main.jpg" alt="식당 이미지" id="backImage" class="rounded img-fluid">
 </div>
 <div class="find-btn">
-    <button type="button" class="btn btn-primary btn-lg" th:onclick="|location.href='@{/}'|">Menu</button>
+    <button type="button" class="btn btn-primary btn-lg" th:onclick="|location.href='@{/menu}'|">Menu</button>
     <button type="button" class="btn btn-outline-dark" id="Sign_up" th:onclick="|location.href='@{/sign-in}'|">Sign in</button>
     <button type="button" class="btn btn-outline-dark" id="Sign_in" th:onclick="|location.href='@{/sign-up}'|">Sign up</button>
+    <button type="button" class="btn btn-outline-dark" id="Logout" style="display: none;" onclick="Logout()">Logout</button>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // 페이지 로드 시 한 번 실행
+        const authToken = getToken().authToken;
+        const refreshToken = getToken().refreshToken;
+
+        // 버튼 요소들 가져오기
+        const signIn = document.getElementById('Sign_in');
+        const signUp = document.getElementById('Sign_up');
+        const Logout = document.getElementById('Logout');
+
+        // 토큰이 존재하면 로그아웃 버튼을 보여주고 나머지는 감추기
+        if (authToken || refreshToken) {
+            signIn.style.display = 'none';
+            signUp.style.display = 'none';
+            Logout.style.display = 'block';
+        } else {
+            // 토큰이 없으면 로그인/가입 버튼을 보여주고 로그아웃 버튼 감추기
+            signIn.style.display = 'block';
+            signUp.style.display = 'block';
+            Logout.style.display = 'none';
+        }
+    });
+</script>
 </body>
 </html>

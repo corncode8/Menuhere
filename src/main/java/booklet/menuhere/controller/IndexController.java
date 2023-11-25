@@ -15,16 +15,5 @@ public class IndexController {
     public String main() {
         return "main";
     }
-    @GetMapping("/menu")
-    public String menu() {
-        return "menu";
-    }
 
-    @GetMapping("/whouser")
-    public User whoUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        log.info("user : {}", user);
-        return user;
-    }
 }

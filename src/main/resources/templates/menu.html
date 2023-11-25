@@ -131,20 +131,19 @@
                 <td class="shadow p-3 mb-5 bg-body-tertiary rounded" colspan="5">
                     <div class="row">
                         <div class="col-md-4">
-                            <!-- <img th:src="${menu.imageUrl}" alt="Menu Image" class="img-fluid"> -->
+                             <img th:src="${menu.uploadFile.getStoreFileName()}" alt="Menu Image" class="img-fluid" style="width: 90px; height: 110px;">
                             <!-- 메뉴 사진 부트스트랩 캐러셀 -->
                             <img class="img-fluid" src="tea.jpg" style="width: 90px; height: 110px;">
                         </div>
                         <div class="col-md-4">
-                            <!-- <h4 th:text="${menu.name}"></h4> -->
-                            <!-- <p th:text="${menu.description}"></p> -->
+                             <h4 th:text="${menu.name}"></h4>
+                             <p th:text="${menu.content}"></p>
                             <h4>메뉴 이름</h4>
                             <p>메뉴 설명</p>
                         </div>
                         <div class="col-md-4">
-                            <!-- <p th:text="'$' + ${menu.price}"></p> -->
+                             <p th:text="'$' + ${menu.price}"></p>
                             <!-- <button th:text="장바구니에 담기"></button> -->
-                            <p>price 25,000</p>
                             <button></button>
                         </div>
                     </div>

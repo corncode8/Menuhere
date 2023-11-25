@@ -2,8 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta name="viewport" content="width=device-width,initial-scale=1" charset="UTF-8">
-        <link rel="stylesheet" href="css/bootstrap.css">
-        <!-- <link rel="stylesheet" href="css/style.css">   -->
+        <link rel="stylesheet" href="/css/bootstrap.css">
+         <link rel="stylesheet" href="/css/style.css">
     </head>
     <body>
         <div class="container" style="max-width: 600px;">
@@ -13,30 +13,44 @@
                 <hr class="my-4">
                 </div>
             </div>
-            <form action="../menu.html" th:action method="post" enctype="multipart/form-data">
+            <div class="py-5 text-center">
+                <h2>상품 등록</h2>
+            </div>
+            <form  th:action th:object="${menu}" method="post" enctype="multipart/form-data">
+<!--                <div th:if="${#fields.hasGlobalErrors()}">-->
+<!--                    <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>-->
+<!--                </div>-->
                 <div>
-                    <label for="itemImage">사진 등록</label>
-                    <input type="file" id="itemImage" name="itemImage" accept="image/*" class="form-control">
+                    <label for="attachFile">사진 등록</label>
+                    <input type="file" id="attachFile" name="attachFile"  class="form-control">
                     <small class="form-text text-muted">200x200 크기의 사진만 등록할 수 있습니다.</small> 
                     <!-- 추가 : 사진 검사 로직 -->
                 </div>
                 <div>
-                    <label for="itemName">상품명</label>
-                    <input type="text" id="itemName" name="itemName" class="form-control" placeholder="이름을 입력하세요">
+                    <label for="name" >상품명</label>
+                    <input type="text" id="name" th:field="*{name}"
+                           th:errorclass="field-error" class="form-control" placeholder="이름을 입력하세요">
+                    <div class="field-error" th:errors="*{name}">
+                        상품명 오류
+                    </div>
                 </div>
                 <div>
-                    <label for="itemName">상품 설명</label>
-                    <input type="text" id="itemName" name="itemName" class="form-control" placeholder="상품 설명을 입력하세요">
+                    <label for="content" >상품 설명</label>
+                    <input type="text" id="content" th:field="*{content}"
+                           th:errorclass="field-error" class="form-control" placeholder="상품 설명을 입력하세요">
+                    <div class="field-error" th:errors="*{content}">
+                        상품 설명
+                    </div>
                 </div>
                 <div>
-                    <label for="price">가격</label>
-                    <input type="text" id="price" name="price" class="form-control" placeholder="가격을 입력하세요">
+                    <label for="price" >가격</label>
+                    <input type="text" id="price" th:field="*{price}"
+                           th:errorclass="field-error" class="form-control" placeholder="가격을 입력하세요">
+                    <div class="field-error" th:errors="*{price}">
+                        가격 오류
+                    </div>
                 </div>
-                <div>
-                    <label for="quantity">수량</label>
-                    <input type="text" id="quantity" name="quantity" class="form-control" placeholder="수량을 입력하세요">
-                </div>
-        <!-- 추가 :  배달 가능 메뉴인지 아닌지 체크하기 -->
+<!--                카테고리 설정-->
                 <hr class="my-4">
         
                 <div class="row">
@@ -45,8 +59,8 @@
                     </div>
                     <div class="col">
                         <button class="w-100 btn btn-secondary btn-lg"
-                                onclick="location.href='menu.html'"
-                                th:onclick="|location.href='@{/form/items}'|"
+                                onclick="location.href='menu'"
+                                th:onclick="|location.href='@{/menu}'|"
                                 type="button">취소</button>
                     </div>
                 </div>

@@ -1,14 +1,13 @@
 package booklet.menuhere.domain.order;
 
+import booklet.menuhere.domain.BaseEntity;
 import booklet.menuhere.domain.OrderMenu;
 import booklet.menuhere.domain.User.User;
 import booklet.menuhere.domain.orderStatus;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @Table(name = "orders")
-public class Order {
+public class Order extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private Long id;
@@ -29,6 +28,7 @@ public class Order {
     private String requests;
 
     private int orderPrice;
+    private int tableNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -41,6 +41,4 @@ public class Order {
     private String orderType;
 
 
-    @CreationTimestamp
-    private Timestamp createdDate;
 }

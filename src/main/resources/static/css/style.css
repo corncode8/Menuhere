@@ -69,3 +69,11 @@ img#backImage {
     color: white;
     border-color: gray;
 }
+#Logout {
+    position: absolute;
+    top: 21%;
+    left: 70%;
+    transform: translate(-50%, -450%);
+    color: white;
+    border-color: gray;
+}

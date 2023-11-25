@@ -1,17 +1,15 @@
 package booklet.menuhere.domain;
 
+import booklet.menuhere.domain.menu.Menu;
 import booklet.menuhere.domain.order.Order;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 
 @Entity
 @Getter @Setter
-public class OrderMenu {
+public class OrderMenu extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orderMenu_id")
     private Long id;
@@ -27,9 +25,4 @@ public class OrderMenu {
     private Menu menu;
 
 
-
-    @CreationTimestamp
-    private Timestamp createdDate;
-    @UpdateTimestamp
-    private Timestamp modifiedDate;
 }
