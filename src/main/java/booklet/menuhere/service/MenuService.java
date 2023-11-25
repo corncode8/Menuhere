@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,14 +35,11 @@ public class MenuService {
             throw new Exception("이미 존재하는 메뉴 이름입니다.");
         }
         Menu menu = new Menu();
-        UploadFile uploadFile = new UploadFile();
         menu.setName(form.getName());
         menu.setContent(form.getContent());
         menu.setPrice(form.getPrice());
-        uploadFile.setStoreFileName(attachFile.getStoreFileName());
-        uploadFile.setUploadFileName(attachFile.getUploadFileName());
+        menu.setUploadFile(attachFile);
 
-        uploadFileRepository.save(uploadFile);
         menuRepository.save(menu);
     }
 
@@ -51,9 +49,9 @@ public class MenuService {
         if (menuList.isEmpty()) {
             return null;
         }
-        List<MenuViewForm> menus = menuList.stream()
+        return menuList.stream()
                 .map(menu -> new MenuViewForm())
                 .collect(Collectors.toList());
-        return menus;
+
     }
 }

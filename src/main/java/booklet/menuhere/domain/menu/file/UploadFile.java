@@ -17,10 +17,10 @@ public class UploadFile extends BaseEntity {
     private String uploadFileName;
     private String storeFileName;
 
-    @OneToOne(mappedBy = "uploadFile", fetch = FetchType.LAZY)
-    private Menu menu;
 
     public UploadFile(String originalFilename, String storeFileName) {
+        this.uploadFileName = originalFilename;
+        this.storeFileName = storeFileName;
     }
 
     public UploadFile() {

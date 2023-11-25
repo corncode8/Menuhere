@@ -24,7 +24,7 @@ public class Menu extends BaseEntity {
     private boolean isdel = false;          // 삭제여부 :     메뉴삭제시 true
     private Category category;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "uploadFile_id")
     private UploadFile uploadFile;
 

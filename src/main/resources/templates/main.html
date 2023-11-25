@@ -89,7 +89,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // 페이지 로드 시 한 번 실행
-        const authToken = getToken().authToken;
+        const accessToken = getToken().Token;
         const refreshToken = getToken().refreshToken;
 
         // 버튼 요소들 가져오기
@@ -98,7 +98,7 @@
         const Logout = document.getElementById('Logout');
 
         // 토큰이 존재하면 로그아웃 버튼을 보여주고 나머지는 감추기
-        if (authToken || refreshToken) {
+        if (accessToken || refreshToken) {
             signIn.style.display = 'none';
             signUp.style.display = 'none';
             Logout.style.display = 'block';

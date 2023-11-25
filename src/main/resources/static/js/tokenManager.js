@@ -1,8 +1,8 @@
 
 function getToken() {
-    const authToken = localStorage.getItem('AccessToken');
+    const accessToken = localStorage.getItem('AccessToken');
     const refreshToken = localStorage.getItem("RefreshToken");
-    return {authToken, refreshToken};
+    return {Token: accessToken, refreshToken};
 }
 
 function Logout() {

@@ -16,10 +16,10 @@
             <div class="py-5 text-center">
                 <h2>상품 등록</h2>
             </div>
-            <form  th:action th:object="${menu}" method="post" enctype="multipart/form-data">
-<!--                <div th:if="${#fields.hasGlobalErrors()}">-->
-<!--                    <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>-->
-<!--                </div>-->
+            <form action="/add" th:object="${menu}" method="post" enctype="multipart/form-data">
+                <div th:if="${#fields.hasGlobalErrors()}">
+                    <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>
+                </div>
                 <div>
                     <label for="attachFile">사진 등록</label>
                     <input type="file" id="attachFile" name="attachFile"  class="form-control">
