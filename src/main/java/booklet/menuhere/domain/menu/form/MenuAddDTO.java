@@ -1,18 +1,20 @@
 package booklet.menuhere.domain.menu.form;
 
+import booklet.menuhere.domain.menu.Category;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 
 @Data
-public class MenuAddForm {
+public class MenuAddDTO {
     @NotNull
     private String name;
     @NotNull
     private String content;
     @NotNull
     private int price;
+    private Category category;
     @NotNull
     private MultipartFile attachFile;
 }

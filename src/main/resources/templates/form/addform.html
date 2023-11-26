@@ -50,6 +50,15 @@
                         가격 오류
                     </div>
                 </div>
+                <div>
+                    <div>상품 종류</div>
+                    <div th:each="type : ${category}" class="form-check form-check-inline">
+                        <input type="radio" th:field="*{category}" th:value="${type.name()}" class="form-check-input">
+                        <label th:for="${#ids.prev('category')}" th:text="${type.description}" class="form-check-label">
+
+                        </label>
+                    </div>
+                </div>
 <!--                카테고리 설정-->
                 <hr class="my-4">
         

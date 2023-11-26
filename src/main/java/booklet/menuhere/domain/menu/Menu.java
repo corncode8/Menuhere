@@ -34,4 +34,5 @@ public class Menu extends BaseEntity {
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL)
     private List<MenuOption> menuOptions = new ArrayList<>();
 
+
 }

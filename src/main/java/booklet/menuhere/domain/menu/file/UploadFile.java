@@ -18,8 +18,8 @@ public class UploadFile extends BaseEntity {
     private String storeFileName;
 
 
-    public UploadFile(String originalFilename, String storeFileName) {
-        this.uploadFileName = originalFilename;
+    public UploadFile(String uploadFileName, String storeFileName) {
+        this.uploadFileName = uploadFileName;
         this.storeFileName = storeFileName;
     }
 

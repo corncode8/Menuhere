@@ -3,16 +3,14 @@ package booklet.menuhere.service;
 import booklet.menuhere.domain.menu.Menu;
 import booklet.menuhere.domain.menu.file.FileStore;
 import booklet.menuhere.domain.menu.file.UploadFile;
-import booklet.menuhere.domain.menu.form.MenuAddForm;
-import booklet.menuhere.domain.menu.form.MenuViewForm;
+import booklet.menuhere.domain.menu.form.MenuAddDTO;
+import booklet.menuhere.domain.menu.form.MenuViewDTO;
 import booklet.menuhere.repository.MenuRepository;
-import booklet.menuhere.repository.UploadFileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,10 +22,9 @@ import java.util.stream.Collectors;
 public class MenuService {
 
     private final MenuRepository menuRepository;
-    private final UploadFileRepository uploadFileRepository;
     private final FileStore fileStore;
 
-    public void addMenu(MenuAddForm form) throws Exception{
+    public void addMenu(MenuAddDTO form) throws Exception{
 
         UploadFile attachFile = fileStore.storeFile(form.getAttachFile());
 
@@ -39,19 +36,29 @@ public class MenuService {
         menu.setContent(form.getContent());
         menu.setPrice(form.getPrice());
         menu.setUploadFile(attachFile);
+        menu.setCategory(form.getCategory());
 
         menuRepository.save(menu);
     }
 
     // 모든 메뉴 return
-    public List<MenuViewForm> viewMenu() {
+    public List<MenuViewDTO> viewMenu() {
         List<Menu> menuList = menuRepository.findAll();
+
         if (menuList.isEmpty()) {
             return null;
         }
         return menuList.stream()
-                .map(menu -> new MenuViewForm())
-                .collect(Collectors.toList());
+                .map(menu -> {
+                    MenuViewDTO menuViewForm = new MenuViewDTO();
+                    menuViewForm.setName(menu.getName());
+                    menuViewForm.setCategory(menu.getCategory());
+                    menuViewForm.setPrice(menu.getPrice());
+                    menuViewForm.setUploadFile(menu.getUploadFile());
+                    menuViewForm.setContent(menu.getContent());
+                    menuViewForm.setMenuId(menu.getId());
+                    return menuViewForm;
+                }).collect(Collectors.toList());
 
     }
 }
