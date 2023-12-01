@@ -5,7 +5,7 @@ import booklet.menuhere.domain.menu.file.UploadFile;
 import lombok.Data;
 
 @Data
-public class MenuViewDTO {
+public class MenuViewDto {
 
     private Long menuId;
     private String name;

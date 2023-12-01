@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class MenuAddDTO {
+public class MenuAddDto {
     @NotNull
     private String name;
     @NotNull

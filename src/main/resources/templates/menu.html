@@ -133,7 +133,7 @@
                         <div class="d-flex justify-content-between align-items-end">
                             <p class="card-text my-2" th:text="${menus.price} + '원'"></p>
                             <div class="d-flex justify-content-end">
-                                <button class="btn btn-primary btn-sm" th:onclick="|addCart()|">장바구니</button>
+                                <button class="btn btn-primary btn-sm" th:name="${menus.name}" th:price="${menus.price}" onclick="addCart(this.getAttribute('name'), this.getAttribute('price'))">장바구니</button>
                             </div>
                         </div>
                     </div>
@@ -167,6 +167,20 @@
             .catch((error) => {
                 console.error('Error:', error);
             })
+    });
+    $(document).ready(function () {
+        // 서버에 장바구니 정보를 요청
+        $.ajax({
+            type: "GET",
+            url: "/cart/count",
+            success: function (response) {
+                // 서버에서 받아온 장바구니 개수를 화면에 표시
+                $("#cart-count").text(response);
+            },
+            error: function (error) {
+                console.error("Failed to get cart count:", error);
+            }
+        });
     });
 </script>
 </body>

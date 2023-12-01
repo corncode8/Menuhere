@@ -13,58 +13,58 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CartController {
 
-    // 장바구니 추가
-//    @PostMapping("/add/cart")
-//    public CartDTO addCart(CartDTO cart, HttpSession session) {
+    // 장바구니 추가 TODO: CartDto 생성시 값 대입
+    @PostMapping("/add/cart")
+    public CartListDto addCart(CartDto cart, HttpSession session) {
 
-//        // 기존 세션에 저장된 장바구니 목록 가져오기
-//        CartDTO cartListDTO = (CartDTO) session.getAttribute("cartList");
-//
-//        cart.totalPriceCalc();
-//        // 세션에 저장된 장바구니 목록이 없을 시
-//        if (cartListDTO == null) {
-//            List<CartDTO> newCart = new ArrayList<>();
-//
-//        } else { // 세션에 저장된 장바구니 목록이 있다면
-//            List<CartDTO> prevCart = cartListDTO.getCart();
-//            int cartTotal = cartListDTO.getCartTotal();
-//            cartListDTO.setCartTotal(cartTotal + cart.getTotalPrice());
-//
-//            // 이미 장바구니에 추가된 메뉴일시
-//            if (prevCart.contains(cart)) {
-//                int cartIdx = prevCart.indexOf(cart);
-//                int amount = cart.getAmount();
-//
-//                Cart newCart = prevCart.get(cartIdx);
-//                int newAmount = newCart.getAmount() + amount;
-//
-//                newCart.setAmount(newAmount);
-//                newCart.totalPriceCalc();
-//                prevCart.set(cartIdx, newCart);
-//            } else {
-//                prevCart.add(cart);
-//            }
-//        }
-//
-//        session.setAttribute("cartList", cartListDTO);
-//        log.info("cartList : {}", cartListDTO);
+        // 기존 세션에 저장된 장바구니 목록 가져오기
+        CartListDto cartList = (CartListDto) session.getAttribute("cartList");
 
-//        return CartDTO;
-//    }
+        cart.totalPriceCalc();
+        // 세션에 저장된 장바구니 목록이 없을 시
+        if (cartList == null) {
+            List<CartDto> newCart = new ArrayList<>();
+            newCart.add(cart);
+            cartList = new CartListDto(cart.getTotalPrice(), newCart);
+        } else { // 세션에 저장된 장바구니 목록이 있다면
+            List<CartDto> prevCart = cartList.getCartDto();
+            int cartTotal = cartList.getCartTotalPrice();
+            cartList.setCartTotalPrice(cartTotal + cart.getTotalPrice());
 
-    @GetMapping("/menu/cart/count")
+            // 이미 장바구니에 추가된 메뉴일시
+            if (prevCart.contains(cart)) {
+
+                CartDto newCart = prevCart.get(prevCart.indexOf(cart));
+                int newAmount = newCart.getAmount() + cart.getAmount();
+
+                newCart.setAmount(newAmount);
+                newCart.totalPriceCalc();
+                prevCart.set(prevCart.indexOf(cart), newCart);
+            } else { // 장바구니에 추가되어 있지 않은 메뉴일때
+                prevCart.add(cart);
+            }
+        }
+
+        session.setAttribute("cartList", cartList);
+        log.info("cartList : {}", cartList);
+
+        return cartList;
+    }
+
+    @GetMapping("/cart/count")
     public int cntCart(HttpSession session) {
-        CartDTO cartList = (CartDTO) session.getAttribute("cartList");
+        CartListDto cartList = (CartListDto) session.getAttribute("cartList");
         if (cartList == null) {
             return 0;
+        } else {
+            return cartList.getCartDto().size();
         }
-        return cartList.getCartTotal();
     }
 
     // 장바구니 목록
     @GetMapping("/menu/cart")
-    public CartDTO cartList(HttpSession session) {
-        CartDTO cartList = (CartDTO) session.getAttribute("cartList");
+    public CartDto cartList(HttpSession session) {
+        CartDto cartList = (CartDto) session.getAttribute("cartList");
         if (cartList == null) {
             return cartList;
         }

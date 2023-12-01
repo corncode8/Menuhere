@@ -30,40 +30,21 @@ const cart = (function () {
 
 
 // 장바구니 담기
-function addCart() {
-    // menuId = parseInt(menuId);
-    //
-    // if (isNaN(menuId)) {
-    //     console.error('유효하지 않은 menuId:', menuId);
-    //     return;
-    // }
-    //
-    // console.log(menuId); // 메뉴 ID가 제대로 전달되었는지 확인
-
-    // 예를 들어, 아래와 같이 서버에 장바구니 추가 요청을 보낼 수 있습니다.
-    fetch('/add/cart', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
+function addCart(menuName, menuPrice) {
+    // Ajax를 사용하여 서버에 메뉴 정보를 전송
+    $.ajax({
+        type: "POST",
+        url: "/add/cart",
+        data: { menuName: menuName, menuPrice:menuPrice },
+        success: function (response) {
+            // 성공 시 처리
+            alert('장바구니에 추가되었습니다.');
         },
-        body: JSON.stringify({
-            // menuId: menuId,
-
-        }),
-    })
-        .then(response => {
-            if (!response.ok) {
-                console.error('에러 응답:', response.status, response.statusText);
-                // 오류 처리 로직 추가
-                return;
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log(data);
-            // updateCartCnt(data.cartTotal);
-        })
-        .catch(error => console.error('Error:', error));
+        error: function (error) {
+            // 에러 시 처리
+            alert('장바구니 추가에 실패했습니다.');
+        }
+    });
 }
 
 function updateCartCnt(count) {

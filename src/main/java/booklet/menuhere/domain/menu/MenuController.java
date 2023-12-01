@@ -1,8 +1,8 @@
 package booklet.menuhere.domain.menu;
 
 import booklet.menuhere.domain.menu.file.FileStore;
-import booklet.menuhere.domain.menu.form.MenuAddDTO;
-import booklet.menuhere.domain.menu.form.MenuViewDTO;
+import booklet.menuhere.domain.menu.form.MenuAddDto;
+import booklet.menuhere.domain.menu.form.MenuViewDto;
 import booklet.menuhere.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class MenuController {
 
     @GetMapping("/addform")
     public String addForm(Model model) {
-        model.addAttribute("menu", new MenuAddDTO());
+        model.addAttribute("menu", new MenuAddDto());
         return "form/addform";
     }
 
@@ -44,7 +44,7 @@ public class MenuController {
     }
 
     @PostMapping("/add")
-    public String addMenu(@Validated @ModelAttribute("menu") MenuAddDTO form, BindingResult result) throws Exception{
+    public String addMenu(@Validated @ModelAttribute("menu") MenuAddDto form, BindingResult result) throws Exception{
         if (result.hasErrors()) {
             log.info("errors = {}", result);
             return "/menu";
@@ -64,7 +64,7 @@ public class MenuController {
         String userRole = authorities.stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_MANAGER")) ? "ROLE_MANAGER" : null;
 
-        List<MenuViewDTO> forms = menuService.viewMenu();
+        List<MenuViewDto> forms = menuService.viewMenu();
 
         model.addAttribute("menuList", forms);
         model.addAttribute("userRole", userRole);

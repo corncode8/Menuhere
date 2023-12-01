@@ -3,8 +3,8 @@ package booklet.menuhere.service;
 import booklet.menuhere.domain.menu.Menu;
 import booklet.menuhere.domain.menu.file.FileStore;
 import booklet.menuhere.domain.menu.file.UploadFile;
-import booklet.menuhere.domain.menu.form.MenuAddDTO;
-import booklet.menuhere.domain.menu.form.MenuViewDTO;
+import booklet.menuhere.domain.menu.form.MenuAddDto;
+import booklet.menuhere.domain.menu.form.MenuViewDto;
 import booklet.menuhere.repository.MenuRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final FileStore fileStore;
 
-    public void addMenu(MenuAddDTO form) throws Exception{
+    public void addMenu(MenuAddDto form) throws Exception{
 
         UploadFile attachFile = fileStore.storeFile(form.getAttachFile());
 
@@ -42,7 +42,7 @@ public class MenuService {
     }
 
     // 모든 메뉴 return
-    public List<MenuViewDTO> viewMenu() {
+    public List<MenuViewDto> viewMenu() {
         List<Menu> menuList = menuRepository.findAll();
 
         if (menuList.isEmpty()) {
@@ -50,7 +50,7 @@ public class MenuService {
         }
         return menuList.stream()
                 .map(menu -> {
-                    MenuViewDTO menuViewForm = new MenuViewDTO();
+                    MenuViewDto menuViewForm = new MenuViewDto();
                     menuViewForm.setName(menu.getName());
                     menuViewForm.setCategory(menu.getCategory());
                     menuViewForm.setPrice(menu.getPrice());
