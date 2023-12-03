@@ -33,7 +33,7 @@
             }
 
             .btn-success {
-                width: 100%; /* 버튼의 폭을 조절하여 검색 폼 크기를 줄임 */
+                width: 100%;
                 font-size: 80%;
             }
 
@@ -82,11 +82,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Link</a>
                             </li>
-<!--                            TODO 메뉴추가버튼 수정-->
-                            <li th:if="${userRole lt 'ROLE_MANAGER'}" class="nav-item">
+                            <li class="nav-item" style="display: none">
                                 <a class="nav-link" href="/addform">메뉴 추가</a>
                             </li>
-
                         </ul>
                     </div>
                 </div>
@@ -121,7 +119,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="card mb-3 shadow border-0" th:each="menus : ${menuList}">
+        <div class="card mb-2 shadow border-0" th:each="menus : ${menuList}">
             <div class="row g-0">
                 <div class="col-4 col-sm-4 d-flex align-items-center justify-content-center">
                     <img alt="Menu Image" class="img-fluid px-1" th:src="|/image/storeImage/${menus.uploadFile.getStoreFileName()}|" style="object-fit: cover;">
@@ -160,13 +158,27 @@
                 'Authorization': 'Bearer ' + accessToken
             },
         })
-            .then(response => response.text())
-            // .then(data => {
-            //     console.log(data);
-            // })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+
+                return fetch('/api/role', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.userRole === 'ROLE_MANAGER') {
+                    let menu = document.getElementById('managermenu');
+                    menu.style.display = 'block';
+                }
+            })
             .catch((error) => {
                 console.error('Error:', error);
-            })
+            });
     });
     $(document).ready(function () {
         // 서버에 장바구니 정보를 요청

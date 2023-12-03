@@ -56,7 +56,6 @@ public class MenuService {
                     menuViewForm.setPrice(menu.getPrice());
                     menuViewForm.setUploadFile(menu.getUploadFile());
                     menuViewForm.setContent(menu.getContent());
-                    menuViewForm.setMenuId(menu.getId());
                     return menuViewForm;
                 }).collect(Collectors.toList());
 

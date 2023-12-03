@@ -9,42 +9,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@RestController
+@RestController("/api")
 @RequiredArgsConstructor
 public class CartController {
 
-    // 장바구니 추가 TODO: CartDto 생성시 값 대입
+    // 장바구니 추가
     @PostMapping("/add/cart")
-    public CartListDto addCart(CartDto cart, HttpSession session) {
+    public CartListDto addCart(CartDto cartDto, HttpSession session) {
 
         // 기존 세션에 저장된 장바구니 목록 가져오기
         CartListDto cartList = (CartListDto) session.getAttribute("cartList");
 
-        cart.totalPriceCalc();
+        cartDto.setAmount(1);
+        cartDto.totalPriceCalc();
         // 세션에 저장된 장바구니 목록이 없을 시
         if (cartList == null) {
             List<CartDto> newCart = new ArrayList<>();
-            newCart.add(cart);
-            cartList = new CartListDto(cart.getTotalPrice(), newCart);
+            newCart.add(cartDto);
+            cartList = new CartListDto(cartDto.getTotalPrice(), newCart);
         } else { // 세션에 저장된 장바구니 목록이 있다면
             List<CartDto> prevCart = cartList.getCartDto();
             int cartTotal = cartList.getCartTotalPrice();
-            cartList.setCartTotalPrice(cartTotal + cart.getTotalPrice());
+            cartList.setCartTotalPrice(cartTotal + cartDto.getTotalPrice());
 
             // 이미 장바구니에 추가된 메뉴일시
-            if (prevCart.contains(cart)) {
+            if(prevCart.contains(cartDto)) {
+                int cartIndex = prevCart.indexOf(cartDto);
+                int amount = cartDto.getAmount();
 
-                CartDto newCart = prevCart.get(prevCart.indexOf(cart));
-                int newAmount = newCart.getAmount() + cart.getAmount();
+                CartDto newCart = prevCart.get(cartIndex);
+                int newAmount = newCart.getAmount() + amount;
 
                 newCart.setAmount(newAmount);
                 newCart.totalPriceCalc();
-                prevCart.set(prevCart.indexOf(cart), newCart);
+                prevCart.set(cartIndex, newCart);
+
             } else { // 장바구니에 추가되어 있지 않은 메뉴일때
-                prevCart.add(cart);
+                prevCart.add(cartDto);
             }
         }
-
         session.setAttribute("cartList", cartList);
         log.info("cartList : {}", cartList);
 
@@ -57,7 +60,8 @@ public class CartController {
         if (cartList == null) {
             return 0;
         } else {
-            return cartList.getCartDto().size();
+            List<CartDto> cartDto = cartList.getCartDto();
+            return cartDto.size();
         }
     }
 

@@ -1,33 +1,8 @@
 const mindelivery = Number($("#min_delivery").data("min_delivery"));
 const deliveryTip = Number($("#delivery_tip").data("delivery_tip"));
 
-const cart = (function () {
-    // 장바구니 상품 수
-    let cartSize = 0;
-    const getCartSize = function () {
-        return cartSize;
-    }
-    const setCartSize = function (setData) {
-        cartSize = setData;
-    }
-    // 장바구니 메뉴 가격 총합
-    let cartTotalPrice = 0;
-    const getCartToTalPrice = function () {
-        return cartTotalPrice;
-    }
-    const setCartTotalPrice = function (setData) {
-        cartTotalPrice = setData;
-    }
 
-    return {
-        getCartSize : getCartSize,
-        setCartSize : setCartSize,
-        getCartToTalPrice : getCartToTalPrice,
-        setCartTotalPrice : setCartTotalPrice,
-    };
-})();
-
-
+let cnt = 0;
 
 // 장바구니 담기
 function addCart(menuName, menuPrice) {
@@ -38,7 +13,9 @@ function addCart(menuName, menuPrice) {
         data: { menuName: menuName, menuPrice:menuPrice },
         success: function (response) {
             // 성공 시 처리
-            alert('장바구니에 추가되었습니다.');
+            // alert('장바구니에 추가되었습니다.');
+            cnt++;
+            updateCartCnt(cnt);
         },
         error: function (error) {
             // 에러 시 처리

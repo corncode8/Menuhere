@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.MalformedURLException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -55,8 +57,19 @@ public class MenuController {
         return "redirect:/menu";
     }
 
+
     @GetMapping("/menu")
     public String menu(Model model) {
+        List<MenuViewDto> forms = menuService.viewMenu();
+
+        model.addAttribute("menuList", forms);
+
+        return "menu";
+    }
+
+    @GetMapping("/api/role")
+    @ResponseBody
+    public Map<String, String> role() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
@@ -64,14 +77,12 @@ public class MenuController {
         String userRole = authorities.stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_MANAGER")) ? "ROLE_MANAGER" : null;
 
-        List<MenuViewDto> forms = menuService.viewMenu();
+        Map<String, String> result = new HashMap<>();
+        result.put("userRole", userRole);
 
-        model.addAttribute("menuList", forms);
-        model.addAttribute("userRole", userRole);
-        log.info("userRole : {}", userRole);
-
-        return "menu";
+        return result;
     }
+
 
     @ResponseBody
     @GetMapping("/image/storeImage/{filename}")

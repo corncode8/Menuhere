@@ -15,6 +15,4 @@ function Logout() {
 function mainPageUpdateButton() {
     const authToken = localStorage.getItem('AccessToken');
     const refreshToken = localStorage.getItem("RefreshToken");
-
-
 }
