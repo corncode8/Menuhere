@@ -1,4 +1,4 @@
-package booklet.menuhere.domain.cart;
+package booklet.menuhere.domain.cart.form;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -79,6 +79,7 @@ public class MenuController {
 
         Map<String, String> result = new HashMap<>();
         result.put("userRole", userRole);
+        log.info("role-api userRole : {}", userRole);
 
         return result;
     }

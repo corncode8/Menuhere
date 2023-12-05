@@ -1,5 +1,6 @@
 package booklet.menuhere.service;
 
+import booklet.menuhere.domain.cart.form.ImageDto;
 import booklet.menuhere.domain.menu.Menu;
 import booklet.menuhere.domain.menu.file.FileStore;
 import booklet.menuhere.domain.menu.file.UploadFile;
@@ -59,5 +60,20 @@ public class MenuService {
                     return menuViewForm;
                 }).collect(Collectors.toList());
 
+    }
+
+    // 이름, 사진만 return
+    public List<ImageDto> cartMenu() {
+        List<Menu> menuList = menuRepository.findByNameAndUploadFile();
+        if (menuList.isEmpty()) {
+            return null;
+        }
+        return menuList.stream()
+                .map(menu -> {
+                    ImageDto imageDto = new ImageDto();
+                    imageDto.setName(menu.getName());
+                    imageDto.setUploadFile(menu.getUploadFile());
+                    return imageDto;
+                }).collect(Collectors.toList());
     }
 }

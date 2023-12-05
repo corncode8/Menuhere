@@ -1,7 +1,12 @@
 package booklet.menuhere.domain.cart;
 
+import booklet.menuhere.domain.cart.form.CartDto;
+import booklet.menuhere.domain.cart.form.CartListDto;
+import booklet.menuhere.domain.cart.form.ImageDto;
+import booklet.menuhere.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -9,9 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@RestController("/api")
+@RestController
 @RequiredArgsConstructor
 public class CartController {
+
+    private final MenuService menuService;
 
     // 장바구니 추가
     @PostMapping("/add/cart")
@@ -54,25 +61,17 @@ public class CartController {
         return cartList;
     }
 
-    @GetMapping("/cart/count")
-    public int cntCart(HttpSession session) {
-        CartListDto cartList = (CartListDto) session.getAttribute("cartList");
-        if (cartList == null) {
-            return 0;
-        } else {
-            List<CartDto> cartDto = cartList.getCartDto();
-            return cartDto.size();
-        }
-    }
-
     // 장바구니 목록
     @GetMapping("/menu/cart")
-    public CartDto cartList(HttpSession session) {
+    public String cartList(HttpSession session, Model model) {
         CartDto cartList = (CartDto) session.getAttribute("cartList");
-        if (cartList == null) {
-            return cartList;
-        }
-        return null;
+
+        // 이름, 사진
+        List<ImageDto> imageDto = menuService.cartMenu();
+
+        model.addAttribute("imageDto", imageDto);
+
+        return "cart";
     }
 
     // 장바구니 전체 삭제
