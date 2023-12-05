@@ -13,7 +13,7 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
     Optional<Menu> findByName(String name);
     Optional<Menu> findById(Long id);
     List<Menu> findAll();
-    List<Menu> findByNameAndUploadFile();
+    List<Menu> findAllByNameAndUploadFile();
 
 
 }

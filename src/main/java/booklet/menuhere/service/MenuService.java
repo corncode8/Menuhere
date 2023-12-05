@@ -64,7 +64,7 @@ public class MenuService {
 
     // 이름, 사진만 return
     public List<ImageDto> cartMenu() {
-        List<Menu> menuList = menuRepository.findByNameAndUploadFile();
+        List<Menu> menuList = menuRepository.findAllByNameAndUploadFile();
         if (menuList.isEmpty()) {
             return null;
         }
