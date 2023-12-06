@@ -28,3 +28,7 @@ function updateCartCnt(count) {
     // span 태그 업데이트
     document.getElementById('cart-count').innerText = count;
 }
+
+function goCart() {
+    window.open("/menu/cart")
+}

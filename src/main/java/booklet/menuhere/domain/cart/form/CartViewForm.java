@@ -4,7 +4,9 @@ import booklet.menuhere.domain.menu.file.UploadFile;
 import lombok.Data;
 
 @Data
-public class ImageDto {
+public class CartViewForm {
     private String name;
+    private int price;
+    private int amount;
     private UploadFile uploadFile;
 }

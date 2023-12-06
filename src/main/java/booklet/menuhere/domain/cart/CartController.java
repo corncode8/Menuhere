@@ -2,10 +2,12 @@ package booklet.menuhere.domain.cart;
 
 import booklet.menuhere.domain.cart.form.CartDto;
 import booklet.menuhere.domain.cart.form.CartListDto;
-import booklet.menuhere.domain.cart.form.ImageDto;
+import booklet.menuhere.domain.cart.form.CartViewForm;
+import booklet.menuhere.domain.menu.Menu;
 import booklet.menuhere.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class CartController {
 
@@ -22,6 +24,7 @@ public class CartController {
 
     // 장바구니 추가
     @PostMapping("/add/cart")
+    @ResponseBody
     public CartListDto addCart(CartDto cartDto, HttpSession session) {
 
         // 기존 세션에 저장된 장바구니 목록 가져오기
@@ -64,24 +67,59 @@ public class CartController {
     // 장바구니 목록
     @GetMapping("/menu/cart")
     public String cartList(HttpSession session, Model model) {
-        CartDto cartList = (CartDto) session.getAttribute("cartList");
+        CartListDto cartList = (CartListDto) session.getAttribute("cartList");
+        List<CartViewForm> cartViewForms = new ArrayList<>();
 
-        // 이름, 사진
-        List<ImageDto> imageDto = menuService.cartMenu();
+        if (cartList != null) {
+            List<CartDto> cartDtos = cartList.getCartDto();
 
-        model.addAttribute("imageDto", imageDto);
+            for (CartDto cartDto : cartDtos) {
+                Menu menu = menuService.getMenuName(cartDto.getMenuName());
+                if (menu != null) {
+                    CartViewForm cartViewForm = new CartViewForm();
+                    cartViewForm.setUploadFile(menu.getUploadFile());
+                    cartViewForm.setName(menu.getName());
+                    cartViewForm.setPrice(menu.getPrice());
+                    cartViewForm.setAmount(cartDto.getAmount());
+                    cartViewForms.add(cartViewForm);
+                }
+            }
+        }
+
+        model.addAttribute("cartList", cartList);
+        model.addAttribute("cartViewForms", cartViewForms);
 
         return "cart";
     }
 
+    // 장바구니 수량 변경
+    @PutMapping("/update/amount/{menuName}")
+    @ResponseBody
+    public CartListDto plusAmount(@PathVariable String menuName,int amount, HttpSession session) {
+        CartListDto cartList = (CartListDto) session.getAttribute("cartList");
+
+        if (cartList != null) {
+            List<CartDto> cartDtos = cartList.getCartDto();
+            for (CartDto cartDto : cartDtos) {
+                if (cartDto.getMenuName().equals(menuName)) {
+                    cartDto.setAmount(amount);
+                    cartDto.totalPriceCalc();
+                }
+            }
+        }
+        return cartList;
+    }
+
     // 장바구니 전체 삭제
     @DeleteMapping("/menu/cart/remove")
+    @ResponseBody
     public void removeCart(HttpSession session) {
         session.removeAttribute("cartList");
     }
 
     // 장바구니 1개 삭제
 //    @DeleteMapping("/menu/cart/{index}")
+//    @ResponseBody
 //    public CartDTO removeOneCart(@PathVariable int index, HttpSession session) {
 //        CartDTO cartList = (CartDTO) session.getAttribute("cartList");
 //        if (cartList == null) {

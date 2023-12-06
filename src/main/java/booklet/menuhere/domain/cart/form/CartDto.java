@@ -18,7 +18,6 @@ public class CartDto {
     private int amount;
     private int totalPrice;
 
-
     public CartDto() {
         this.totalPrice = 0;
     }

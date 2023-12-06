@@ -5,6 +5,9 @@ a {
     text-decoration: none;
     color: black;
 }
+.bi-house {
+    font-size: 23px;
+}
 .container {
     max-width: 700px;
 }
