@@ -3,7 +3,6 @@ package booklet.menuhere.domain.cart.form;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
