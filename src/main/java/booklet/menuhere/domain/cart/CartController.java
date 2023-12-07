@@ -81,6 +81,7 @@ public class CartController {
                     cartViewForm.setName(menu.getName());
                     cartViewForm.setPrice(menu.getPrice());
                     cartViewForm.setAmount(cartDto.getAmount());
+                    cartViewForm.setMenuId(menu.getId());
                     cartViewForms.add(cartViewForm);
                 }
             }
@@ -118,26 +119,35 @@ public class CartController {
     }
 
     // 장바구니 1개 삭제
-//    @DeleteMapping("/menu/cart/{index}")
-//    @ResponseBody
-//    public CartDTO removeOneCart(@PathVariable int index, HttpSession session) {
-//        CartDTO cartList = (CartDTO) session.getAttribute("cartList");
-//        if (cartList == null) {
-//            return null;
-//        }
-//        int cartTotal = cartList.getCartTotal();
-//        List<Cart> carts = cartList.getCart();
-//        int removeCartPrice = carts.get(index).getTotalPrice();
-//
-//        carts.remove(index);
-//        if (carts.size() == 0) {
-//            session.removeAttribute("cartList");
-//            return null;
-//        }
-//        cartTotal -= removeCartPrice;
-//        cartList.setCartTotal(cartTotal);
-//        return cartList;
-//    }
+    @DeleteMapping("/menu/cart/{index}")
+    @ResponseBody
+    public CartListDto removeOneCart(@PathVariable int index, HttpSession session) {
+        CartListDto cartList = (CartListDto) session.getAttribute("cartList");
 
+        if (cartList != null) {
+            int cartTotal = cartList.getCartTotalPrice();
+            List<CartDto> carts = cartList.getCartDto();
+
+            if (carts.size() > index) { // 유효한 인덱스인지 확인
+                int removeCartPrice = carts.get(index).getTotalPrice();
+
+                log.info("remove carts : {}", carts.get(index));
+                carts.remove(index);
+                if (carts.size() == 0) {
+                    session.removeAttribute("cartList");
+                    cartList.setCartTotalPrice(0); // 장바구니가 비어있으면 총 주문금액도 0으로 설정
+                    return null;
+                }
+                cartTotal -= removeCartPrice;
+                cartList.setCartTotalPrice(cartTotal);
+
+                return cartList;
+            } else {
+                return null; // 유효하지 않은 인덱스인 경우 처리
+            }
+        } else {
+            return null;
+        }
+    }
 
 }

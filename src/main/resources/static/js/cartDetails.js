@@ -1,6 +1,3 @@
-const mindelivery = Number($("#min_delivery").data("min_delivery"));
-const deliveryTip = Number($("#delivery_tip").data("delivery_tip"));
-
 
 let cnt = 0;
 
@@ -27,8 +24,4 @@ function addCart(menuName, menuPrice) {
 function updateCartCnt(count) {
     // span 태그 업데이트
     document.getElementById('cart-count').innerText = count;
-}
-
-function goCart() {
-    window.open("/menu/cart")
 }

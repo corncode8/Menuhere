@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta name="viewport" content="width=device-width,initial-scale=1" charset="UTF-8">
 
@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css" >
     <link rel="stylesheet" href="/css/style.css" >
 
+    <script src="/js/tokenManager.js"></script>
+    <script src="/js/cartDetails.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 
@@ -35,6 +37,15 @@
         .menu-name {
             margin-left: 40px;
         }
+        .order-btn {
+            width: 25%;
+        }
+        .right-align {
+            float: right;
+        }
+        p {
+            text-align: left;
+        }
         /* mobile 규격 */
         @media screen and (max-width: 540px){
             .custom_space {
@@ -59,6 +70,9 @@
             .menu-name {
                 margin-left: -5px;
             }
+            .order-btn {
+                width: 97%;
+            }
         }
     </style>
 </head>
@@ -67,9 +81,9 @@
     <div class="container text-center">
         <nav class="navbar fixed-top">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/menu.html"><i class="bi bi-arrow-left"></i></a>
+                <a class="navbar-brand" th:href="@{/menu}"><i class="bi bi-arrow-left"></i></a>
                 <h2 style="font-style: bold; height:20px">장바구니</h2>
-                <a href="/menu.html"><i class="bi bi-house"></i></a>
+                <a th:href="@{/}"><i class="bi bi-house"></i></a>
                 <div aria-labelledby="offcanvasNavbarLabel" class="offcanvas offcanvas-end hm" id="offcanvasNavbar"
                      tabindex="-1">
                     <div class="offcanvas-header">
@@ -83,11 +97,11 @@
     <div class="card mb-2 border-0" th:each="cartlist, cartIndex : ${cartViewForms}" th:with="cartDto=${cartList.cartDto[cartIndex.index]}">
         <div class="row">
             <div class="row menu-name">
-                <strong style="margin-left: 13px;" th:text="${cartlist.name}"></strong>
-                <i class="bi bi-x text-end"></i>
+                <strong style="margin-left: 13px; margin-top: -5px; margin-bottom: -5px" th:text="${cartlist.name}"></strong>
+                <i class="bi bi-x text-end" th:data-index="${cartIndex.index}" onclick="removeOne(this)"></i>
             </div>
             <div class="col-4 col-sm-4 d-flex align-items-center justify-content-center">
-                <img alt="Menu Image" class="img-fluid rounded" th:src="|/image/storeImage/${cartlist.uploadFile.getStoreFileName()}|" style="width: 75px; height: 75px;">
+                <img alt="Menu Image" class="img-fluid rounded" th:src="|/image/storeImage/${cartlist.uploadFile.getStoreFileName()}|" style="width: 75px; height: 75px; margin-top: 10px">
             </div>
             <div class="col-7">
                 <div class="card-body text-start px-1" style="margin-left: -28px;">
@@ -97,40 +111,102 @@
             </div>
             <div class="num d-flex justify-content-end px-4">
                     <span class="count">
-                        <a href="#" class="minus">-</a>
-                        <span class="result" th:text="${cartDto.amount}"></span>
-                        <a href="#" class="plus">+</a>
+                        <a href="#" class="minus" th:data-menuid="${cartlist.menuId}">-</a>
+                        <span class="result" th:text="${cartDto.amount}" th:data-menuid="${cartlist.menuId}"></span>
+                        <a href="#" class="plus" th:data-menuid="${cartlist.menuId}">+</a>
                     </span>
             </div>
         </div>
         <hr>
     </div>
+    <nav class="z-2 navbar fixed-bottom shadow">
+        <div class="card mb-2 border-0 container text-center">
+            <div class="row">
+                <div style="margin-bottom: -8px;">
+<!--                    TODO: cartList.cartTotalPrice 가 null일때 예외처리-->
+                    <p>&nbsp;총 주문금액<span class="right-align" style="font-weight: bold;"><span class="total-order" th:text="${cartList.cartTotalPrice}"></span>원&nbsp;</span></p>
+                    <hr>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="container-fluid d-flex justify-content-center" style="text-align: center; height: 45px">
+            <button class="btn btn-primary btn-lg order-btn" >
+                <span class="order-btn" th:text="${cartList.cartTotalPrice}" ></span>
+                <span>원 주문하기</span>
+            </button>
+        </div>
+    </nav>
 </div>
 <script>
-    // TODO: 여러메뉴 적용 가능하게 수정
-    let plus = document.querySelector(".plus");
-    let minus = document.querySelector(".minus");
-    let result = document.querySelector(".result");
-    let price = document.querySelector(".price");
-    let totalcost = document.querySelector(".totalcost");
+    let plus = document.querySelectorAll(".plus");
+    let minus = document.querySelectorAll(".minus");
+    let result = document.querySelectorAll(".result");
+    let price = document.querySelectorAll(".price");
+    let totalcost = document.querySelectorAll(".totalcost");
+    let totalOrder = document.querySelector(".total-order");
+    let orderButton = document.querySelector(".order-btn");
 
-    let resultValue = parseInt(result.textContent);
-    let priceValue = parseInt(price.textContent);
+    let resultValues = Array.from(result).map(el => parseInt(el.textContent));
+    let priceValues = Array.from(price).map(el => parseInt(el.textContent));
 
-    plus.addEventListener("click", ()=> {
-        resultValue++;
-        result.textContent = resultValue;
-        let totalcostNum = resultValue * priceValue;
-        totalcost.textContent = totalcostNum.toLocaleString();
-    })
-    minus.addEventListener("click", () => {
-        if (resultValue > 1) {
-            resultValue--;
-            result.textContent = resultValue;
-            let totalcostNum = resultValue * priceValue;
-            totalcost.textContent = totalcostNum.toLocaleString();
+    function updateTotalCost() {
+        let total = 0;
+        for (let i = 0; i < resultValues.length; i++) {
+            total += resultValues[i] * priceValues[i];
         }
-    })
+        totalOrder.textContent = total.toLocaleString();
+        orderButton.textContent = total.toLocaleString() + "원 주문하기";
+    }
+    function reduceCost(num) {
+        let total = totalOrder.textContent;
+        total -= num;
+        totalOrder.textContent = total;
+        orderButton.textContent = total + "원 주문하기";
+    }
+
+    plus.forEach((btn, index) => {
+        btn.addEventListener("click", () => {
+            resultValues[index]++;
+            result[index].textContent = resultValues[index];
+            let totalcostNum = resultValues[index] * priceValues[index];
+            totalcost[index].textContent = totalcostNum.toLocaleString();
+            updateTotalCost();
+        });
+    });
+
+    minus.forEach((btn, index) => {
+        btn.addEventListener("click", () => {
+            if (resultValues[index] > 1) {
+                resultValues[index]--;
+                result[index].textContent = resultValues[index];
+                let totalcostNum = resultValues[index] * priceValues[index];
+                totalcost[index].textContent = totalcostNum.toLocaleString();
+                updateTotalCost();
+            }
+        });
+    });
+
+    function removeOne(element) {
+        const index = element.getAttribute('data-index');
+        let total = parseInt(totalcost[0].textContent)
+        fetch(`/menu/cart/${index}`, {
+            method: 'DELETE'
+        })
+            .then(response => response.text())
+            .then(data => {
+                // 삭제된 후의 처리 로직
+                const cardElement = element.closest('.card');
+                if (cardElement) {
+                    cardElement.remove(); // 카드 단위 삭제
+                }
+                reduceCost(total);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
 </script>
 </body>
 </html>

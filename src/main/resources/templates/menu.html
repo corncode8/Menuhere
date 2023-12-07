@@ -139,7 +139,7 @@
     </div>
     <nav class="z-2 navbar fixed-bottom shadow">
         <div class="container-fluid d-flex justify-content-center" style="text-align: center; height: 45px">
-            <button class="btn btn-primary btn-lg" onclick="goCart()"><i class="bi bi-cart3"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;View Order&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge bg-dark" id="cart-count" style="color: white; margin-left: 10px;" >0</span></button>
+            <button class="btn btn-primary btn-lg" th:onclick="|location.href='@{/menu/cart}'|"><i class="bi bi-cart3"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;View Order&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge bg-dark" id="cart-count" style="color: white; margin-left: 10px;" >0</span></button>
         </div>
     </nav>
 </div>

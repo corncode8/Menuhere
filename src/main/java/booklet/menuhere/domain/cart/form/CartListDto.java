@@ -10,8 +10,12 @@ import java.util.List;
 @AllArgsConstructor
 public class CartListDto {
 
-    @NotNull
     public int cartTotalPrice;
-//    private int deliveryTip;
+    public int deliveryTip = 2000;
     List<CartDto> cartDto;
+
+    public CartListDto(int cartTotalPrice, List<CartDto> cartDtos) {
+        this.cartTotalPrice = cartTotalPrice;
+        this.cartDto = cartDtos;
+    }
 }
