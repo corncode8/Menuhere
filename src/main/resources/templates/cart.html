@@ -119,11 +119,10 @@
         </div>
         <hr>
     </div>
-    <nav class="z-2 navbar fixed-bottom shadow">
+    <nav class="z-2 navbar fixed-bottom shadow" th:if="${cartList != null}">
         <div class="card mb-2 border-0 container text-center">
             <div class="row">
                 <div style="margin-bottom: -8px;">
-<!--                    TODO: cartList.cartTotalPrice 가 null일때 예외처리-->
                     <p>&nbsp;총 주문금액<span class="right-align" style="font-weight: bold;"><span class="total-order" th:text="${cartList.cartTotalPrice}"></span>원&nbsp;</span></p>
                     <hr>
                 </div>
@@ -158,9 +157,9 @@
         totalOrder.textContent = total.toLocaleString();
         orderButton.textContent = total.toLocaleString() + "원 주문하기";
     }
-    function reduceCost(num) {
-        let total = totalOrder.textContent;
-        total -= num;
+    function reduceCost(total, cost) {
+        // let total = parseInt(totalOrder.textContent);
+        total -= cost;
         totalOrder.textContent = total;
         orderButton.textContent = total + "원 주문하기";
     }
@@ -189,7 +188,7 @@
 
     function removeOne(element) {
         const index = element.getAttribute('data-index');
-        let total = parseInt(totalcost[0].textContent)
+        let total = parseInt(totalOrder.textContent)
         fetch(`/menu/cart/${index}`, {
             method: 'DELETE'
         })
@@ -198,9 +197,11 @@
                 // 삭제된 후의 처리 로직
                 const cardElement = element.closest('.card');
                 if (cardElement) {
+                    const cost = parseInt(cardElement.querySelector('.totalcost').textContent);
                     cardElement.remove(); // 카드 단위 삭제
+                    reduceCost(total, cost);
                 }
-                reduceCost(total);
+
             })
             .catch(error => {
                 console.error('Error:', error);

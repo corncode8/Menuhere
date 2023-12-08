@@ -10,7 +10,7 @@ import java.util.List;
 public class CartListDto {
 
     public int cartTotalPrice;
-    public int deliveryTip = 2000;
+    public int deliveryTip;
     List<CartDto> cartDto;
 
     public CartListDto(int cartTotalPrice, List<CartDto> cartDtos) {

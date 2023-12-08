@@ -137,9 +137,10 @@ public class CartController {
                     session.removeAttribute("cartList");
                     cartList.setCartTotalPrice(0); // 장바구니가 비어있으면 총 주문금액도 0으로 설정
                     return null;
+                } else {
+                    cartTotal -= removeCartPrice;
+                    cartList.setCartTotalPrice(cartTotal);
                 }
-                cartTotal -= removeCartPrice;
-                cartList.setCartTotalPrice(cartTotal);
 
                 return cartList;
             } else {
