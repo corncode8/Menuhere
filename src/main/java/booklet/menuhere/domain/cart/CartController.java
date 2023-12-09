@@ -93,23 +93,7 @@ public class CartController {
         return "cart";
     }
 
-    // 장바구니 수량 변경
-    @PutMapping("/update/amount/{menuName}")
-    @ResponseBody
-    public CartListDto plusAmount(@PathVariable String menuName,int amount, HttpSession session) {
-        CartListDto cartList = (CartListDto) session.getAttribute("cartList");
 
-        if (cartList != null) {
-            List<CartDto> cartDtos = cartList.getCartDto();
-            for (CartDto cartDto : cartDtos) {
-                if (cartDto.getMenuName().equals(menuName)) {
-                    cartDto.setAmount(amount);
-                    cartDto.totalPriceCalc();
-                }
-            }
-        }
-        return cartList;
-    }
 
     // 장바구니 전체 삭제
     @DeleteMapping("/menu/cart/remove")
@@ -149,6 +133,33 @@ public class CartController {
         } else {
             return null;
         }
+    }
+
+    // 장바구니 수량 변경
+    @PutMapping("/update/amount/{menuName}")
+    @ResponseBody
+    public CartListDto plusAmount(@PathVariable String menuName,@RequestBody CartDto amount, HttpSession session) {
+        CartListDto cartList = (CartListDto) session.getAttribute("cartList");
+
+        if (cartList != null) {
+            List<CartDto> cartDtos = cartList.getCartDto();
+
+            for (CartDto cartDto : cartDtos) {
+                if (cartDto.getMenuName().equals(menuName)) {
+                    cartDto.setAmount(amount.getAmount());
+                    cartDto.totalPriceCalc();
+                }
+            }
+            int total = 0;
+            for (CartDto cartDto : cartDtos) {
+                total += cartDto.getTotalPrice();
+            }
+
+            cartList.setCartTotalPrice(total);
+            session.setAttribute("cartList", cartList);
+        }
+        log.info("current cart : {}", cartList);
+        return cartList;
     }
 
 }
