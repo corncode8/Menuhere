@@ -98,6 +98,9 @@
                 payment(paytype);
             }
         }
+        // TODO: 결제실패 로직 및 테스트
+        // https://guide.portone.io/09f252f7-f15e-4e1c-ad39-d526486b463b 아임포트 가이드 페이지
+        // 페이코는 실 결제가 되지 않고 페이코 개발용 앱을 다운받아야 함.
         function payment(type) {
 
             IMP.request_pay({
@@ -169,9 +172,9 @@
                     </label>
                 </div>
             </div>
-            
+<!--                TODO: 데이터 검증-->
                 <div class="mb-3 table-no">
-                    <label for="formGroupExampleInput" class="form-label table-no" style="text-align: start;">테이블 번호</label>
+                    <label for="formGroupExampleInput" class="form-label table-no" style="text-align: start;" >테이블 번호</label>
                     <input type="text" class="form-control" id="formGroupExampleInput" placeholder="테이블 번호를 입력해주세요.">
                   </div>
                   <br>
@@ -214,6 +217,7 @@
             <h2 class="mb-3" style="font-size: 18px; font-weight: bold;">총 결제금액 <span class="right-align" th:text="${payAmount} + 원"></span></h2>
       </div>
     </div>
+<!--    TODO: 주문 후 처리 ( 주문완료 페이지 + 주문 실패 )-->
       <nav class="z-2 navbar fixed-bottom shadow" style="background-color: white;">
         <div class="container-fluid d-flex justify-content-center" style="text-align: center; height: 45px">
             <button class="btn btn-primary btn-lg order-btn" onclick="requestPay()"><span th:text="${payAmount}" class="pay-amount"></span>원 주문하기</button>
