@@ -87,9 +87,9 @@
     <button type="button" class="btn btn-outline-dark" id="Logout" style="display: none;" onclick="Logout()">Logout</button>
 </div>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded',async function () {
         // 페이지 로드 시 한 번 실행
-        const token = getToken();
+        const token = await getToken();
 
         // 버튼 요소들 가져오기
         const signIn = document.getElementById('Sign_in');

@@ -1,10 +1,10 @@
 
-function getToken() {
+async function getToken() {
     const accessToken = localStorage.getItem('AccessToken');
     const refreshToken = localStorage.getItem("RefreshToken");
-    if (isTokenValid(accessToken)) {
+    if (await isTokenValid(accessToken)) {
         return accessToken;
-    } else if (isTokenValid(refreshToken)) {
+    } else if (await isTokenValid(refreshToken)) {
         return refreshToken;
     }
     else {

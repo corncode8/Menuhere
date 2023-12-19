@@ -20,8 +20,9 @@ public class Menu extends BaseEntity {
     private String name;
     private String content;
     private int price;
-    private int orderNum = 0;               // 메뉴 주문 횟수
-    private boolean isdel = false;          // 삭제여부 :     메뉴삭제시 true
+    private int orderNum = 0;       // TODO: 메뉴 주문 횟수
+    private boolean saleHold;
+    private boolean sale;           // 판매
     private Category category;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)

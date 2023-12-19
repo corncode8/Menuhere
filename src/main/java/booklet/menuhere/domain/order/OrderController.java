@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 @RequiredArgsConstructor
 public class OrderController {
 
-    @GetMapping("/orders")
+    @GetMapping("/menu/cart/orders")
     public String order(Model model, HttpSession session) {
         CartListDto cartList = (CartListDto) session.getAttribute("cartList");
         if (cartList == null) {

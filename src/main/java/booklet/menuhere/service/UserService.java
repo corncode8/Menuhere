@@ -33,7 +33,7 @@ public class UserService {
                 .username(userSignUpDto.getUsername())
                 .phone(userSignUpDto.getPhone())
                 .address(userSignUpDto.getAddress())
-                .role(Role.MANAGER)
+                .role(Role.USER)
                 .build();
         user.passwordEncode(passwordEncoder);
         userRepository.save(user);

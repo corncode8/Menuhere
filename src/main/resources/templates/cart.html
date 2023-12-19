@@ -106,7 +106,10 @@
             <div class="col-7">
                 <div class="card-body text-start px-1" style="margin-left: -28px;">
                     <h6>가격 : <span class="price" th:text="${cartlist.price}"></span>원</h6>
-                    <h4 class="card-text totalcost" th:text="${cartDto.totalPrice}"><span class="won">원</span></h4>
+                    <h4 class="card-text totalcost">
+                        <span th:text="${cartDto.totalPrice}"></span>
+                        <span class="won">원</span>
+                    </h4>
                 </div>
             </div>
             <div class="num d-flex justify-content-end px-4">
@@ -130,7 +133,7 @@
             <hr>
         </div>
         <div class="container-fluid d-flex justify-content-center" style="text-align: center; height: 45px">
-            <button class="btn btn-primary btn-lg order-btn" th:onclick="|location.href='@{/orders}'|">
+            <button class="btn btn-primary btn-lg order-btn" th:onclick="|location.href='@{/menu/cart/orders}'|">
                 <span class="order-btn" th:text="${cartList.cartTotalPrice}" ></span>
                 <span>원 주문하기</span>
             </button>
@@ -160,7 +163,7 @@
     function reduceCost(total, cost) {
         // let total = parseInt(totalOrder.textContent);
         total -= cost;
-        totalOrder.textContent = total;
+        totalOrder.textContent = total ;
         orderButton.textContent = total + "원 주문하기";
     }
 
@@ -169,7 +172,7 @@
             resultValues[index]++;
             result[index].textContent = resultValues[index];
             let totalcostNum = resultValues[index] * priceValues[index];
-            totalcost[index].textContent = totalcostNum.toLocaleString();
+            totalcost[index].textContent = totalcostNum.toLocaleString() + "원";
             updateTotalCost();
 
             let menuName = btn.getAttribute('data-menuName');
@@ -183,7 +186,7 @@
                 resultValues[index]--;
                 result[index].textContent = resultValues[index];
                 let totalcostNum = resultValues[index] * priceValues[index];
-                totalcost[index].textContent = totalcostNum.toLocaleString();
+                totalcost[index].textContent = totalcostNum.toLocaleString() + "원";
                 updateTotalCost();
 
                 let menuName = btn.getAttribute('data-menuName');

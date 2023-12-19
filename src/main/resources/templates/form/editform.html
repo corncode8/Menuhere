@@ -19,7 +19,17 @@
           </div>
       </div>
 
-    <form action="item.html" th:action th:object="${item}" method="post" enctype="multipart/form-data">
+    <form th:object="${menu}" method="post" enctype="multipart/form-data">
+        <!-- 현재 이미지 표시 -->
+        <div>
+            <label for="currentImage">현재 메뉴 사진</label>
+            <div>
+                <img th:if="${menu.storeFileName}" th:src="|/image/storeImage/${menu.storeFileName}|" alt="Current Menu Image" style="max-width: 200px; max-height: 200px;">
+                <p th:unless="${menu.storeFileName}">현재 사진이 없습니다.</p>
+            </div>
+        </div>
+
+        <!-- 이미지 업로드 필드 -->
         <div>
             <label for="itemImage">사진 등록</label>
             <input type="file" id="itemImage" name="itemImage" accept="image/*" class="form-control">
@@ -27,62 +37,42 @@
         </div>
         <div>
             <label for="itemName">상품명</label>
-            <input type="text" id="itemName" class="form-control" th:field="*{itemName}">
+            <input type="text" id="itemName" class="form-control" th:field="*{name}">
         </div>
         <div>
             <label for="itemInfo">상품 설명</label>
-            <input type="text" id="itemInfo" class="form-control" th:field="*{itemInfo}">
+            <input type="text" id="itemInfo" class="form-control" th:field="*{content}">
         </div>
         <div>
             <label for="price">가격</label>
             <input type="text" id="price" class="form-control" th:field="*{price}">
         </div>
-        <div>
-            <label for="quantity">수량</label>
-            <input type="text" id="quantity" class="form-control" th:field="*{quantity}">
-        </div>
 
         <hr class="my-4">
 
-        <!-- checkbox -->
-        <div>판매 여부</div>
-        <div>
-            <div class="form-check">
-                <input type="checkbox" id="open" th:field="*{open}" class="form-check-input">
-                <label for="open" class="form-check-label">판매 오픈</label>
-            </div>
-        </div>
+        <!-- checkbox TODO: 판매 여부 해결 -->
+<!--        <div>판매 여부</div>-->
+<!--        <div>-->
+<!--            <div class="form-check">-->
+<!--                <input type="checkbox" id="open" th:field="*{saleHold}" class="form-check-input" th:checked="${menu.saleHold}">-->
+<!--                <label for="open" class="form-check-label">판매 보류</label>-->
+<!--            </div>-->
+<!--        </div>-->
         <!-- radio button -->
+        <div>판매 여부</div>
+                <div>
+                    <div class="form-check">
+                        <input type="checkbox" id="open" th:field="*{saleHold}" class="form-check-input" th:checked="${menu.saleHold}">
+                        <label for="open" class="form-check-label">메뉴 삭제</label>
+                    </div>
+                </div>
+         radio button
         <div>
             <div>상품 종류</div>
             <div th:each="type : ${itemTypes}" class="form-check form-check-inline">
-                <input type="radio" th:field="*{itemType}" th:value="${type.name()}" class="form-check-input">
-                <label th:for="${#ids.prev('itemType')}" th:text="${type.description}" class="form-check-label">
+                <input type="radio" th:field="*{category}" th:value="${type.name()}" class="form-check-input" th:checked="${menu.category == type}">
+                <label th:for="${#ids.prev('category')}" th:text="${type.description}" class="form-check-label">
                     Signature
-                </label>
-            </div>
-            <div th:each="type : ${itemTypes}" class="form-check form-check-inline">
-                <input type="radio" th:field="*{itemType}" th:value="${type.name()}" class="form-check-input">
-                <label th:for="${#ids.prev('itemType')}" th:text="${type.description}" class="form-check-label">
-                    Coffee
-                </label>
-            </div>
-            <div th:each="type : ${itemTypes}" class="form-check form-check-inline">
-                <input type="radio" th:field="*{itemType}" th:value="${type.name()}" class="form-check-input">
-                <label th:for="${#ids.prev('itemType')}" th:text="${type.description}" class="form-check-label">
-                    Beverage
-                </label>
-            </div>
-            <div th:each="type : ${itemTypes}" class="form-check form-check-inline">
-                <input type="radio" th:field="*{itemType}" th:value="${type.name()}" class="form-check-input">
-                <label th:for="${#ids.prev('itemType')}" th:text="${type.description}" class="form-check-label">
-                    Tea
-                </label>
-            </div>
-            <div th:each="type : ${itemTypes}" class="form-check form-check-inline">
-                <input type="radio" th:field="*{itemType}" th:value="${type.name()}" class="form-check-input">
-                <label th:for="${#ids.prev('itemType')}" th:text="${type.description}" class="form-check-label">
-                    Dessert
                 </label>
             </div>
         </div>
@@ -95,10 +85,12 @@
             </div>
             <div class="col">
                 <button class="w-100 btn btn-secondary btn-lg"
-                        onclick="location.href='item.html'"
-                        th:onclick="|location.href='@{/form/items/{itemId}(itemId=${item.id})}'|"
+                        th:onclick="|location.href='@{/menu}'|"
                         type="button">취소</button>
             </div>
+<!--            <div class="col">-->
+<!--                <button class="w-100 btn btn-secondary btn-lg" type="submit" th:onclick="|location.href='@{/menu}'|">메뉴 삭제</button>-->
+<!--            </div>-->
         </div>
 
     </form>
