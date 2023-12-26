@@ -90,6 +90,7 @@ public class JwtService {
 
         setAccessTokenHeader(response, accessToken);
         setRefreshTokenHeader(response, refreshToken);
+
         log.info("Access Token, Refresh Token 헤더 설정 완료");
     }
 
@@ -149,6 +150,7 @@ public class JwtService {
     public void setRefreshTokenHeader(HttpServletResponse response, String refreshToken) {
         response.setHeader(refreshHeader, refreshToken);
     }
+
 
     /**
      * RefreshToken DB 저장(업데이트)

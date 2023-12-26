@@ -34,8 +34,3 @@ function Logout() {
     // 페이지 새로고침
     location.reload();
 }
-
-function mainPageUpdateButton() {
-    const authToken = localStorage.getItem('AccessToken');
-    const refreshToken = localStorage.getItem("RefreshToken");
-}

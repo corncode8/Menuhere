@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="header :: header">
+<head>
     <meta charset="UTF-8" content="width=device-width,initial-scale=1" name="viewport">
-
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="/js/bootstrap.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <script src="/js/tokenManager.js"></script>
+    <script src="/js/cartDetails.js"></script>
     <style>
         /* mobile 규격 */
         @media screen and (max-width: 540px) {
@@ -39,10 +45,12 @@
                 font-size: 13px;
             }
         }
+
         img {
             max-width: 50px;
             max-height: 185px;
         }
+
         #offcanvasNavbar {
             max-width: 50%;
         }
@@ -104,29 +112,50 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <th>SIGNATURE</th>
-                    <th>&nbsp;&nbsp;COFFEE&nbsp;&nbsp;</th>
-                    <th>BEVERAGE</th>
-                    <th>&nbsp;&nbsp;&nbsp;&nbsp;TEA&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                    <th>&nbsp;&nbsp;DESSERT&nbsp;</th>
+                    <th>
+                        <button onclick="loadCategory('SIGNATURE')">SIGNATURE</button>
+                    </th>
+                    <th>
+                        <button onclick="loadCategory('COFFEE')">&nbsp;&nbsp;COFFEE&nbsp;&nbsp;</button>
+                    </th>
+                    <th>
+                        <button onclick="loadCategory('BEVERAGE')">BEVERAGE</button>
+                    </th>
+                    <th>
+                        <button onclick="loadCategory('TEA')">&nbsp;&nbsp;&nbsp;&nbsp;TEA&nbsp;&nbsp;&nbsp;&nbsp;
+                        </button>
+                    </th>
+                    <th>
+                        <button onclick="loadCategory('DESSERT')">&nbsp;&nbsp;DESSERT&nbsp;</button>
+                    </th>
                 </tr>
                 </tbody>
             </table>
         </div>
-        <div class="card mb-2 shadow border-0" th:each="menus : ${menuList}">
-            <div class="row g-0">
-                <div class="col-4 col-sm-4 d-flex align-items-center justify-content-center">
-                    <img alt="Menu Image" class="img-fluid px-1" th:src="|/image/storeImage/${menus.uploadFile.getStoreFileName()}|" style="object-fit: cover;">
-                </div>
-                <div class="col-7 col-sm-7">
-                    <div class="card-body text-start px-1">
-                        <h4 class="card-title" th:text="${menus.name}"></h4>
-                        <p class="card-text" th:text="${menus.content}"></p>
-                        <div class="d-flex justify-content-between align-items-end">
-                            <p class="card-text my-2" th:text="${menus.price} + '원'"></p>
-                            <div class="d-flex justify-content-end">
-                                <button class="btn btn-primary btn-sm" th:name="${menus.name}" th:price="${menus.price}" onclick="addCart(this.getAttribute('name'), this.getAttribute('price'))">장바구니</button>
-                                &nbsp;<button type="button" class="btn btn-primary btn-sm" id="manager-button" style="display: none" th:onclick="|location.href='@{'/menu/' + ${menus.menuId} + '/edit'}'|" ><i class="bi bi-pencil-square"></i></button>
+        <div id="menu-list">
+            <div class="card mb-2 shadow border-0" th:each="menus : ${menuList}">
+                <div class="row g-0">
+                    <div class="col-4 col-sm-4 d-flex align-items-center justify-content-center">
+                        <img alt="Menu Image" class="img-fluid px-1"
+                             th:src="|/image/storeImage/${menus.uploadFile.getStoreFileName()}|" style="object-fit: cover;">
+                    </div>
+                    <div class="col-7 col-sm-7">
+                        <div class="card-body text-start px-1">
+                            <h4 class="card-title" th:text="${menus.name}"></h4>
+                            <p class="card-text" th:text="${menus.content}"></p>
+                            <div class="d-flex justify-content-between align-items-end">
+                                <p class="card-text my-2" th:text="${menus.price} + '원'"></p>
+                                <div class="d-flex justify-content-end">
+                                    <button class="btn btn-primary btn-sm" th:name="${menus.name}"
+                                            th:price="${menus.price}"
+                                            onclick="addCart(this.getAttribute('name'), this.getAttribute('price'))">
+                                        장바구니
+                                    </button>
+                                    &nbsp;<button type="button" class="btn btn-primary btn-sm" id="manager-button"
+                                                  style="display: none"
+                                                  th:onclick="|location.href='@{'/menu/' + ${menus.menuId} + '/edit'}'|">
+                                    <i class="bi bi-pencil-square"></i></button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -136,13 +165,16 @@
     </div>
     <nav class="z-2 navbar fixed-bottom shadow">
         <div class="container-fluid d-flex justify-content-center" style="text-align: center; height: 45px">
-            <button class="btn btn-primary btn-lg" th:onclick="|location.href='@{/menu/cart}'|"><i class="bi bi-cart3"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;View Order&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge bg-dark" id="cart-count" style="color: white; margin-left: 10px;" >0</span></button>
+            <button class="btn btn-primary btn-lg" th:onclick="|location.href='@{/menu/cart}'|"><i
+                    class="bi bi-cart3"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;View Order&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                    class="badge bg-dark" id="cart-count" style="color: white; margin-left: 10px;">0</span></button>
         </div>
     </nav>
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', async function () {
         // 페이지 로드 시 한 번 실행
+        updateCartCnt();
         const token = await getToken();
 
         await fetch('/menu', {
@@ -179,7 +211,64 @@
             .catch((error) => {
                 console.error('Error:', error);
             });
+
     });
+
+    function updateCartCnt() {
+        $.ajax({
+            url: 'update/amount/cart',
+            type: 'GET',
+            success: function (response) {
+                console.log(response);
+                let cnt = response.cartAmount;
+                if (cnt == null) {
+                    document.getElementById('cart-count').innerText = 0;
+                } else {
+                    document.getElementById('cart-count').innerText = response.cartAmount;
+                }
+            },
+            error: function (error) {
+                console.error("Error cart cnt", error);
+            }
+        })
+    }
+    function loadCategory(category) {
+        $.ajax({
+            url: `/menus/${category}`,
+            type: 'GET',
+            success: function(menus) {
+                console.log(menus);
+                let menusHtml = '';
+                menus.forEach(menu => {
+                    menusHtml += `
+                    <div class="card mb-2 shadow border-0">
+                        <div class="row g-0">
+                            <div class="col-4 col-sm-4 d-flex align-items-center justify-content-center">
+                                <img alt="Menu Image" class="img-fluid px-1" src="/image/storeImage/${menu.uploadFile.storeFileName}" style="object-fit: cover;">
+                            </div>
+                            <div class="col-7 col-sm-7">
+                                <div class="card-body text-start px-1">
+                                    <h4 class="card-title">${menu.name}</h4>
+                                    <p class="card-text">${menu.content}</p>
+                                    <div class="d-flex justify-content-between align-items-end">
+                                        <p class="card-text my-2">${menu.price}원</p>
+                                        <div class="d-flex justify-content-end">
+                                            <button class="btn btn-primary btn-sm" name="${menu.name}" price="${menu.price}" onclick="addCart(this.getAttribute('name'), this.getAttribute('price'))">장바구니</button>
+                                            &nbsp;<button type="button" class="btn btn-primary btn-sm" id="manager-button" style="display: none" onclick="location.href='/menu/${menu.menuId}/edit'"><i class="bi bi-pencil-square"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                document.getElementById('menu-list').innerHTML = menusHtml;
+            },
+            error: function(error) {
+                console.error("Error loading category", error);
+            }
+        });
+    }
 </script>
 </body>
 </html>

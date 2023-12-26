@@ -1,6 +1,7 @@
 package booklet.menuhere.repository;
 
 
+import booklet.menuhere.domain.menu.Category;
 import booklet.menuhere.domain.menu.Menu;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -15,5 +16,6 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
     List<Menu> findAll();
     List<Menu> findAllBySaleIsTrue();
     List<Menu> findAllBySaleIsTrueAndSaleHoldIsFalse();
+    List<Menu> findByCategory(Category category);
 
 }

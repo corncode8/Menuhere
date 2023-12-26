@@ -4,6 +4,7 @@ import booklet.menuhere.domain.BaseEntity;
 import booklet.menuhere.domain.OrderMenu;
 import booklet.menuhere.domain.menu.file.UploadFile;
 import lombok.Data;
+import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.ArrayList;

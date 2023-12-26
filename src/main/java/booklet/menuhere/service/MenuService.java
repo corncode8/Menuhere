@@ -1,5 +1,6 @@
 package booklet.menuhere.service;
 
+import booklet.menuhere.domain.menu.Category;
 import booklet.menuhere.domain.menu.Menu;
 import booklet.menuhere.domain.menu.file.FileStore;
 import booklet.menuhere.domain.menu.file.UploadFile;
@@ -50,18 +51,9 @@ public class MenuService {
     public MenuEditDto editView(Long menuId) {
         Optional<Menu> menuOpt = menuRepository.findById(menuId);
         if (menuOpt.isPresent()) {
-            Menu menu = menuOpt.get();
-
-            MenuEditDto editDto = new MenuEditDto();
-            editDto.setSaleHold(menu.isSaleHold());
-            editDto.setCategory(menu.getCategory());
-            editDto.setContent(menu.getContent());
-            editDto.setPrice(menu.getPrice());
-            editDto.setMenuId(menu.getId());
-            editDto.setName(menu.getName());
-            editDto.setStoreFileName(menu.getUploadFile().getStoreFileName());
-
-            return editDto;
+            return (MenuEditDto) menuOpt.stream()
+                    .map(m -> new MenuEditDto(m))
+                    .collect(Collectors.toList());
         } else{
             return null;
         }
@@ -99,17 +91,8 @@ public class MenuService {
             return null;
         }
         return menuList.stream()
-                .map(menu -> {
-                    MenuViewDto menuViewForm = new MenuViewDto();
-                    menuViewForm.setName(menu.getName());
-                    menuViewForm.setCategory(menu.getCategory());
-                    menuViewForm.setPrice(menu.getPrice());
-                    menuViewForm.setUploadFile(menu.getUploadFile());
-                    menuViewForm.setContent(menu.getContent());
-                    menuViewForm.setMenuId(menu.getId());
-                    return menuViewForm;
-                }).collect(Collectors.toList());
-
+                .map(menu -> new MenuViewDto(menu))
+                .collect(Collectors.toList());
     }
 
     // 유저 메뉴 view
@@ -121,16 +104,8 @@ public class MenuService {
         }
 
         return menuList.stream()
-                .map(menu -> {
-                    MenuViewDto menuViewForm = new MenuViewDto();
-                    menuViewForm.setName(menu.getName());
-                    menuViewForm.setCategory(menu.getCategory());
-                    menuViewForm.setPrice(menu.getPrice());
-                    menuViewForm.setUploadFile(menu.getUploadFile());
-                    menuViewForm.setContent(menu.getContent());
-                    menuViewForm.setMenuId(menu.getId());
-                    return menuViewForm;
-                }).collect(Collectors.toList());
+                .map(menu -> new MenuViewDto(menu))
+                .collect(Collectors.toList());
 
     }
 
@@ -147,7 +122,15 @@ public class MenuService {
         }
     }
 
-
+    public List<MenuViewDto> findCategory(Category category) {
+        List<Menu> menuList = menuRepository.findByCategory(category);
+        if (menuList.isEmpty()) {
+            return null;
+        }
+        return menuList.stream()
+                .map(menu -> new MenuViewDto(menu))
+                .collect(Collectors.toList());
+    }
 
     public Menu getMenuName(String name) {
         return menuRepository.findByName(name).orElse(null);

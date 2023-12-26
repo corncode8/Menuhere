@@ -5,7 +5,10 @@ import booklet.menuhere.domain.menu.file.FileStore;
 import booklet.menuhere.domain.menu.form.MenuAddDto;
 import booklet.menuhere.domain.menu.form.MenuEditDto;
 import booklet.menuhere.domain.menu.form.MenuViewDto;
+import booklet.menuhere.exception.BaseResponse;
 import booklet.menuhere.service.MenuService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -76,26 +79,6 @@ public class MenuController {
         return "redirect:/menu";
     }
 
-
-//    @GetMapping("/menu")
-//    public String menu(Model model) {
-//
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-//        if (authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_MANAGER"))) {
-//            List<MenuViewDto> forms = menuService.managerViewMenu();
-//            model.addAttribute("menuList", forms);
-//            log.info("매니저 입니다.");
-//        } else {
-//            List<MenuViewDto> forms = menuService.UserViewMenu();
-//            model.addAttribute("menuList", forms);
-//            log.info("유저 입니다");
-//        }
-//
-//        return "menu";
-//    }
-
     @GetMapping("/menu")
     public String menu(Model model, HttpSession session) {
 
@@ -105,6 +88,15 @@ public class MenuController {
         model.addAttribute("menuList", forms);
 
         return "menu";
+    }
+
+    @GetMapping("/menus/{category}")
+    @ResponseBody
+    public BaseResponse MenusByCategory(@PathVariable Category category, HttpSession session) {
+        log.info("List<MenuViewDto> : {}", menuService.findCategory(category));
+        List<MenuViewDto> menuViewDtos = menuService.findCategory(category);
+        // TODO: Type definition error: [simple type, class org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor];
+        return new BaseResponse(menuViewDtos);
     }
 
     @GetMapping("/api/role")
@@ -141,6 +133,5 @@ public class MenuController {
         }
         return "redirect:/menu";
     }
-
 
 }

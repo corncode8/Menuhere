@@ -13,18 +13,17 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class CartController {
 
-    private final MenuService menuService;
-
     // 장바구니 추가
     @PostMapping("/add/cart")
-    @ResponseBody
     public CartListDto addCart(CartDto cartDto, HttpSession session) {
 
         // 기존 세션에 저장된 장바구니 목록 가져오기
@@ -64,47 +63,18 @@ public class CartController {
         return cartList;
     }
 
-    // 장바구니 목록
-    @GetMapping("/menu/cart")
-    public String cartList(HttpSession session, Model model) {
-        CartListDto cartList = (CartListDto) session.getAttribute("cartList");
-        List<CartViewForm> cartViewForms = new ArrayList<>();
 
-        if (cartList != null) {
-            List<CartDto> cartDtos = cartList.getCartDto();
-
-            for (CartDto cartDto : cartDtos) {
-                Menu menu = menuService.getMenuName(cartDto.getMenuName());
-                if (menu != null) {
-                    CartViewForm cartViewForm = new CartViewForm();
-                    cartViewForm.setUploadFile(menu.getUploadFile());
-                    cartViewForm.setName(menu.getName());
-                    cartViewForm.setPrice(menu.getPrice());
-                    cartViewForm.setAmount(cartDto.getAmount());
-                    cartViewForm.setMenuId(menu.getId());
-                    cartViewForms.add(cartViewForm);
-                }
-            }
-        }
-
-        model.addAttribute("cartList", cartList);
-        model.addAttribute("cartViewForms", cartViewForms);
-
-        return "cart";
-    }
 
 
 
     // 장바구니 전체 삭제
     @DeleteMapping("/menu/cart/remove")
-    @ResponseBody
     public void removeCart(HttpSession session) {
         session.removeAttribute("cartList");
     }
 
     // 장바구니 1개 삭제
     @DeleteMapping("/menu/cart/{index}")
-    @ResponseBody
     public CartListDto removeOneCart(@PathVariable int index, HttpSession session) {
         CartListDto cartList = (CartListDto) session.getAttribute("cartList");
 
@@ -137,7 +107,6 @@ public class CartController {
 
     // 장바구니 수량 변경
     @PutMapping("/update/amount/{menuName}")
-    @ResponseBody
     public CartListDto plusAmount(@PathVariable String menuName,@RequestBody CartDto amount, HttpSession session) {
         CartListDto cartList = (CartListDto) session.getAttribute("cartList");
 
@@ -154,12 +123,30 @@ public class CartController {
             for (CartDto cartDto : cartDtos) {
                 total += cartDto.getTotalPrice();
             }
-
+            log.info("cart total : {}", total);
             cartList.setCartTotalPrice(total);
-            session.setAttribute("cartList", cartList);
         }
         log.info("current cart : {}", cartList);
         return cartList;
     }
 
+    @GetMapping("/update/amount/cart")
+    public Map<String, Object> amountCart(HttpSession session, Model model) {
+        CartListDto cartList = (CartListDto) session.getAttribute("cartList");
+
+        if (cartList != null) {
+            List<CartDto> cartDtos = cartList.getCartDto();
+            int amount = 0;
+            for (CartDto cartDto : cartDtos) {
+                amount += cartDto.getAmount();
+            }
+            log.info("cart Amount : {}", amount);
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("cartAmount", amount);
+
+            return map;
+        }
+        return null;
+    }
 }
