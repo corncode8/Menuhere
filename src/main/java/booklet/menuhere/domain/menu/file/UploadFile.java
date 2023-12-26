@@ -1,8 +1,6 @@
 package booklet.menuhere.domain.menu.file;
 
 import booklet.menuhere.domain.BaseEntity;
-import booklet.menuhere.domain.menu.Menu;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;

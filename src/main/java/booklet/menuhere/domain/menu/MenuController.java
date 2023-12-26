@@ -7,8 +7,6 @@ import booklet.menuhere.domain.menu.form.MenuEditDto;
 import booklet.menuhere.domain.menu.form.MenuViewDto;
 import booklet.menuhere.exception.BaseResponse;
 import booklet.menuhere.service.MenuService;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -92,7 +90,7 @@ public class MenuController {
 
     @GetMapping("/menus/{category}")
     @ResponseBody
-    public BaseResponse MenusByCategory(@PathVariable Category category, HttpSession session) {
+    public BaseResponse MenusByCategory(@PathVariable Category category) {
         log.info("List<MenuViewDto> : {}", menuService.findCategory(category));
         List<MenuViewDto> menuViewDtos = menuService.findCategory(category);
         // TODO: Type definition error: [simple type, class org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor];

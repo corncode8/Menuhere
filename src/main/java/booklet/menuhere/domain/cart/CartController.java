@@ -2,12 +2,8 @@ package booklet.menuhere.domain.cart;
 
 import booklet.menuhere.domain.cart.form.CartDto;
 import booklet.menuhere.domain.cart.form.CartListDto;
-import booklet.menuhere.domain.cart.form.CartViewForm;
-import booklet.menuhere.domain.menu.Menu;
-import booklet.menuhere.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -131,7 +127,7 @@ public class CartController {
     }
 
     @GetMapping("/update/amount/cart")
-    public Map<String, Object> amountCart(HttpSession session, Model model) {
+    public Map<String, Object> amountCart(HttpSession session) {
         CartListDto cartList = (CartListDto) session.getAttribute("cartList");
 
         if (cartList != null) {

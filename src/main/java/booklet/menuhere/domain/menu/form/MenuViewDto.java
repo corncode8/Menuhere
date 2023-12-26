@@ -4,7 +4,6 @@ import booklet.menuhere.domain.menu.Category;
 import booklet.menuhere.domain.menu.Menu;
 import booklet.menuhere.domain.menu.file.UploadFile;
 import lombok.Data;
-import net.minidev.json.annotate.JsonIgnore;
 
 @Data
 public class MenuViewDto {
