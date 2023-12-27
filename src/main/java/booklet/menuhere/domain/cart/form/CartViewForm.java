@@ -10,6 +10,4 @@ public class CartViewForm {
     private int price;
     private int amount;
     private UploadFile uploadFile;
-
-
 }

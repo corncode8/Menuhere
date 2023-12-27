@@ -8,6 +8,7 @@ import booklet.menuhere.domain.menu.form.MenuAddDto;
 import booklet.menuhere.domain.menu.form.MenuEditDto;
 import booklet.menuhere.domain.menu.form.MenuViewDto;
 import booklet.menuhere.repository.MenuRepository;
+import booklet.menuhere.repository.menu.MenuViewDtoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -25,6 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MenuService {
 
+    private final MenuViewDtoRepository menuViewDtoRepository;
     private final MenuRepository menuRepository;
     private final FileStore fileStore;
 
@@ -36,13 +36,7 @@ public class MenuService {
             throw new Exception("이미 존재하는 메뉴 이름입니다.");
         }
         Menu menu = new Menu();
-        menu.setName(form.getName());
-        menu.setContent(form.getContent());
-        menu.setPrice(form.getPrice());
-        menu.setUploadFile(attachFile);
-        menu.setCategory(form.getCategory());
-        menu.setSaleHold(false);
-        menu.setSale(true);
+        menu.UpdateMenu(form.getName(), form.getContent(), form.getPrice(), form.getCategory(), false, attachFile);
 
         menuRepository.save(menu);
     }
@@ -51,9 +45,18 @@ public class MenuService {
     public MenuEditDto editView(Long menuId) {
         Optional<Menu> menuOpt = menuRepository.findById(menuId);
         if (menuOpt.isPresent()) {
-            return (MenuEditDto) menuOpt.stream()
-                    .map(m -> new MenuEditDto(m))
-                    .collect(Collectors.toList());
+            Menu menu = menuOpt.get();
+
+            MenuEditDto editDto = new MenuEditDto();
+            editDto.setSaleHold(menu.isSaleHold());
+            editDto.setCategory(menu.getCategory());
+            editDto.setContent(menu.getContent());
+            editDto.setPrice(menu.getPrice());
+            editDto.setMenuId(menu.getId());
+            editDto.setName(menu.getName());
+            editDto.setStoreFileName(menu.getUploadFile().getStoreFileName());
+
+            return editDto;
         } else{
             return null;
         }
@@ -68,14 +71,9 @@ public class MenuService {
 
             if (editDto.getAttachFile() != null && !editDto.getAttachFile().isEmpty()) {
                 UploadFile attachFile = fileStore.storeFile(editDto.getAttachFile());
-                menu.setUploadFile(attachFile);
+                menu.updateFile(attachFile);
             }
-
-            menu.setName(editDto.getName());
-            menu.setContent(editDto.getContent());
-            menu.setPrice(editDto.getPrice());
-            menu.setSaleHold(editDto.isSaleHold());
-            menu.setCategory(editDto.getCategory());
+            menu.EditMenu(editDto.getName(), editDto.getContent(), editDto.getPrice(), editDto.getCategory(), editDto.isSaleHold());
             menuRepository.save(menu);
             return Boolean.TRUE;
         } else
@@ -83,53 +81,37 @@ public class MenuService {
     }
 
     // 매니저 메뉴 view
-    public List<MenuViewDto> managerViewMenu() {
-        List<Menu> menuList = menuRepository.findAllBySaleIsTrue();
-        log.info("Service - manager menu");
-
-        if (menuList.isEmpty()) {
-            return null;
-        }
-        return menuList.stream()
-                .map(menu -> new MenuViewDto(menu))
-                .collect(Collectors.toList());
-    }
+//    public List<MenuViewDto> managerViewMenu() {
+//        List<Menu> menuList = menuRepository.findAllBySaleIsTrue();
+//        log.info("Service - manager menu");
+//
+//        if (menuList.isEmpty()) {
+//            return null;
+//        }
+//        return menuList.stream()
+//                .map(menu -> new MenuViewDto(menu))
+//                .collect(Collectors.toList());
+//    }
 
     // 유저 메뉴 view
-    public List<MenuViewDto> UserViewMenu() {
-        List<Menu> menuList = menuRepository.findAllBySaleIsTrueAndSaleHoldIsFalse();
-        log.info("Service - user menu");
-        if (menuList.isEmpty()) {
-            return null;
-        }
-
-        return menuList.stream()
-                .map(menu -> new MenuViewDto(menu))
-                .collect(Collectors.toList());
-
+    public List<MenuViewDto> ViewMenu() {
+        log.info("View Menu : {}", menuViewDtoRepository.findViewDto());
+        return menuViewDtoRepository.findViewDto();
     }
 
-    // 메뉴 제거 ( sale = false )
-    public Boolean removeMenu(Long menuId) {
-        Optional<Menu> menuOpt = menuRepository.findById(menuId);
-        if (menuOpt.isPresent()) {
-            Menu menu = menuOpt.get();
-            menu.setSale(false);
-            menu.setName("deleteMenu" + UUID.randomUUID());
-            return Boolean.TRUE;
-        } else {
-            return Boolean.FALSE;
-        }
-    }
+
+    // 메뉴 제거
+//    public void removeMenu(Long menuId) {
+//        Optional<Menu> menuOpt = menuRepository.findById(menuId);
+//        if (menuOpt.isPresent()) {
+//            Menu menu = menuOpt.get();
+//            menu.setSale(false);
+//            menu.setName("deleteMenu" + UUID.randomUUID());
+//        }
+//    }
 
     public List<MenuViewDto> findCategory(Category category) {
-        List<Menu> menuList = menuRepository.findByCategory(category);
-        if (menuList.isEmpty()) {
-            return null;
-        }
-        return menuList.stream()
-                .map(menu -> new MenuViewDto(menu))
-                .collect(Collectors.toList());
+        return menuViewDtoRepository.findCategoryView(category);
     }
 
     public Menu getMenuName(String name) {

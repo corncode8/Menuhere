@@ -17,4 +17,7 @@ public class CartListDto {
         this.cartTotalPrice = cartTotalPrice;
         this.cartDto = cartDtos;
     }
+
+    public CartListDto() {
+    }
 }

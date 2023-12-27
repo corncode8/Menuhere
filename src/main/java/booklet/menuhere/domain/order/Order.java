@@ -5,7 +5,6 @@ import booklet.menuhere.domain.OrderMenu;
 import booklet.menuhere.domain.User.User;
 import booklet.menuhere.domain.orderStatus;
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
 @Table(name = "orders")
 public class Order extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

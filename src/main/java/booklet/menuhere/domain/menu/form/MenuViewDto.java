@@ -15,13 +15,12 @@ public class MenuViewDto {
     private UploadFile uploadFile;
     private Category category;
 
-    public MenuViewDto(Menu menu) {
-        menuId = menu.getId();
-        name = menu.getName();
-        content = menu.getContent();
-        price = menu.getPrice();
-        uploadFile = menu.getUploadFile();
-        category = menu.getCategory();
+    public MenuViewDto(Long menuId, String name, String content, int price, UploadFile uploadFile, Category category) {
+        this.menuId = menuId;
+        this.name = name;
+        this.content = content;
+        this.price = price;
+        this.uploadFile = uploadFile;
+        this.category = category;
     }
-
 }

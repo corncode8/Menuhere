@@ -2,12 +2,13 @@ package booklet.menuhere.domain.cart;
 
 import booklet.menuhere.domain.cart.form.CartDto;
 import booklet.menuhere.domain.cart.form.CartListDto;
+import booklet.menuhere.exception.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,11 +17,11 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class CartController {
+public class CartApiController {
 
     // 장바구니 추가
     @PostMapping("/add/cart")
-    public CartListDto addCart(CartDto cartDto, HttpSession session) {
+    public BaseResponse addCart(@Valid CartDto cartDto, HttpSession session) {
 
         // 기존 세션에 저장된 장바구니 목록 가져오기
         CartListDto cartList = (CartListDto) session.getAttribute("cartList");
@@ -56,7 +57,7 @@ public class CartController {
         session.setAttribute("cartList", cartList);
         log.info("cartList : {}", cartList);
 
-        return cartList;
+        return new BaseResponse(cartList);
     }
 
 
@@ -69,9 +70,11 @@ public class CartController {
         session.removeAttribute("cartList");
     }
 
+//    TODO: null 반환값 처리
+
     // 장바구니 1개 삭제
     @DeleteMapping("/menu/cart/{index}")
-    public CartListDto removeOneCart(@PathVariable int index, HttpSession session) {
+    public BaseResponse removeOneCart(@PathVariable int index, HttpSession session) {
         CartListDto cartList = (CartListDto) session.getAttribute("cartList");
 
         if (cartList != null) {
@@ -86,31 +89,32 @@ public class CartController {
                 if (carts.isEmpty()) {
                     session.removeAttribute("cartList");
                     cartList.setCartTotalPrice(0); // 장바구니가 비어있으면 총 주문금액도 0으로 설정
-                    return null;
+                    return new BaseResponse(cartList);
                 } else {
                     cartTotal -= removeCartPrice;
                     cartList.setCartTotalPrice(cartTotal);
                 }
 
-                return cartList;
+                return new BaseResponse(cartList);
             } else {
-                return null; // 유효하지 않은 인덱스인 경우 처리
+                return new BaseResponse(null); // 유효하지 않은 인덱스인 경우
             }
         } else {
-            return null;
+            return new BaseResponse(null) ;
         }
     }
 
     // 장바구니 수량 변경
     @PutMapping("/update/amount/{menuName}")
-    public CartListDto plusAmount(@PathVariable String menuName,@RequestBody CartDto amount, HttpSession session) {
+    public BaseResponse plusAmount(@PathVariable String menuName, @RequestBody @Valid CartDto amount, HttpSession session) {
         CartListDto cartList = (CartListDto) session.getAttribute("cartList");
 
         if (cartList != null) {
             List<CartDto> cartDtos = cartList.getCartDto();
 
             for (CartDto cartDto : cartDtos) {
-                if (cartDto.getMenuName().equals(menuName)) {
+                String menuNameInCart = cartDto.getMenuName().trim();
+                if (menuNameInCart.equals(menuName.trim())) {
                     cartDto.setAmount(amount.getAmount());
                     cartDto.totalPriceCalc();
                 }
@@ -123,11 +127,11 @@ public class CartController {
             cartList.setCartTotalPrice(total);
         }
         log.info("current cart : {}", cartList);
-        return cartList;
+        return new BaseResponse(cartList);
     }
 
     @GetMapping("/update/amount/cart")
-    public Map<String, Object> amountCart(HttpSession session) {
+    public BaseResponse amountCart(HttpSession session) {
         CartListDto cartList = (CartListDto) session.getAttribute("cartList");
 
         if (cartList != null) {
@@ -136,13 +140,24 @@ public class CartController {
             for (CartDto cartDto : cartDtos) {
                 amount += cartDto.getAmount();
             }
-            log.info("cart Amount : {}", amount);
+//            log.info("cart Amount : {}", amount);
 
             Map<String, Object> map = new HashMap<>();
             map.put("cartAmount", amount);
 
-            return map;
+            return new BaseResponse(map);
         }
-        return null;
+        return new BaseResponse(0);
+    }
+
+    @GetMapping("/update/price/cart")
+    public BaseResponse UpdatePriceCart(HttpSession session) {
+        CartListDto cartList = (CartListDto) session.getAttribute("cartList");
+
+        if (cartList != null) {
+            log.info("가격 업데이트 cartList : {}", cartList);
+            return new BaseResponse(cartList);
+        }
+        return new BaseResponse(0);
     }
 }

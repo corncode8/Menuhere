@@ -198,7 +198,8 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.userRole === 'ROLE_MANAGER') {
+                console.log(data);
+                if (data.result.userRole === 'ROLE_MANAGER') {
                     let menu = document.getElementById('manager-menu');
                     menu.style.display = 'block';
 
@@ -219,12 +220,11 @@
             url: 'update/amount/cart',
             type: 'GET',
             success: function (response) {
-                console.log(response);
-                let cnt = response.cartAmount;
-                if (cnt == null) {
+                // console.log(response);
+                if (response.result.cartAmount == null) {
                     document.getElementById('cart-count').innerText = 0;
                 } else {
-                    document.getElementById('cart-count').innerText = response.cartAmount;
+                    document.getElementById('cart-count').innerText = response.result.cartAmount;
                 }
             },
             error: function (error) {

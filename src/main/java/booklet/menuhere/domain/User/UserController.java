@@ -1,6 +1,5 @@
 package booklet.menuhere.domain.User;
 
-import booklet.menuhere.config.jwt.JwtService;
 import booklet.menuhere.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-    private final JwtService jwtService;
+
 
     @GetMapping("/sign-up")
     public String signUp(@ModelAttribute("user") UserSignUpDto user) {
@@ -56,12 +55,5 @@ public class UserController {
         return "jwtTest 요청 성공";
     }
 
-    @GetMapping("/api/validate-token")
-    @ResponseBody
-    public boolean tokenValid(String token) {
-        boolean tokenValid = jwtService.isTokenValid(token);
 
-        if (tokenValid) return true;
-        else return false;
-    }
 }

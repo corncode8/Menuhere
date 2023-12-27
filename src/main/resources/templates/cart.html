@@ -134,7 +134,7 @@
         </div>
         <div class="container-fluid d-flex justify-content-center" style="text-align: center; height: 45px">
             <button class="btn btn-primary btn-lg order-btn" th:onclick="|location.href='@{/menu/cart/orders}'|">
-                <span class="order-btn" th:text="${cartList.cartTotalPrice}" ></span>
+                <span class="order-btn" th:text="${cartList.cartTotalPrice}"></span>
                 <span>원 주문하기</span>
             </button>
         </div>
@@ -153,18 +153,18 @@
     let priceValues = Array.from(price).map(el => parseInt(el.textContent));
 
     function updateTotalCost() {
-        let total = 0;
-        for (let i = 0; i < resultValues.length; i++) {
-            total += resultValues[i] * priceValues[i];
-        }
-        totalOrder.textContent = total.toLocaleString();
-        orderButton.textContent = total.toLocaleString() + "원 주문하기";
-    }
-    function reduceCost(total, cost) {
-        // let total = parseInt(totalOrder.textContent);
-        total -= cost;
-        totalOrder.textContent = total ;
-        orderButton.textContent = total + "원 주문하기";
+        $.ajax({
+            url: '/update/price/cart',
+            type: 'GET',
+            success: function (response) {
+                console.log(response);
+                totalOrder.textContent = response.result.cartTotalPrice;
+                orderButton.textContent = response.result.cartTotalPrice + "원 주문하기";
+            },
+            error: function (error) {
+                console.log("Error Update Cart", error);
+            }
+        })
     }
 
     plus.forEach((btn, index) => {
@@ -197,18 +197,22 @@
 
     function removeOne(element) {
         const index = element.getAttribute('data-index');
-        let total = parseInt(totalOrder.textContent)
         fetch(`/menu/cart/${index}`, {
             method: 'DELETE'
         })
-            .then(response => response.text())
+            .then(response => response.json())
             .then(data => {
+                 console.log(data);
                 // 삭제된 후의 처리 로직
                 const cardElement = element.closest('.card');
                 if (cardElement) {
-                    const cost = parseInt(cardElement.querySelector('.totalcost').textContent);
+                    if (data.result === null) {
+                        totalOrder.textContent = 0;
+                        orderButton.textContent = 0 + "원 주문하기";
+                    }
+                    totalOrder.textContent = data.result.cartTotalPrice;
+                    orderButton.textContent = data.result.cartTotalPrice + "원 주문하기";
                     cardElement.remove(); // 카드 단위 삭제
-                    reduceCost(total, cost);
                 }
             })
             .catch(error => {
@@ -226,8 +230,10 @@
                 amount: quantity })
         })
             .then(response => response.json())
+
             .then(data => {
                 console.log('Success:', data);
+                updateTotalCost();
             })
             .catch((error) => {
                 console.error('Error:', error);

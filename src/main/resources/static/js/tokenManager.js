@@ -1,4 +1,3 @@
-
 async function getToken() {
     const accessToken = localStorage.getItem('AccessToken');
     const refreshToken = localStorage.getItem("RefreshToken");
@@ -20,8 +19,9 @@ async function isTokenValid(token) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        const data = await response.text();
-        return data === 'true'; // 서버에서 받은 값이 'true'이면 true, 그렇지 않으면 false 반환
+        const data = await response.json();
+        // console.log(data);
+        return data.result
     } catch (error) {
         console.error('Error validating token:', error);
         throw error; // 에러가 발생하면 에러를 전파
