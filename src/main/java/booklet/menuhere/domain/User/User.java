@@ -29,6 +29,7 @@ public class User extends BaseEntity {
 
     private String email;
 
+    @Builder.Default
     @OneToMany(mappedBy = "user")
     private List<Order> orders = new ArrayList<>();
 

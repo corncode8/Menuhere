@@ -1,4 +1,4 @@
-package booklet.menuhere.repository;
+package booklet.menuhere.repository.menu;
 
 
 import booklet.menuhere.domain.menu.Category;

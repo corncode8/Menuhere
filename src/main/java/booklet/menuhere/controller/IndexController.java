@@ -22,41 +22,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class IndexController {
 
-    private final MenuService menuService;
-
     @GetMapping("/")
     public String mainpage() {
         return "main";
     }
 
-    // 장바구니 목록
-    @GetMapping("/menu/cart")
-    public String cartList(HttpSession session, Model model) {
-        CartListDto cartList = (CartListDto) session.getAttribute("cartList");
-        List<CartViewForm> cartViewForms = new ArrayList<>();
 
-        if (cartList != null) {
-            List<CartDto> cartDtos = cartList.getCartDto();
-
-            for (CartDto cartDto : cartDtos) {
-                Menu menu = menuService.getMenuName(cartDto.getMenuName());
-                if (menu != null) {
-                    CartViewForm cartViewForm = new CartViewForm();
-                    cartViewForm.setUploadFile(menu.getUploadFile());
-                    cartViewForm.setName(menu.getName());
-                    cartViewForm.setPrice(menu.getPrice());
-                    cartViewForm.setAmount(cartDto.getAmount());
-                    cartViewForm.setMenuId(menu.getId());
-                    cartViewForms.add(cartViewForm);
-                }
-            }
-        }
-
-        model.addAttribute("cartList", cartList);
-        model.addAttribute("cartViewForms", cartViewForms);
-
-        return "cart";
-    }
 
 
 }

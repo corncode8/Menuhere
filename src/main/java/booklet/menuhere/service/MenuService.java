@@ -7,8 +7,8 @@ import booklet.menuhere.domain.menu.file.UploadFile;
 import booklet.menuhere.domain.menu.form.MenuAddDto;
 import booklet.menuhere.domain.menu.form.MenuEditDto;
 import booklet.menuhere.domain.menu.form.MenuViewDto;
-import booklet.menuhere.repository.MenuRepository;
-import booklet.menuhere.repository.menu.MenuViewDtoRepository;
+import booklet.menuhere.repository.menu.MenuRepository;
+import booklet.menuhere.repository.menu.query.MenuViewDtoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -52,7 +52,6 @@ public class MenuService {
             editDto.setCategory(menu.getCategory());
             editDto.setContent(menu.getContent());
             editDto.setPrice(menu.getPrice());
-            editDto.setMenuId(menu.getId());
             editDto.setName(menu.getName());
             editDto.setStoreFileName(menu.getUploadFile().getStoreFileName());
 
@@ -63,8 +62,8 @@ public class MenuService {
     }
 
     // 메뉴 수정하기
-    public Boolean editMenu(MenuEditDto editDto) throws Exception{
-        Optional<Menu> menuOpt = menuRepository.findById(editDto.getMenuId());
+    public Boolean editMenu(MenuEditDto editDto, Long menuId) throws Exception{
+        Optional<Menu> menuOpt = menuRepository.findById(menuId);
 
         if (menuOpt.isPresent()) {
             Menu menu = menuOpt.get();
@@ -95,8 +94,8 @@ public class MenuService {
 
     // 유저 메뉴 view
     public List<MenuViewDto> ViewMenu() {
-        log.info("View Menu : {}", menuViewDtoRepository.findViewDto());
-        return menuViewDtoRepository.findViewDto();
+        log.info("View Menu : {}", menuViewDtoRepository.findViewDtoV2());
+        return menuViewDtoRepository.findViewDtoV2();
     }
 
 
@@ -111,6 +110,7 @@ public class MenuService {
 //    }
 
     public List<MenuViewDto> findCategory(Category category) {
+        log.info("findCategory : {}", menuViewDtoRepository.findCategoryView(category));
         return menuViewDtoRepository.findCategoryView(category);
     }
 

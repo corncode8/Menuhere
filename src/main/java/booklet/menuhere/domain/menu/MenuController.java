@@ -1,6 +1,8 @@
 package booklet.menuhere.domain.menu;
 
+import booklet.menuhere.domain.cart.form.CartDto;
 import booklet.menuhere.domain.cart.form.CartListDto;
+import booklet.menuhere.domain.cart.form.CartViewForm;
 import booklet.menuhere.domain.menu.form.MenuAddDto;
 import booklet.menuhere.domain.menu.form.MenuEditDto;
 import booklet.menuhere.domain.menu.form.MenuViewDto;
@@ -25,6 +27,35 @@ public class MenuController {
 
     private final MenuService menuService;
 
+    // 장바구니 목록
+    @GetMapping("/menu/cart")
+    public String cartList(HttpSession session, Model model) {
+        CartListDto cartList = (CartListDto) session.getAttribute("cartList");
+        List<CartViewForm> cartViewForms = new ArrayList<>();
+
+        if (cartList != null) {
+            List<CartDto> cartDtos = cartList.getCartDto();
+
+            for (CartDto cartDto : cartDtos) {
+                Menu menu = menuService.getMenuName(cartDto.getMenuName());
+                if (menu != null) {
+                    CartViewForm cartViewForm = new CartViewForm();
+                    cartViewForm.setUploadFile(menu.getUploadFile());
+                    cartViewForm.setName(menu.getName());
+                    cartViewForm.setPrice(menu.getPrice());
+                    cartViewForm.setAmount(cartDto.getAmount());
+                    cartViewForm.setMenuId(menu.getId());
+                    cartViewForms.add(cartViewForm);
+                }
+            }
+        }
+
+        model.addAttribute("cartList", cartList);
+        model.addAttribute("cartViewForms", cartViewForms);
+
+        return "cart";
+    }
+
     @GetMapping("/menu/addform")
     public String addForm(Model model) {
         model.addAttribute("menu", new MenuAddDto());
@@ -41,7 +72,7 @@ public class MenuController {
 
     @PostMapping("/menu/{menuId}/edit")
     public String editMenu(@PathVariable Long menuId, @Valid MenuEditDto menuEditDto, RedirectAttributes redirectAttributes) throws Exception{
-        if (menuService.editMenu(menuEditDto)) {
+        if (menuService.editMenu(menuEditDto, menuId)) {
             redirectAttributes.addFlashAttribute("successMessage", "메뉴를 수정하였습니다.");
         } else {
             redirectAttributes.addFlashAttribute("failMessage", "메뉴를 찾을 수 없습니다. 메뉴 수정에 실패하였습니다.");

@@ -2,11 +2,13 @@ package booklet.menuhere.domain.menu.file;
 
 import booklet.menuhere.domain.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class UploadFile extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

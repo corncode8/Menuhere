@@ -1,8 +1,8 @@
 package booklet.menuhere.domain.menu.form;
 
 import booklet.menuhere.domain.menu.Category;
-import booklet.menuhere.domain.menu.Menu;
 import booklet.menuhere.domain.menu.file.UploadFile;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
