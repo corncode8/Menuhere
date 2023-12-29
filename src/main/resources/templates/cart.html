@@ -32,7 +32,7 @@
             font-size: 20px;
         }
         .won {
-            font-size: 17.4px;
+            font-size: 20px;
         }
         .menu-name {
             margin-left: 40px;
@@ -46,10 +46,19 @@
         p {
             text-align: left;
         }
+        h2 {
+            font-size: 30px;
+            height:17px;
+            font-family: 함초롬돋움 bold;
+        }
         /* mobile 규격 */
         @media screen and (max-width: 540px){
             .custom_space {
                 margin-top: 60px;
+            }
+            h2 {
+                font-size: 22px;
+                height:13px;
             }
             .bi-x {
                 position: absolute;
@@ -65,7 +74,7 @@
                 font-size: 20px;
             }
             .won {
-                font-size: 17.4px;
+                font-size: 19px;
             }
             .menu-name {
                 margin-left: -5px;
@@ -79,10 +88,10 @@
 <body>
 <div class="container">
     <div class="container text-center">
-        <nav class="navbar fixed-top">
+        <nav class="navbar fixed-top" style="background-color: white">
             <div class="container-fluid">
                 <a class="navbar-brand" th:href="@{/menu}"><i class="bi bi-arrow-left"></i></a>
-                <h2 style="font-style: bold; height:20px">장바구니</h2>
+                <h2>장바구니&nbsp;&nbsp;</h2>
                 <a th:href="@{/}"><i class="bi bi-house"></i></a>
                 <div aria-labelledby="offcanvasNavbarLabel" class="offcanvas offcanvas-end hm" id="offcanvasNavbar"
                      tabindex="-1">
@@ -94,7 +103,8 @@
         </nav>
     </div>
     <hr class="row custom_space">
-    <div class="card mb-2 border-0" th:each="cartlist, cartIndex : ${cartViewForms}" th:with="cartDto=${cartList.cartDto[cartIndex.index]}">
+    <div style="padding-bottom: 150px">
+    <div class="card border-0" th:each="cartlist, cartIndex : ${cartViewForms}" th:with="cartDto=${cartList.cartDto[cartIndex.index]}">
         <div class="row">
             <div class="row menu-name">
                 <strong style="margin-left: 13px; margin-top: -5px; margin-bottom: -5px" th:text="${cartlist.name}"></strong>
@@ -122,8 +132,9 @@
         </div>
         <hr>
     </div>
-    <nav class="z-2 navbar fixed-bottom shadow" th:if="${cartList != null}">
-        <div class="card mb-2 border-0 container text-center">
+    </div>
+    <nav class="z-2 navbar fixed-bottom shadow" th:if="${cartList != null}" style="background-color: white">
+        <div class="card border-0 container text-center">
             <div class="row">
                 <div style="margin-bottom: -8px;">
                     <p>&nbsp;총 주문금액<span class="right-align" style="font-weight: bold;"><span class="total-order" th:text="${cartList.cartTotalPrice}"></span>원&nbsp;</span></p>
@@ -210,7 +221,7 @@
                         totalOrder.textContent = 0;
                         orderButton.textContent = 0 + "원 주문하기";
                     }
-                    totalOrder.textContent = data.result.cartTotalPrice;
+                    totalOrder.textContent = data.result.cartTotalPrice + "원";
                     orderButton.textContent = data.result.cartTotalPrice + "원 주문하기";
                     cardElement.remove(); // 카드 단위 삭제
                 }

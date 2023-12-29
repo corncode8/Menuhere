@@ -6,8 +6,6 @@ import booklet.menuhere.domain.menu.form.MenuViewDto;
 import com.querydsl.core.types.Projections;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -51,8 +49,6 @@ public class MenuViewDtoRepository {
                 .fetch();
     }
 
-// 백단에서 잘 넘기고 있는지 log 확인
-// 프론트에서 어떻게 받고 있는지 log 확인
     public List<MenuViewDto> findCategoryView(Category category) {
         return em.createQuery(
                 "select new booklet.menuhere.domain.menu.form.MenuViewDto(m.id, m.name, m.content, m.price, m.uploadFile, m.category)" +

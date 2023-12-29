@@ -140,7 +140,7 @@ public class CartApiController {
             for (CartDto cartDto : cartDtos) {
                 amount += cartDto.getAmount();
             }
-//            log.info("cart Amount : {}", amount);
+            log.info("cart Amount : {}", amount);
 
             Map<String, Object> map = new HashMap<>();
             map.put("cartAmount", amount);

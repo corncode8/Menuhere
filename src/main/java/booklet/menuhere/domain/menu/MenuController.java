@@ -6,6 +6,7 @@ import booklet.menuhere.domain.cart.form.CartViewForm;
 import booklet.menuhere.domain.menu.form.MenuAddDto;
 import booklet.menuhere.domain.menu.form.MenuEditDto;
 import booklet.menuhere.domain.menu.form.MenuViewDto;
+import booklet.menuhere.exception.BaseResponse;
 import booklet.menuhere.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -111,7 +112,18 @@ public class MenuController {
     }
 
 
+    @GetMapping("/search/menu")
+    public String MenuSearch(@RequestParam("name")String  search, Model model) {
+        model.addAttribute("menuList", menuService.MenuSearch(search));
 
+        return "menu";
+    }
 
+    @GetMapping("/menus/{category}")
+    public String MenusByCategory(@PathVariable Category category, Model model) {
+        model.addAttribute("menuList", menuService.findCategory(category));
+
+        return "menu";
+    }
 
 }

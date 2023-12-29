@@ -8,6 +8,7 @@ import booklet.menuhere.domain.menu.form.MenuAddDto;
 import booklet.menuhere.domain.menu.form.MenuEditDto;
 import booklet.menuhere.domain.menu.form.MenuViewDto;
 import booklet.menuhere.repository.menu.MenuRepository;
+import booklet.menuhere.repository.menu.query.MenuSearchRepository;
 import booklet.menuhere.repository.menu.query.MenuViewDtoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -25,6 +27,7 @@ import java.util.Optional;
 public class MenuService {
 
     private final MenuViewDtoRepository menuViewDtoRepository;
+    private final MenuSearchRepository menuSearchRepository;
     private final MenuRepository menuRepository;
     private final FileStore fileStore;
 
@@ -112,6 +115,14 @@ public class MenuService {
     public List<MenuViewDto> findCategory(Category category) {
         log.info("findCategory : {}", menuViewDtoRepository.findCategoryView(category));
         return menuViewDtoRepository.findCategoryView(category);
+    }
+
+    public List<MenuViewDto> MenuSearch(String search) {
+        List<Menu> searchMenu = menuSearchRepository.findAll(search);
+        return searchMenu.stream()
+                .map(m -> new MenuViewDto(m.getId(), m.getName(), m.getContent(), m.getPrice(), m.getUploadFile(), m.getCategory()))
+                .collect(Collectors.toList());
+
     }
 
     public Menu getMenuName(String name) {

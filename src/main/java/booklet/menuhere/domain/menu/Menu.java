@@ -3,6 +3,7 @@ package booklet.menuhere.domain.menu;
 import booklet.menuhere.domain.BaseEntity;
 import booklet.menuhere.domain.OrderMenu;
 import booklet.menuhere.domain.menu.file.UploadFile;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -33,6 +34,7 @@ public class Menu extends BaseEntity {
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL)
     private List<OrderMenu> orderMenus = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL)
     private List<MenuOption> menuOptions = new ArrayList<>();
 

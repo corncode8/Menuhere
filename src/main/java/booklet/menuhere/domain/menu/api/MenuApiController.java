@@ -24,19 +24,7 @@ public class MenuApiController {
 
     private final FileStore fileStore;
 
-    private final MenuService menuService;
-
-    @GetMapping("/menus/{category}")
-    @ResponseBody
-    public BaseResponse MenusByCategory(@PathVariable Category category) {
-        log.info("List<MenuViewDto> : {}", menuService.findCategory(category));
-        List<MenuViewDto> menuViewDtos = menuService.findCategory(category);
-
-        return new BaseResponse(menuViewDtos);
-    }
-
     @GetMapping("/api/role")
-    @ResponseBody
     public BaseResponse role() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -53,11 +41,25 @@ public class MenuApiController {
     }
 
     @GetMapping("/image/storeImage/{filename}")
-    @ResponseBody
     public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
 
         return new UrlResource("file:" + fileStore.getFullPath(filename));
     }
+
+    // category api
+    //    @GetMapping("/menus/{category}")
+//    public BaseResponse MenusByCategory(@PathVariable Category category) {
+//        log.info("List<MenuViewDto> : {}", menuService.findCategory(category));
+//        List<MenuViewDto> menuViewDtos = menuService.findCategory(category);
+//
+//        return new BaseResponse(menuViewDtos);
+//    }
+
+    // search api
+//    @GetMapping("/api/search/menu")
+//    public BaseResponse MenuSearch(MenuSearchDto search) {
+//        return new BaseResponse(menuService.MenuSearch(search.getSearch()));
+//    }
 
 
 }

@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8" content="width=device-width,initial-scale=1" name="viewport">
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
     <script src="/js/bootstrap.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
     <script src="/js/tokenManager.js"></script>
     <script src="/js/cartDetails.js"></script>
     <style>
@@ -45,7 +45,9 @@
                 font-size: 13px;
             }
         }
-
+        p {
+            font-family: Candara;
+        }
         img {
             max-width: 50px;
             max-height: 185px;
@@ -61,7 +63,7 @@
 <body>
 <div class="container">
     <div class="container text-center">
-        <nav class="navbar fixed-top">
+        <nav class="navbar fixed-top" style="background-color: white">
             <div class="container-fluid">
                 <a class="navbar-brand" href="/"><i class="bi bi-arrow-left"></i></a>
                 <h2 style="font-style: bold; height:20px"><a href="/">Menuhere</a></h2>
@@ -94,10 +96,10 @@
         </nav>
         <div class="mb-5" style="margin-bottom: 70px !important;"></div>
         <!-- 검색 폼 -->
-        <form action="search" autocomplete="on" id="form-buscar" method="get" role="form">
+        <form action="/search/menu" autocomplete="on" id="form-buscar" method="get" role="form">
             <div class="form-group ">
                 <div class="input-group container text-center">
-                    <input class="form-control" id="fm" name="name" placeholder="Search..." required type="text"/>
+                    <input class="form-control" id="fm" name="name" placeholder="Search..." type="text"/>
                     <span class="input-group-btn">
                             <button class="btn btn-success" type="submit">
                                 <i aria-hidden="true" class="glyphicon glyphicon-search"></i> Search
@@ -106,33 +108,32 @@
                 </div>
             </div>
         </form>
-        <div class="table-container" style="margin-bottom: 20px">
+        <div class="table-container" style="margin-bottom: -12px">
             <table class="table table-borderless">
                 <thead class="table-thead">
                 </thead>
                 <tbody>
-                <tr>
+                <tr class="table-category">
                     <th>
-                        <button onclick="loadCategory('SIGNATURE')">SIGNATURE</button>
+                        <a href="/menus/SIGNATURE" class="btn"><span>SIGNATURE</span></a>
                     </th>
                     <th>
-                        <button onclick="loadCategory('COFFEE')">&nbsp;&nbsp;COFFEE&nbsp;&nbsp;</button>
+                        <a href="/menus/COFFEE" class="btn"><span>COFFEE</span></a>
                     </th>
                     <th>
-                        <button onclick="loadCategory('BEVERAGE')">BEVERAGE</button>
+                        <a href="/menus/BEVERAGE" class="btn"><span>BEVERAGE</span></a>
                     </th>
                     <th>
-                        <button onclick="loadCategory('TEA')">&nbsp;&nbsp;&nbsp;&nbsp;TEA&nbsp;&nbsp;&nbsp;&nbsp;
-                        </button>
+                        <a href="/menus/TEA" class="btn"><span>&nbsp;&nbsp;TEA&nbsp;</span></a>
                     </th>
                     <th>
-                        <button onclick="loadCategory('DESSERT')">&nbsp;&nbsp;DESSERT&nbsp;</button>
+                        <a href="/menus/DESSERT" class="btn"><span>&nbsp;DESSERT&nbsp;</span></a>
                     </th>
                 </tr>
                 </tbody>
             </table>
         </div>
-        <div id="menu-list">
+        <div id="menu-list" style="padding-bottom: 65px">
             <div class="card mb-2 shadow border-0" th:each="menus : ${menuList}">
                 <div class="row g-0">
                     <div class="col-4 col-sm-4 d-flex align-items-center justify-content-center">
@@ -163,7 +164,7 @@
             </div>
         </div>
     </div>
-    <nav class="z-2 navbar fixed-bottom shadow">
+    <nav class="z-2 navbar fixed-bottom shadow" style="background-color: white">
         <div class="container-fluid d-flex justify-content-center" style="text-align: center; height: 45px">
             <button class="btn btn-primary btn-lg" th:onclick="|location.href='@{/menu/cart}'|"><i
                     class="bi bi-cart3"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;View Order&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
@@ -217,7 +218,7 @@
 
     function updateCartCnt() {
         $.ajax({
-            url: 'update/amount/cart',
+            url: '/update/amount/cart',
             type: 'GET',
             success: function (response) {
                 // console.log(response);
@@ -231,43 +232,6 @@
                 console.error("Error cart cnt", error);
             }
         })
-    }
-    function loadCategory(category) {
-        $.ajax({
-            url: `/menus/${category}`,
-            type: 'GET',
-            success: function(menus) {
-                console.log(menus);
-                let menusHtml = '';
-                menus.forEach(menu => {
-                    menusHtml += `
-                    <div class="card mb-2 shadow border-0">
-                        <div class="row g-0">
-                            <div class="col-4 col-sm-4 d-flex align-items-center justify-content-center">
-                                <img alt="Menu Image" class="img-fluid px-1" src="/image/storeImage/${menu.uploadFile.storeFileName}" style="object-fit: cover;">
-                            </div>
-                            <div class="col-7 col-sm-7">
-                                <div class="card-body text-start px-1">
-                                    <h4 class="card-title">${menu.name}</h4>
-                                    <p class="card-text">${menu.content}</p>
-                                    <div class="d-flex justify-content-between align-items-end">
-                                        <p class="card-text my-2">${menu.price}원</p>
-                                        <div class="d-flex justify-content-end">
-                                            <button class="btn btn-primary btn-sm" name="${menu.name}" price="${menu.price}" onclick="addCart(this.getAttribute('name'), this.getAttribute('price'))">장바구니</button>
-                                            &nbsp;<button type="button" class="btn btn-primary btn-sm" id="manager-button" style="display: none" onclick="location.href='/menu/${menu.menuId}/edit'"><i class="bi bi-pencil-square"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>`;
-                });
-                document.getElementById('menu-list').innerHTML = menusHtml;
-            },
-            error: function(error) {
-                console.error("Error loading category", error);
-            }
-        });
     }
 </script>
 </body>
