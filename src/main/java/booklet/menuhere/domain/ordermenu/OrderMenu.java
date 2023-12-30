@@ -1,5 +1,6 @@
-package booklet.menuhere.domain;
+package booklet.menuhere.domain.ordermenu;
 
+import booklet.menuhere.domain.BaseEntity;
 import booklet.menuhere.domain.menu.Menu;
 import booklet.menuhere.domain.order.Order;
 import lombok.Getter;
@@ -15,6 +16,7 @@ public class OrderMenu extends BaseEntity {
     private Long id;
 
     private int totalPrice;
+    private int quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
@@ -24,5 +26,13 @@ public class OrderMenu extends BaseEntity {
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
+    public OrderMenu(int totalPrice, int quantity, Order order, Menu menu) {
+        this.totalPrice = totalPrice;
+        this.quantity = quantity;
+        this.order = order;
+        this.menu = menu;
+    }
 
+    public OrderMenu() {
+    }
 }

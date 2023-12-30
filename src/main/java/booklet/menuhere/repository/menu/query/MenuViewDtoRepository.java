@@ -2,7 +2,7 @@ package booklet.menuhere.repository.menu.query;
 
 import booklet.menuhere.domain.menu.Category;
 import booklet.menuhere.domain.menu.QMenu;
-import booklet.menuhere.domain.menu.form.MenuViewDto;
+import booklet.menuhere.domain.menu.dtos.MenuViewDto;
 import com.querydsl.core.types.Projections;
 import lombok.RequiredArgsConstructor;
 
@@ -26,7 +26,7 @@ public class MenuViewDtoRepository {
     // fit하기 때문에 재사용성이 좋지 않다. 가장 최적화 조회 상태.
     public List<MenuViewDto> findViewDtoV1() {
         return em.createQuery(
-                "select new booklet.menuhere.domain.menu.form.MenuViewDto(m.id, m.name, m.content, m.price, m.uploadFile, m.category)" +
+                "select new booklet.menuhere.domain.menu.dtos.MenuViewDto(m.id, m.name, m.content, m.price, m.uploadFile, m.category)" +
                         " from Menu m", MenuViewDto.class)
                 .getResultList();
     }
@@ -51,7 +51,7 @@ public class MenuViewDtoRepository {
 
     public List<MenuViewDto> findCategoryView(Category category) {
         return em.createQuery(
-                "select new booklet.menuhere.domain.menu.form.MenuViewDto(m.id, m.name, m.content, m.price, m.uploadFile, m.category)" +
+                "select new booklet.menuhere.domain.menu.dtos.MenuViewDto(m.id, m.name, m.content, m.price, m.uploadFile, m.category)" +
                         " from Menu m" +
                         " where m.category = :category", MenuViewDto.class)
                 .setParameter("category", category)

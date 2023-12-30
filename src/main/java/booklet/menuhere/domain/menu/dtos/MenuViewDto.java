@@ -1,4 +1,4 @@
-package booklet.menuhere.domain.menu.form;
+package booklet.menuhere.domain.menu.dtos;
 
 import booklet.menuhere.domain.menu.Category;
 import booklet.menuhere.domain.menu.file.UploadFile;

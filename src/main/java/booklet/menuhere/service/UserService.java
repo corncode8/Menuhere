@@ -2,13 +2,17 @@ package booklet.menuhere.service;
 
 import booklet.menuhere.domain.Role;
 import booklet.menuhere.domain.User.User;
-import booklet.menuhere.domain.User.UserSignUpDto;
+import booklet.menuhere.domain.User.dtos.UserSignUpDto;
+import booklet.menuhere.domain.order.dtos.OrderUserInfoDto;
 import booklet.menuhere.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -45,5 +49,14 @@ public class UserService {
         return userRepository.findByEmail(id)
                 .filter(m -> m.getPassword().equals(password))
                 .orElse(null);
+    }
+
+    public Optional<User> findEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public Optional<OrderUserInfoDto> OrderUserInfo(String email) {
+        return findEmail(email)
+                .map(u -> new OrderUserInfoDto(u.getUsername(), u.getAddress(), u.getPhone(), u.getEmail()));
     }
 }

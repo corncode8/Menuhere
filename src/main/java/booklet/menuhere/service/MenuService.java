@@ -4,9 +4,9 @@ import booklet.menuhere.domain.menu.Category;
 import booklet.menuhere.domain.menu.Menu;
 import booklet.menuhere.domain.menu.file.FileStore;
 import booklet.menuhere.domain.menu.file.UploadFile;
-import booklet.menuhere.domain.menu.form.MenuAddDto;
-import booklet.menuhere.domain.menu.form.MenuEditDto;
-import booklet.menuhere.domain.menu.form.MenuViewDto;
+import booklet.menuhere.domain.menu.dtos.MenuAddDto;
+import booklet.menuhere.domain.menu.dtos.MenuEditDto;
+import booklet.menuhere.domain.menu.dtos.MenuViewDto;
 import booklet.menuhere.repository.menu.MenuRepository;
 import booklet.menuhere.repository.menu.query.MenuSearchRepository;
 import booklet.menuhere.repository.menu.query.MenuViewDtoRepository;
@@ -51,7 +51,7 @@ public class MenuService {
             Menu menu = menuOpt.get();
 
             MenuEditDto editDto = new MenuEditDto();
-            editDto.setSaleHold(menu.isSaleHold());
+            editDto.setSaleHold(menu.isSale());
             editDto.setCategory(menu.getCategory());
             editDto.setContent(menu.getContent());
             editDto.setPrice(menu.getPrice());
@@ -125,6 +125,9 @@ public class MenuService {
 
     }
 
+    public Optional<Menu> findById(Long menuId) {
+        return menuRepository.findById(menuId);
+    }
     public Menu getMenuName(String name) {
         return menuRepository.findByName(name).orElse(null);
     }

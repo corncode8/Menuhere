@@ -1,4 +1,4 @@
-package booklet.menuhere.domain.User;
+package booklet.menuhere.domain.User.dtos;
 
 import lombok.Data;
 

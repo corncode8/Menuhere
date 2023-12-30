@@ -1,4 +1,4 @@
-package booklet.menuhere.domain.cart.form;
+package booklet.menuhere.domain.cart.dtos;
 
 import booklet.menuhere.domain.menu.file.UploadFile;
 import lombok.Data;

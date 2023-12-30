@@ -1,5 +1,6 @@
-package booklet.menuhere.domain.User;
+package booklet.menuhere.domain.User.dtos;
 
+import booklet.menuhere.domain.User.Address;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,7 @@
 package booklet.menuhere.domain.menu;
 
 import booklet.menuhere.domain.BaseEntity;
-import booklet.menuhere.domain.OrderMenu;
+import booklet.menuhere.domain.ordermenu.OrderMenu;
 import booklet.menuhere.domain.menu.file.UploadFile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -22,7 +22,7 @@ public class Menu extends BaseEntity {
     private String content;
     private int price;
     private int orderNum = 0;       // TODO: 메뉴 주문 횟수
-    private boolean saleHold;
+    private boolean sale;
 
     @Enumerated(EnumType.STRING)
     private Category category;
@@ -43,7 +43,7 @@ public class Menu extends BaseEntity {
         this.name = name;
         this.content = content;
         this.category = category;
-        this.saleHold = saleHold;
+        this.sale = saleHold;
         this.uploadFile = uploadFile;
         this.price = price;
     }
@@ -51,7 +51,7 @@ public class Menu extends BaseEntity {
         this.name = name;
         this.content = content;
         this.category = category;
-        this.saleHold = saleHold;
+        this.sale = saleHold;
         this.price = price;
     }
     public void updateFile(UploadFile uploadFile) {
