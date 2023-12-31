@@ -24,12 +24,12 @@ public class MenuViewDtoRepository {
 
 
     // fit하기 때문에 재사용성이 좋지 않다. 가장 최적화 조회 상태.
-    public List<MenuViewDto> findViewDtoV1() {
-        return em.createQuery(
-                "select new booklet.menuhere.domain.menu.dtos.MenuViewDto(m.id, m.name, m.content, m.price, m.uploadFile, m.category)" +
-                        " from Menu m", MenuViewDto.class)
-                .getResultList();
-    }
+//    public List<MenuViewDto> findViewDtoV1() {
+//        return em.createQuery(
+//                "select new booklet.menuhere.domain.menu.dtos.MenuViewDto(m.id, m.name, m.content, m.price, m.uploadFile, m.category)" +
+//                        " from Menu m", MenuViewDto.class)
+//                .getResultList();
+//    }
 
     // QueryDSL 사용
     public List<MenuViewDto> findViewDtoV2() {

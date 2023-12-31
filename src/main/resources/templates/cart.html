@@ -250,6 +250,21 @@
                 console.error('Error:', error);
             });
     }
+
+    function saveOrderInfo() {
+        let orderMenus = [];
+        document.querySelectorAll(".result").forEach((el, index) => {
+            let menuId = el.getAttribute("data-menuid");
+            let quantity = parseInt(el.textContent);
+            orderMenus.push({menuId, quantity});
+        });
+        localStorage.setItem("orderMenus", JSON.stringify(orderMenus));
+    }
+
+    document.querySelector(".order-btn").addEventListener("click", () => {
+        saveOrderInfo();
+        window.location.href = '/menu/cart/orders';
+    })
 </script>
 </body>
 </html>

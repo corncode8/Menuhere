@@ -97,7 +97,6 @@ public class MenuService {
 
     // 유저 메뉴 view
     public List<MenuViewDto> ViewMenu() {
-        log.info("View Menu : {}", menuViewDtoRepository.findViewDtoV2());
         return menuViewDtoRepository.findViewDtoV2();
     }
 

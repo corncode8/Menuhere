@@ -18,6 +18,4 @@ public class CartListDto {
         this.cartDto = cartDtos;
     }
 
-    public CartListDto() {
-    }
 }

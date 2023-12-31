@@ -1,6 +1,5 @@
 package booklet.menuhere.domain.User;
 
-import booklet.menuhere.config.jwt.JwtService;
 import booklet.menuhere.domain.User.dtos.LoginForm;
 import booklet.menuhere.domain.User.dtos.UserSignUpDto;
 import booklet.menuhere.service.UserService;

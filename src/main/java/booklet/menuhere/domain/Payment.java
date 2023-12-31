@@ -1,7 +1,6 @@
 package booklet.menuhere.domain;
 
 import booklet.menuhere.domain.order.Order;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import javax.persistence.*;

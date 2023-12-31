@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Slf4j
@@ -53,6 +53,16 @@ public class UserService {
 
     public Optional<User> findEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public Role getRole(String email) {
+        Optional<User> user = findEmail(email);
+        if (user.isPresent()) {
+            return user.get().getRole();
+        } else {
+            // 적절한 대체 작업 또는 예외 처리
+            throw new NoSuchElementException("User not found with email: " + email);
+        }
     }
 
     public Optional<OrderUserInfoDto> OrderUserInfo(String email) {

@@ -27,7 +27,7 @@ public class Order extends BaseEntity {
     private int orderPrice;
     private int tableNo;
 
-    // 주문 유형 ( 예약, 배달, 매장 내 식사 )
+    // 주문 유형 (예약, 배달, 매장 내 식사)
     private String orderType;
 
 

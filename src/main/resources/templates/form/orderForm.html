@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css" >
     <link rel="stylesheet" href="/css/style.css" >
 
+    <script src="/js/payment.js"></script>
     <script src="/js/tokenManager.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
@@ -58,19 +59,23 @@
         }
     </style>
     <script>
+        let paytype;
+        let orderMenus = JSON.parse(localStorage.getItem("orderMenus")) || [];
         let Num = 0;
         let amount;
-        let tableNo;
+        // let tableNo = document.getElementById('table-no');
         let username = "손님" + ++Num;
         let phone = "손님";
         let zipcode = "손님";
         let defaultAddress = "손님";
         let detailAddress = "손님";
         let email = "손님";
+        let token;
         isUser();
 
+        // 유저 정보 받아오기
         async function isUser() {
-            const token = await getToken();
+            token = await getToken();
             if (token) {
                 await $.ajax({
                     url: '/api/user/details',
@@ -100,76 +105,15 @@
                     const data = await response.json();
                     amount = data.result;
                 } else {
-                    console.error('Failed to fetch amount');
+                    console.error('fetchAmount else Failed to fetch amount');
                 }
             } catch (error) {
-                console.error('Error:', error);
+                console.error('fetchAmount Error:', error);
             }
         }
-
-
-        // 주문번호 만들기
-        function createOrderNum(){
-            const date = new Date();
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, "0");
-            const day = String(date.getDate()).padStart(2, "0");
-
-            let orderNum = year + month + day;
-            for(let i=0;i<10;i++) {
-                orderNum += Math.floor(Math.random() * 8);
-            }
-            return orderNum;
-        }
-
         fetchAmount();
-        let IMP = window.IMP;
-        IMP.init("imp11756620");
-        function requestPay() {
-            let paytype = document.querySelector('input[name="Payment-type"]:checked').id;
 
-            if (paytype == 'kakaopay' || paytype == 'payco') {
-                payment(paytype);
-            }
-        }
-        // TODO: 결제실패 로직 및 테스트
-        // https://guide.portone.io/09f252f7-f15e-4e1c-ad39-d526486b463b 아임포트 가이드 페이지
-        // 페이코는 실 결제가 되지 않고 페이코 개발용 앱을 다운받아야 함.
-        function payment(type) {
 
-            IMP.request_pay({
-                pg: type,
-                pay_method: "card",
-                merchant_uid: createOrderNum(),   // 주문번호
-                amount: amount,                    // 숫자 타입
-                name: "menuHere",
-                customer_uid : 'customer-unique-id',
-                buyer_email: email,
-                buyer_name: username,
-                buyer_tel: phone,
-                buyer_addr: defaultAddress + " " +  detailAddress,
-                tableNo: tableNo,
-                buyer_postcode: zipcode,
-                m_redirect_url: "http://localhost:8080/menu"
-            }, function (rsp) { // callback
-                //rsp.imp_uid 값으로 결제 단건조회 API를 호출하여 결제결과를 판단합니다.
-                console.log(rsp);
-                let msg;
-                if (rsp.success) {
-                    msg = '결제가 완료되었습니다.';
-                    msg += '결제금액 : ' + rsp.paid_amount;
-                } else {
-                    msg = '결제에 실패하였습니다. ';
-                    if (rsp.error_msg.includes("[결제포기]")) {
-                        msg += "결제를 취소하였습니다.";
-                    } else {
-                        msg += rsp.error_msg;
-                    }
-                }
-                alert(msg);
-                // document.location.href="/menu"; // alret창 확인 후 이동할 url 설정
-            });
-        }
     </script>
 </head>
 <body>
@@ -191,7 +135,7 @@
     </div>
     <div class="order-body">
         <div class="custom_space"></div>
-        <select class="form-select form-select-sm mb-3 select-type" aria-label="Default select example">
+        <select class="form-select form-select-sm mb-3 select-type" id="order-type" aria-label="Default select example">
             <option value="dine-in">매장 내 식사</option>
             <option value="delivery">배달 주문</option>
             <option value="pre-order">예약 (준비중 입니다.)</option>
@@ -215,12 +159,12 @@
 <!--                TODO: 데이터 검증-->
                 <div class="mb-3 table-no">
                     <label for="formGroupExampleInput" class="form-label table-no" style="text-align: start;" >테이블 번호</label>
-                    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="테이블 번호를 입력해주세요.">
+                    <input type="text" class="form-control" id="table-no" placeholder="테이블 번호를 입력해주세요." required>
                   </div>
                   <br>
                 <div class="mb-2">
                     <label for="formGroupExampleInput" class="form-label" style="text-align: start;">요청사항</label>
-                    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="예) 덜 맵게 해주세요.">
+                    <input type="text" class="form-control" id="request" placeholder="예) 덜 맵게 해주세요.">
                   </div>
           </div>
           <hr>
@@ -266,7 +210,8 @@
 </div>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <!-- CDN 방식 사용 -->
-<script th:inline="javascript">
+<script>
+
     function execDaumPostcode() {
         new daum.Postcode({
             oncomplete: function(data) {
@@ -339,6 +284,71 @@
             tableNo.style.display = 'block';
             pay.innerHTML = "카운터 결제 <i class=\"bi bi-credit-card\"></i>";
         }
+    }
+
+    let tableNo = document.getElementById('table-no');
+    let IMP = window.IMP;
+    IMP.init("imp11756620");
+    function requestPay() {
+        paytype = document.querySelector('input[name="Payment-type"]:checked').id;
+        let tableNoValue = tableNo.value;
+        if (paytype == 'kakaopay' || paytype == 'payco') {
+            payment(paytype, tableNoValue);
+        } else {
+            if (token) {
+                userOrder(tableNoValue);
+                alert("결제가 완료되었습니다.")
+                // document.location.href="/menu";
+            } else {
+                nonUserOeder(tableNoValue);
+                alert("결제가 완료되었습니다.")
+                // document.location.href="/menu";
+            }
+        }
+    }
+    // TODO: 결제실패 로직 및 테스트
+    // https://guide.portone.io/09f252f7-f15e-4e1c-ad39-d526486b463b 아임포트 가이드 페이지
+    // 페이코는 실 결제가 되지 않고 페이코 개발용 앱을 다운받아야 함.
+    function payment(type, tableNoValue) {
+
+        IMP.request_pay({
+            pg: type,
+            pay_method: "card",
+            merchant_uid: createOrderNum(),   // 주문번호
+            amount: amount,                    // 숫자 타입
+            name: "menuHere",
+            customer_uid : 'customer-unique-id',
+            buyer_email: email,
+            buyer_name: username,
+            buyer_tel: phone,
+            buyer_addr: defaultAddress + " " +  detailAddress,
+            tableNo: tableNoValue,
+            buyer_postcode: zipcode,
+            m_redirect_url: "http://localhost:8080/menu"
+        }, function (rsp) { // callback
+            //rsp.imp_uid 값으로 결제 단건조회 API를 호출하여 결제결과를 판단합니다.
+            console.log(rsp);
+            let msg;
+            if (rsp.success) {
+                msg = '결제가 완료되었습니다.';
+                msg += '결제금액 : ' + rsp.paid_amount;
+                if (token) {
+                    userOrder(tableNoValue);
+                } else {
+                    nonUserOeder(tableNoValue);
+                }
+
+            } else {
+                msg = '결제에 실패하였습니다. ';
+                if (rsp.error_msg.includes("[결제포기]")) {
+                    msg += "결제를 취소하였습니다.";
+                } else {
+                    msg += rsp.error_msg;
+                }
+            }
+            alert(msg);
+            // document.location.href="/menu"; // alret창 확인 후 이동할 url 설정
+        });
     }
 </script>
 </body>

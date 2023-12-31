@@ -179,6 +179,7 @@
         // 페이지 로드 시 한 번 실행
         updateCartCnt();
         const token = await getToken();
+        test();
 
         await fetch('/menu', {
             method: 'GET',
@@ -187,34 +188,28 @@
                 'Authorization': 'Bearer ' + token
             },
         })
-            .then(response => response.text())
-            .then(data => {
-                // console.log(data);
 
-                return fetch('/api/role', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + token
-                    },
-                });
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                if (data.result.userRole === 'ROLE_MANAGER') {
-                    let menu = document.getElementById('manager-menu');
-                    menu.style.display = 'block';
+        function test() {
+            $.ajax({
+                url: '/api/role',
+                headers: { 'Authorization': 'Bearer ' + token},
+                type: 'GET',
+                success: function(response) {
+                    if (response.result.userRole === 'ROLE_MANAGER') {
+                        let menu = document.getElementById('manager-menu');
+                        menu.style.display = 'block';
 
-                    let buttons = document.querySelectorAll('#manager-button'); // 모든 '메뉴 수정' 버튼 선택
-                    buttons.forEach(button => {
-                        button.style.display = 'block'; // 각 버튼에 대해 display 설정
-                    });
+                        let buttons = document.querySelectorAll('#manager-button'); // 모든 '메뉴 수정' 버튼 선택
+                        buttons.forEach(button => {
+                            button.style.display = 'block'; // 각 버튼에 대해 display 설정
+                        });
+                    }
+                },
+                error: function (error) {
+                    // console.error("Error isUser", error);
                 }
             })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+        }
 
     });
 
@@ -235,6 +230,7 @@
             }
         })
     }
+
 </script>
 </body>
 </html>

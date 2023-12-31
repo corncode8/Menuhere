@@ -1,7 +1,10 @@
 package booklet.menuhere.domain.menu.api;
 
+import booklet.menuhere.config.jwt.JwtService;
+import booklet.menuhere.domain.Role;
 import booklet.menuhere.domain.menu.file.FileStore;
 import booklet.menuhere.exception.BaseResponse;
+import booklet.menuhere.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -20,21 +23,26 @@ import java.util.*;
 public class MenuApiController {
 
     private final FileStore fileStore;
+    private final JwtService jwtService;
+    private final UserService userService;
 
     @GetMapping("/api/role")
-    public BaseResponse role() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public BaseResponse getRole(@RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
+        if (authorizationHeader != null && !authorizationHeader.isEmpty()) {
+            String token = authorizationHeader.replace("Bearer ", "");
+            Optional<String> emailOpt = jwtService.extractEmail(token);
+            if (emailOpt.isPresent()) {
+                Role role = userService.getRole(emailOpt.get());
 
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+                Map<String, String> result = new HashMap<>();
+                result.put("userRole", role.getKey());
 
-        String userRole = authorities.stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_MANAGER")) ? "ROLE_MANAGER" : null;
-
-        Map<String, String> result = new HashMap<>();
-        result.put("userRole", userRole);
-        log.info("role-api userRole : {}", userRole);
-
-        return new BaseResponse(result);
+                return new BaseResponse(result);
+            } else {
+                return new BaseResponse("Email not found");
+            }
+        }
+        return new BaseResponse("Non-Member");
     }
 
     @GetMapping("/image/storeImage/{filename}")

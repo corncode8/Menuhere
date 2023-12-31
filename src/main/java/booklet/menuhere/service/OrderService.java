@@ -46,18 +46,25 @@ public class OrderService {
         }
 
         order.setOrderMenus(orderMenus);
-        Optional<User> email = userService.findEmail(makeOrderDto.getEmail());
+        try {
+            if (makeOrderDto.getEmail().equals("Non-Members")) {
+                order.createOrder(makeOrderDto.getOrderStatus(), makeOrderDto.getRequests(), makeOrderDto.getOrderPrice(),
+                        makeOrderDto.getTableNo(), makeOrderDto.getOrderType(), payment);
+            } else {
+                Optional<User> email = userService.findEmail(makeOrderDto.getEmail());
 
-        if (email.isPresent()) {
-            User user = email.get();
-            order.createOrder(makeOrderDto.getOrderStatus(), makeOrderDto.getRequests(), makeOrderDto.getOrderPrice(),
-                    makeOrderDto.getTableNo(), makeOrderDto.getOrderType(), payment);
-            order.addUser(user);
-        } else {
-            order.createOrder(makeOrderDto.getOrderStatus(), makeOrderDto.getRequests(), makeOrderDto.getOrderPrice(),
-                    makeOrderDto.getTableNo(), makeOrderDto.getOrderType(), payment);
+                User user = email.get();
+                order.createOrder(makeOrderDto.getOrderStatus(), makeOrderDto.getRequests(), makeOrderDto.getOrderPrice(),
+                        makeOrderDto.getTableNo(), makeOrderDto.getOrderType(), payment);
+                order.addUser(user);
+            }
+
+            log.info("order : {}", order);
+            orderRepository.save(order);
+        } catch (Exception e) {
+            log.info("createOrder Exception : {}", e);
         }
-        orderRepository.save(order);
+
     }
 
 }

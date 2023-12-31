@@ -5,7 +5,7 @@ function addCart(menuName, menuPrice) {
     $.ajax({
         type: "POST",
         url: "/add/cart",
-        data: { menuName: menuName, menuPrice:menuPrice },
+        data: { menuName: menuName, menuPrice:menuPrice},
         success: function (response) {
             // 성공 시 처리
             // alert('장바구니에 추가되었습니다.');
