@@ -51,14 +51,16 @@ public class OrderService {
                 order.createOrder(makeOrderDto.getOrderStatus(), makeOrderDto.getRequests(), makeOrderDto.getOrderPrice(),
                         makeOrderDto.getTableNo(), makeOrderDto.getOrderType(), payment);
             } else {
-                Optional<User> email = userService.findEmail(makeOrderDto.getEmail());
-
-                User user = email.get();
-                order.createOrder(makeOrderDto.getOrderStatus(), makeOrderDto.getRequests(), makeOrderDto.getOrderPrice(),
-                        makeOrderDto.getTableNo(), makeOrderDto.getOrderType(), payment);
-                order.addUser(user);
+                Optional<User> emailOpt = userService.findEmail(makeOrderDto.getEmail());
+                if (emailOpt.isPresent()) {
+                    User user = emailOpt.get();
+                    order.createOrder(makeOrderDto.getOrderStatus(), makeOrderDto.getRequests(), makeOrderDto.getOrderPrice(),
+                            makeOrderDto.getTableNo(), makeOrderDto.getOrderType(), payment);
+                    order.addUser(user);
+                } else {
+                    log.info("!emailOpt.isPresent() : {}", emailOpt.isPresent());
+                }
             }
-
             log.info("order : {}", order);
             orderRepository.save(order);
         } catch (Exception e) {

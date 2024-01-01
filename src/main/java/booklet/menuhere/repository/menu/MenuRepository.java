@@ -1,7 +1,6 @@
 package booklet.menuhere.repository.menu;
 
 
-import booklet.menuhere.domain.menu.Category;
 import booklet.menuhere.domain.menu.Menu;
 import org.springframework.data.jpa.repository.JpaRepository;
 
