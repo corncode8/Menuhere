@@ -46,6 +46,7 @@ public class MenuViewDtoRepository {
                         menu.category
                 ))
                 .from(menu)
+                .where(menu.sale.isFalse())
                 .fetch();
     }
 

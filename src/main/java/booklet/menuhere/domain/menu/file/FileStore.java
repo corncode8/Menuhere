@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,6 +53,7 @@ public class FileStore {
         return new UploadFile(originalFilename, storeFileName);
     }
 
+
     private String createStoreFileName(String originalFilename) {
         // 확장자 가져오기
         String ext = extracted(originalFilename);
@@ -62,4 +66,5 @@ public class FileStore {
         int pos = originalFilename.lastIndexOf(".");
         return originalFilename.substring(pos + 1);
     }
+
 }

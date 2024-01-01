@@ -64,7 +64,7 @@ public class MenuService {
         }
     }
 
-    // 메뉴 수정하기
+    // 메뉴 수정하기 TODO: sale true(메뉴 삭제시) 메뉴이름 수정
     public Boolean editMenu(MenuEditDto editDto, Long menuId) throws Exception{
         Optional<Menu> menuOpt = menuRepository.findById(menuId);
 

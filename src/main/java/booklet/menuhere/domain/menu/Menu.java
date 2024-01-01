@@ -39,11 +39,11 @@ public class Menu extends BaseEntity {
     private List<MenuOption> menuOptions = new ArrayList<>();
 
 
-    public void UpdateMenu(String name, String content, int price, Category category, boolean saleHold, UploadFile uploadFile) {
+    public void UpdateMenu(String name, String content, int price, Category category, boolean sale, UploadFile uploadFile) {
         this.name = name;
         this.content = content;
         this.category = category;
-        this.sale = saleHold;
+        this.sale = sale;
         this.uploadFile = uploadFile;
         this.price = price;
     }
