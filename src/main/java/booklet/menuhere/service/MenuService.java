@@ -51,12 +51,13 @@ public class MenuService {
             Menu menu = menuOpt.get();
 
             MenuEditDto editDto = new MenuEditDto();
-            editDto.setSaleHold(menu.isSale());
-            editDto.setCategory(menu.getCategory());
-            editDto.setContent(menu.getContent());
-            editDto.setPrice(menu.getPrice());
-            editDto.setName(menu.getName());
-            editDto.setStoreFileName(menu.getUploadFile().getStoreFileName());
+            editDto.setMenuEditDto(menu.getName(), menu.getContent(), menu.getPrice(), menu.isSale(), menu.getUploadFile().getStoreFileName(), menu.getCategory());
+//            editDto.setSaleHold(menu.isSale());
+//            editDto.setCategory(menu.getCategory());
+//            editDto.setContent(menu.getContent());
+//            editDto.setPrice(menu.getPrice());
+//            editDto.setName(menu.getName());
+//            editDto.setStoreFileName(menu.getUploadFile().getStoreFileName());
 
             return editDto;
         } else{

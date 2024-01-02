@@ -40,11 +40,14 @@ public class MenuController {
                 Menu menu = menuService.getMenuName(cartDto.getMenuName());
                 if (menu != null) {
                     CartViewForm cartViewForm = new CartViewForm();
-                    cartViewForm.setUploadFile(menu.getUploadFile());
-                    cartViewForm.setName(menu.getName());
-                    cartViewForm.setPrice(menu.getPrice());
-                    cartViewForm.setAmount(cartDto.getAmount());
-                    cartViewForm.setMenuId(menu.getId());
+                    cartViewForm.setCartViewForm(menu.getId(), menu.getName(), menu.getPrice(), cartDto.getAmount(), menu.getUploadFile());
+
+//                    cartViewForm.setUploadFile(menu.getUploadFile());
+//                    cartViewForm.setName(menu.getName());
+//                    cartViewForm.setPrice(menu.getPrice());
+//                    cartViewForm.setAmount(cartDto.getAmount());
+//                    cartViewForm.setMenuId(menu.getId());
+
                     cartViewForms.add(cartViewForm);
                 }
             }

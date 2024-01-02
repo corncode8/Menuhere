@@ -15,4 +15,12 @@ public class MenuEditDto {
     private String storeFileName;
     private Category category;
 
+    public void setMenuEditDto(String name, String content, int price, boolean saleHold, String storeFileName, Category category) {
+        this.name = name;
+        this.content = content;
+        this.price = price;
+        this.saleHold = saleHold;
+        this.storeFileName = storeFileName;
+        this.category = category;
+    }
 }

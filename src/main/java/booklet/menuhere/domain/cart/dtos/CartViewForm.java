@@ -10,4 +10,12 @@ public class CartViewForm {
     private int price;
     private int amount;
     private UploadFile uploadFile;
+
+    public void setCartViewForm(Long menuId, String name, int price, int amount, UploadFile uploadFile) {
+        this.menuId = menuId;
+        this.name = name;
+        this.price = price;
+        this.amount = amount;
+        this.uploadFile = uploadFile;
+    }
 }
