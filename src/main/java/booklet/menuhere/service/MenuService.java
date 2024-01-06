@@ -12,6 +12,8 @@ import booklet.menuhere.repository.menu.query.MenuSearchRepository;
 import booklet.menuhere.repository.menu.query.MenuViewDtoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -97,8 +99,8 @@ public class MenuService {
 //    }
 
     // 유저 메뉴 view
-    public List<MenuViewDto> ViewMenu() {
-        return menuViewDtoRepository.findViewDtoV2();
+    public Page<MenuViewDto> ViewMenu(Pageable pageable) {
+        return menuViewDtoRepository.menuViewQuery(pageable);
     }
 
 

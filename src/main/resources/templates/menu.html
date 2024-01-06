@@ -12,6 +12,23 @@
     <script src="/js/tokenManager.js"></script>
     <script src="/js/cartDetails.js"></script>
     <style>
+        p {
+            font-family: Candara;
+        }
+        img {
+            max-width: 50px;
+            max-height: 185px;
+        }
+
+        #offcanvasNavbar {
+            max-width: 50%;
+        }
+        .page-link {
+            width: 35px;
+            height: 35px;
+            font-size: 15px;
+            text-align: center;
+        }
         /* mobile 규격 */
         @media screen and (max-width: 540px) {
             th {
@@ -46,18 +63,12 @@
             p {
                 font-size: 13px;
             }
-        }
-        p {
-            font-family: Candara;
-        }
-        img {
-            max-width: 50px;
-            max-height: 185px;
+            .page-link {
+                width: 26px;
+                height: 32px;
+            }
         }
 
-        #offcanvasNavbar {
-            max-width: 50%;
-        }
 
     </style>
 
@@ -135,7 +146,7 @@
                 </tbody>
             </table>
         </div>
-        <div id="menu-list" style="padding-bottom: 65px">
+        <div id="menu-list" style="padding-bottom: 10px">
             <div class="card mb-2 shadow border-0" th:each="menus : ${menuList}">
                 <div class="row g-0">
                     <div class="col-4 col-sm-4 d-flex align-items-center justify-content-center">
@@ -166,6 +177,24 @@
             </div>
         </div>
     </div>
+        <nav aria-label="z-1 Page navigation" style="position:relative; z-index: 1">
+            <ul class="pagination pagination-sm justify-content-center" style="margin-bottom: 80px">
+                <!-- Previous Page Link -->
+                <li th:classappend="${menuList.number == 0} ? 'disabled' : ''" class="page-item">
+                    <a th:href="@{/menu(page=${menuList.number - 1})}" class="page-link">&laquo;</a>
+                </li>
+
+                <!-- Page Number Links -->
+                <li th:each="pageNum : ${#numbers.sequence(0, menuList.totalPages -1)}" th:classappend="${pageNum == menuList.number} ? 'active' : ''" class="page-item">
+                    <a th:href="@{/menu(page=${pageNum})}" th:text="${pageNum + 1}" class="page-link"></a>
+                </li>
+
+                <!-- Next Page Link -->
+                <li th:classappend="${menuList.number + 1 == menuList.totalPages} ? 'disabled' : ''" class="page-item">
+                    <a th:href="@{/menu(page=${menuList.number + 1})}" class="page-link">&raquo;</a>
+                </li>
+            </ul>
+        </nav>
     <nav class="z-2 navbar fixed-bottom shadow" style="background-color: white">
         <div class="container-fluid d-flex justify-content-center" style="text-align: center; height: 45px">
             <button class="btn btn-primary btn-lg" th:onclick="|location.href='@{/menu/cart}'|"><i

@@ -1,7 +1,6 @@
 package booklet.menuhere.repository.menu.query;
 
 import booklet.menuhere.domain.menu.Menu;
-import booklet.menuhere.domain.menu.QMenu;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -9,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 import static booklet.menuhere.domain.menu.QMenu.*;

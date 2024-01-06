@@ -84,3 +84,6 @@ img#backImage {
     color: white;
     border-color: gray;
 }
+pagination1 li a {
+    padding: 50px; /* 상하 5px, 좌우 10px 패딩 */
+}
