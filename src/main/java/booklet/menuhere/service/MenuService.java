@@ -14,11 +14,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -67,7 +69,7 @@ public class MenuService {
         }
     }
 
-    // 메뉴 수정하기 TODO: sale true(메뉴 삭제시) 메뉴이름 수정
+    // 메뉴 수정하기
     public Boolean editMenu(MenuEditDto editDto, Long menuId) throws Exception{
         Optional<Menu> menuOpt = menuRepository.findById(menuId);
 
@@ -77,6 +79,9 @@ public class MenuService {
             if (editDto.getAttachFile() != null && !editDto.getAttachFile().isEmpty()) {
                 UploadFile attachFile = fileStore.storeFile(editDto.getAttachFile());
                 menu.updateFile(attachFile);
+            }
+            if (menu.isSale() == true) {
+                menu.EditMenu(UUID.randomUUID().toString(), editDto.getContent(), editDto.getPrice(), editDto.getCategory(), editDto.isSaleHold());
             }
             menu.EditMenu(editDto.getName(), editDto.getContent(), editDto.getPrice(), editDto.getCategory(), editDto.isSaleHold());
             menuRepository.save(menu);
@@ -114,17 +119,12 @@ public class MenuService {
 //        }
 //    }
 
-    public List<MenuViewDto> findCategory(Category category) {
-        log.info("findCategory : {}", menuViewDtoRepository.findCategoryView(category));
-        return menuViewDtoRepository.findCategoryView(category);
+    public Page<MenuViewDto> findCategory(Category category, Pageable pageable) {
+        return menuViewDtoRepository.findCategoryViewV2(category, pageable);
     }
 
-    public List<MenuViewDto> MenuSearch(String search) {
-        List<Menu> searchMenu = menuSearchRepository.findAll(search);
-        return searchMenu.stream()
-                .map(m -> new MenuViewDto(m.getId(), m.getName(), m.getContent(), m.getPrice(), m.getUploadFile(), m.getCategory()))
-                .collect(Collectors.toList());
-
+    public Page<MenuViewDto> MenuSearch(String search, Pageable pageable) {
+        return  menuSearchRepository.findAll(search, pageable);
     }
 
     public Optional<Menu> findById(Long menuId) {

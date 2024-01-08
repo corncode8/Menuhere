@@ -1,16 +1,13 @@
 package booklet.menuhere;
 
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 
-import javax.persistence.EntityManager;
 
 @SpringBootApplication
-//@RequiredArgsConstructor
 public class MenuhereApplication {
 //	private final EntityManager em;
 

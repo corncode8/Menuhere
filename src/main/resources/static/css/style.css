@@ -5,6 +5,9 @@ a {
     text-decoration: none;
     color: black;
 }
+p {
+    font-family: Candara;
+}
 .bi-house {
     font-size: 23px;
 }
@@ -47,7 +50,7 @@ th {
     width: 150px;
     height: 120px;
 }
-img#backImage {
+#backImage {
     max-width: 100%;
     height: 10%;
     filter: brightness(80%);
@@ -84,6 +87,19 @@ img#backImage {
     color: white;
     border-color: gray;
 }
-pagination1 li a {
-    padding: 50px; /* 상하 5px, 좌우 10px 패딩 */
+.text-sns {
+    text-align: center;
+    font-size: 20px;
+    margin-top: 20px;
+    font-family: 함초롬돋움;
+}
+.signup-btn {
+    margin-top: 20px;
+    text-align: center;
+}
+.go-back {
+    position: absolute;
+    font-size: 12px;
+    left: 10px;
+    top: 5px
 }

@@ -26,6 +26,9 @@
 </head>
 <body>
 <div class="container">
+    <div>
+        <a class="navbar-brand go-back" href="/"><i class="bi bi-arrow-left"></i></a>
+    </div>
     <div class="py-5 text-center">
         <h2>로그인</h2>
     </div>
@@ -56,9 +59,16 @@
             </div>
         </div>
     </form>
+    <div class="text-sns">
+        <p><span style="font-family: Candara; font-size: 25px">SNS</span> 계정으로 로그인하기</p>
+    </div>
     <div class="text-center">
         <a href="http://localhost:8080/oauth2/authorization/google"><i class="bi bi-google">&nbsp;</i></a>
         <a href="http://localhost:8080/oauth2/authorization/github"><i class="bi bi-github"></i></a>
+    </div>
+
+    <div class="signup-btn">
+        <button type="button" class="btn btn-outline-dark" href="">회원가입</button>
     </div>
 </div> <!-- /container -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>

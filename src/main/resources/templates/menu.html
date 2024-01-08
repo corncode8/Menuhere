@@ -12,14 +12,10 @@
     <script src="/js/tokenManager.js"></script>
     <script src="/js/cartDetails.js"></script>
     <style>
-        p {
-            font-family: Candara;
-        }
         img {
             max-width: 50px;
             max-height: 185px;
         }
-
         #offcanvasNavbar {
             max-width: 50%;
         }
@@ -54,9 +50,6 @@
                 width: 100%;
                 font-size: 80%;
             }
-            .bi-arrow-left {
-                text-align: start;
-            }
             h4{
                 font-size: 17px;
             }
@@ -68,8 +61,6 @@
                 height: 32px;
             }
         }
-
-
     </style>
 
 </head>
@@ -79,7 +70,7 @@
         <nav class="navbar fixed-top" style="background-color: white">
             <div class="container-fluid">
                 <a class="navbar-brand" href="/"><i class="bi bi-arrow-left"></i></a>
-                <h2 style="font-style: bold; height:20px"><a href="/">Menuhere</a></h2>
+                <h2 style="font-style: bold; height:20px"><a href="/menu">Menuhere</a></h2>
                 <button aria-controls="offcanvasNavbar" aria-label="Toggle navigation" class="navbar-toggler"
                         data-bs-target="#offcanvasNavbar" data-bs-toggle="offcanvas"
                         type="button">
@@ -94,10 +85,10 @@
                     <div class="offcanvas-body">
                         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                             <li class="nav-item">
-                                <a aria-current="page" class="nav-link active" href="#">Home</a>
+                                <a aria-current="page" class="nav-link active" href="/">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Link</a>
+                                <a class="nav-link" id="sign" href="#"></a>
                             </li>
                             <li id="manager-menu" class="nav-item" style="display: none">
                                 <a class="nav-link" href="/menu/addform">메뉴 추가</a>
@@ -208,7 +199,16 @@
         // 페이지 로드 시 한 번 실행
         updateCartCnt();
         const token = await getToken();
+        const sign = document.getElementById('sign');
         test();
+
+        if (token) {
+            sign.onclick = Logout;
+            sign.innerHTML = "로그아웃";
+        } else {
+            sign.href = "/sign-in";
+            sign.innerHTML = "로그인";
+        }
 
         await fetch('/menu', {
             method: 'GET',
@@ -217,6 +217,7 @@
                 'Authorization': 'Bearer ' + token
             },
         })
+
 
         function test() {
             $.ajax({

@@ -106,7 +106,7 @@ public class MenuController {
     }
 
     @GetMapping("/menu")
-    public String menu(Model model, HttpSession session,  @PageableDefault(size = 10) Pageable pageable) {
+    public String menu(Model model, HttpSession session, @PageableDefault Pageable pageable) {
 
         Page<MenuViewDto> menuPage = menuService.ViewMenu(pageable);
         CartListDto cartList = (CartListDto) session.getAttribute("cart");
@@ -115,26 +115,40 @@ public class MenuController {
         model.addAttribute("menuList", menuPage);
 
         int currentPage = menuPage.getNumber();
-        int totalPages = menuPage.getTotalPages();
+        int totalPage = menuPage.getTotalPages();
         model.addAttribute("currentPage", currentPage);
-        model.addAttribute("totalPages", totalPages);
-
-        return "menu";
-    }
-
-
-    @GetMapping("/search/menu")
-    public String MenuSearch(@RequestParam("name")String  search, Model model) {
-        model.addAttribute("menuList", menuService.MenuSearch(search));
+        model.addAttribute("totalPages", totalPage);
 
         return "menu";
     }
 
     @GetMapping("/menus/{category}")
-    public String MenusByCategory(@PathVariable Category category, Model model) {
-        model.addAttribute("menuList", menuService.findCategory(category));
+    public String MenusByCategory(@PathVariable Category category, Model model, @PageableDefault Pageable pageable) {
+        Page<MenuViewDto> categoryView = menuService.findCategory(category, pageable);
+
+        model.addAttribute("menuList", categoryView);
+
+        int currentPage = categoryView.getNumber();
+        int totalPage = categoryView.getTotalPages();
+
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", totalPage);
 
         return "menu";
     }
 
+    @GetMapping("/search/menu")
+    public String MenuSearch(@RequestParam("name")String  search, Model model, Pageable pageable) {
+        Page<MenuViewDto> menuViewDtos = menuService.MenuSearch(search, pageable);
+
+        model.addAttribute("menuList", menuViewDtos);
+
+        int currentPage = menuViewDtos.getNumber();
+        int totalPage = menuViewDtos.getTotalPages();
+
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", totalPage);
+
+        return "menu";
+    }
 }
