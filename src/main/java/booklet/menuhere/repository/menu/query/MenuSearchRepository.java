@@ -1,7 +1,5 @@
 package booklet.menuhere.repository.menu.query;
 
-import booklet.menuhere.domain.menu.Category;
-import booklet.menuhere.domain.menu.Menu;
 import booklet.menuhere.domain.menu.QMenu;
 import booklet.menuhere.domain.menu.dtos.MenuViewDto;
 import com.querydsl.core.types.Projections;

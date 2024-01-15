@@ -28,7 +28,7 @@ public class UserController {
         if(result.hasErrors()){
             return "login";
         }
-        userService.singUp(userSignUpDto);
+        userService.signUp(userSignUpDto);
         return "회원가입 성공";
     }
 

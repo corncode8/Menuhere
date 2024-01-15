@@ -16,7 +16,7 @@ import java.util.List;
 @Table(name = "orders")
 public class Order extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_id")
+    @Column(name = "order_id", updatable = false)
     private Long id;
 
     @Enumerated(EnumType.STRING)

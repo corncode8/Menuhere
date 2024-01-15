@@ -3,7 +3,10 @@ package booklet.menuhere.service;
 import booklet.menuhere.domain.Role;
 import booklet.menuhere.domain.User.User;
 import booklet.menuhere.domain.User.dtos.UserSignUpDto;
+import booklet.menuhere.domain.model.Email;
 import booklet.menuhere.domain.order.dtos.OrderUserInfoDto;
+import booklet.menuhere.exception.BaseResponseStatus;
+import booklet.menuhere.exception.CustomException;
 import booklet.menuhere.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,35 +27,45 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     // 회원가입 로직
-    public void singUp(UserSignUpDto userSignUpDto) throws Exception {
-        if (userRepository.findByEmail(userSignUpDto.getEmail()).isPresent()) {
+    public void signUp(UserSignUpDto userSignUpDto) throws Exception {
+        if (userRepository.findByEmailValue(userSignUpDto.getEmail()).isPresent()) {
             throw new Exception("이미 존재하는 이메일입니다.");
         }
         if (userRepository.findByusername(userSignUpDto.getUsername()).isPresent()) {
             throw new Exception("이미 존재하는 이름입니다.");
         }
         User user = User.builder()
-                .email(userSignUpDto.getEmail())
+                .email(Email.of(userSignUpDto.getEmail()))
                 .password(userSignUpDto.getPassword())
                 .username(userSignUpDto.getUsername())
                 .phone(userSignUpDto.getPhone())
                 .address(userSignUpDto.getAddress())
-                .role(Role.USER)
                 .build();
-        user.passwordEncode(passwordEncoder);
+        user.passwordEncode(passwordEncoder); user.authorizeUser();
         userRepository.save(user);
     }
 
 
     // 로그인 로직
-    public User login(String id, String password) {
-        return userRepository.findByEmail(id)
-                .filter(m -> m.getPassword().equals(password))
+    public User login(String id, String password) throws CustomException{
+        User user = userRepository.findByEmailValue(id)
+                .filter(m -> passwordEncoder.matches(password, m.getPassword()))
                 .orElse(null);
+        if (user == null) {
+            Optional<User> userEmail = userRepository.findByEmailValue(id);
+            if (!userEmail.isPresent()) {
+                // 가입되지 않은 아이디
+                throw new CustomException(BaseResponseStatus.UserNotFoundException);
+            } else {
+                // 비밀번호가 불일치
+                throw new CustomException(BaseResponseStatus.InvalidPasswordException);
+            }
+        }
+        return user;
     }
 
     public Optional<User> findEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmailValue(email);
     }
 
     public Role getRole(String email) {
@@ -67,6 +80,6 @@ public class UserService {
 
     public Optional<OrderUserInfoDto> OrderUserInfo(String email) {
         return findEmail(email)
-                .map(u -> new OrderUserInfoDto(u.getUsername(), u.getAddress(), u.getPhone(), u.getEmail()));
+                .map(u -> new OrderUserInfoDto(u.getUsername(), u.getAddress(), u.getPhone(), u.getEmail().getValue()));
     }
 }

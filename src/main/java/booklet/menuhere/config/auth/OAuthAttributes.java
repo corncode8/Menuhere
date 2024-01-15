@@ -6,6 +6,7 @@ import booklet.menuhere.config.auth.userinfo.OAuth2UserInfo;
 import booklet.menuhere.domain.Role;
 import booklet.menuhere.domain.User.SocialType;
 import booklet.menuhere.domain.User.User;
+import booklet.menuhere.domain.model.Email;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -61,7 +62,7 @@ public class OAuthAttributes {
         return User.builder()
                 .socialType(socialType)
                 .socialId(oauth2UserInfo.getId())
-                .email(UUID.randomUUID() + "@socialUser.com")
+                .email(Email.of(UUID.randomUUID() + "@socialUser.com"))
                 .username(oauth2UserInfo.getNickname())
                 .role(Role.GUEST)
                 .build();

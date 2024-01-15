@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Getter @Setter
 public class MenuOption extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "menuoption_id")
+    @Column(name = "menuoption_id", updatable = false)
     private Long id;
 
     private String option;

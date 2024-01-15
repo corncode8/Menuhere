@@ -15,7 +15,7 @@ import java.util.List;
 public class Menu extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "menu_id")
+    @Column(name = "menu_id", updatable = false)
     private Long id;
 
     private String name;

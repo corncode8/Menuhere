@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Getter @Setter
 public class OrderMenu extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "orderMenu_id")
+    @Column(name = "orderMenu_id", updatable = false)
     private Long id;
 
     private int totalPrice;

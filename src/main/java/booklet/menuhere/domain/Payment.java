@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class Payment {
 
     @Id @GeneratedValue
-    @Column(name = "payment_id")
+    @Column(name = "payment_id", updatable = false)
     private Long id;
 
     private String payType;

@@ -1,7 +1,7 @@
 package booklet.menuhere.config.auth;
 
 import booklet.menuhere.domain.Role;
-import booklet.menuhere.domain.User.Address;
+import booklet.menuhere.domain.model.Address;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;

@@ -2,6 +2,8 @@ package booklet.menuhere.domain.User;
 
 import booklet.menuhere.domain.BaseEntity;
 import booklet.menuhere.domain.Role;
+import booklet.menuhere.domain.model.Address;
+import booklet.menuhere.domain.model.Email;
 import booklet.menuhere.domain.order.Order;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,11 +16,12 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@ToString(of = {"email"})
 @Builder
 public class User extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "user_id", updatable = false)
     private Long id;
 
     private String username;
@@ -27,7 +30,9 @@ public class User extends BaseEntity {
 
     private String password;
 
-    private String email;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "email", nullable = false, unique = true, updatable = false, length = 50))
+    private Email email;
 
     @Builder.Default
     @OneToMany(mappedBy = "user")

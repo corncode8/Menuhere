@@ -1,23 +1,25 @@
 package booklet.menuhere.domain.User.dtos;
 
-import booklet.menuhere.domain.User.Address;
+import booklet.menuhere.domain.model.Address;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @AllArgsConstructor
 @Getter
 public class UserSignUpDto {
-    @NotBlank
+    @Valid
     private String email;
-    @NotBlank
+    @Valid
     private String password;
-    @NotBlank
+    @Valid
     private String username;
-    @NotBlank
+    @Valid
     private String phone;
     private Address address;
 
