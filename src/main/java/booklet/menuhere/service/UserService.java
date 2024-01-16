@@ -51,16 +51,6 @@ public class UserService {
         User user = userRepository.findByEmailValue(id)
                 .filter(m -> passwordEncoder.matches(password, m.getPassword()))
                 .orElse(null);
-        if (user == null) {
-            Optional<User> userEmail = userRepository.findByEmailValue(id);
-            if (!userEmail.isPresent()) {
-                // 가입되지 않은 아이디
-                throw new CustomException(BaseResponseStatus.UserNotFoundException);
-            } else {
-                // 비밀번호가 불일치
-                throw new CustomException(BaseResponseStatus.InvalidPasswordException);
-            }
-        }
         return user;
     }
 
@@ -73,8 +63,7 @@ public class UserService {
         if (user.isPresent()) {
             return user.get().getRole();
         } else {
-            // 적절한 대체 작업 또는 예외 처리
-            throw new NoSuchElementException("User not found with email: " + email);
+            return null;
         }
     }
 

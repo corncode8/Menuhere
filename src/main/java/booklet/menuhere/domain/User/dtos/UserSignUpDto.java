@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
+
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @AllArgsConstructor

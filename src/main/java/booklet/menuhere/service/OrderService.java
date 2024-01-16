@@ -28,19 +28,22 @@ public class OrderService {
     private final MenuService menuService;
 
 
-    public void createOrder(MakeOrderDto makeOrderDto) {
+    public Order createOrder(MakeOrderDto makeOrderDto) {
         Order order = new Order();
         Payment payment = new Payment();
         List<OrderMenu> orderMenus = new ArrayList<>();
 
-        payment.createPayment(makeOrderDto.getOrderType(), makeOrderDto.getOrderType(), makeOrderDto.getOrderPrice(), order);
+        payment.createPayment(makeOrderDto.getPayType(), makeOrderDto.getPayStatus(), makeOrderDto.getOrderPrice(), order);
 
         for (OrderMenuDto orderMenu : makeOrderDto.getOrderMenus()) {
             Optional<Menu> menuOpt = menuService.findById(orderMenu.getMenuId());
+            log.info("menuOpt : {}", menuOpt);
+
             if (menuOpt.isPresent()) {
                 Menu menu =  menuOpt.get();
-
+                log.info(String.valueOf(menu));
                 int totalPrice = menu.getPrice() * orderMenu.getQuantity();
+
                 OrderMenu newOrderMenu = new OrderMenu(totalPrice, orderMenu.getQuantity(), order, menu);
                 orderMenus.add(newOrderMenu);
             }
@@ -64,8 +67,10 @@ public class OrderService {
             }
             log.info("order : {}", order);
             orderRepository.save(order);
+            return order;
         } catch (Exception e) {
             log.info("createOrder Exception : {}", e);
+            return null;
         }
 
     }

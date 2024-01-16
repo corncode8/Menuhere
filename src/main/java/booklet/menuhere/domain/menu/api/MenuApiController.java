@@ -4,6 +4,7 @@ import booklet.menuhere.config.jwt.JwtService;
 import booklet.menuhere.domain.Role;
 import booklet.menuhere.domain.menu.file.FileStore;
 import booklet.menuhere.exception.BaseResponse;
+import booklet.menuhere.exception.BaseResponseStatus;
 import booklet.menuhere.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,21 +26,27 @@ public class MenuApiController {
 
     @GetMapping("/api/role")
     public BaseResponse getRole(@RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
+
         if (authorizationHeader != null && !authorizationHeader.isEmpty()) {
             String token = authorizationHeader.replace("Bearer ", "");
             Optional<String> emailOpt = jwtService.extractEmail(token);
+
             if (emailOpt.isPresent()) {
                 Role role = userService.getRole(emailOpt.get());
+
+                if (role == null) {
+                    return new BaseResponse(BaseResponseStatus.NOT_FOUND_USER);
+                }
 
                 Map<String, String> result = new HashMap<>();
                 result.put("userRole", role.getKey());
 
                 return new BaseResponse(result);
             } else {
-                return new BaseResponse("Email not found");
+                return new BaseResponse(BaseResponseStatus.NOT_FOUND_USER);
             }
         }
-        return new BaseResponse("Non-Member");
+        return new BaseResponse(BaseResponseStatus.NOT_FOUND_USER);
     }
 
     @GetMapping("/image/storeImage/{filename}")

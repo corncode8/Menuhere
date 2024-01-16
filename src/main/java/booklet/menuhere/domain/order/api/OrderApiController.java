@@ -27,6 +27,7 @@ public class OrderApiController {
         return new BaseResponse(cartList.cartTotalPrice);
     }
 
+    // TODO: 주문 실패 (테이블No 입력안했을 시) 예외처리
     @PostMapping("/new/order")
     public BaseResponse MakeOrder(@RequestBody MakeOrderDto makeOrderDto,@RequestHeader(value = "Authorization", required = false) String authorizationHeader, HttpSession session) {
         log.info("Received order request: {}", makeOrderDto);

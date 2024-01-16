@@ -2,6 +2,8 @@ package booklet.menuhere.domain.User;
 
 import booklet.menuhere.domain.User.dtos.LoginForm;
 import booklet.menuhere.domain.User.dtos.UserSignUpDto;
+import booklet.menuhere.exception.BaseResponse;
+import booklet.menuhere.exception.BaseResponseStatus;
 import booklet.menuhere.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,18 +40,17 @@ public class UserController {
     }
 
     @PostMapping("/sign-in")
-    public String login(@Validated @RequestBody LoginForm form, BindingResult result) throws Exception{
+    public BaseResponse login(@Validated @RequestBody LoginForm form, BindingResult result) throws Exception{
         if (result.hasErrors()) {
-            return "form/login";
+            return new BaseResponse(BaseResponseStatus.LOGIN_EXCEPTION);
         }
         User loginUser = userService.login(form.getLoginId(), form.getPassword());
 
         if (loginUser == null) {
-            result.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다");
-            return "form/login";
+            return new BaseResponse(BaseResponseStatus.LOGIN_EXCEPTION);
         }
 
-        return "로그인 성공";
+        return new BaseResponse(BaseResponseStatus.SUCCESS);
     }
 
     @GetMapping("/jwt-test")

@@ -32,7 +32,7 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final FileStore fileStore;
 
-    public void addMenu(MenuAddDto form) throws Exception{
+    public Menu addMenu(MenuAddDto form) throws Exception{
 
         UploadFile attachFile = fileStore.storeFile(form.getAttachFile());
 
@@ -42,7 +42,7 @@ public class MenuService {
         Menu menu = new Menu();
         menu.UpdateMenu(form.getName(), form.getContent(), form.getPrice(), form.getCategory(), false, attachFile);
 
-        menuRepository.save(menu);
+        return menuRepository.save(menu);
     }
 
     // 메뉴 수정 폼
@@ -87,20 +87,8 @@ public class MenuService {
             return Boolean.FALSE;
     }
 
-    // 매니저 메뉴 view
-//    public List<MenuViewDto> managerViewMenu() {
-//        List<Menu> menuList = menuRepository.findAllBySaleIsTrue();
-//        log.info("Service - manager menu");
-//
-//        if (menuList.isEmpty()) {
-//            return null;
-//        }
-//        return menuList.stream()
-//                .map(menu -> new MenuViewDto(menu))
-//                .collect(Collectors.toList());
-//    }
 
-    // 유저 메뉴 view
+    // 메뉴 view
     public Page<MenuViewDto> ViewMenu(Pageable pageable) {
         return menuViewDtoRepository.menuViewQuery(pageable);
     }

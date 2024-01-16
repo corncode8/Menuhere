@@ -1,14 +1,15 @@
 package booklet.menuhere.test.service;
 
+import booklet.menuhere.domain.Role;
 import booklet.menuhere.domain.model.Address;
 import booklet.menuhere.domain.User.User;
 import booklet.menuhere.domain.User.dtos.UserSignUpDto;
 import booklet.menuhere.domain.model.Email;
+import booklet.menuhere.domain.order.dtos.OrderUserInfoDto;
 import booklet.menuhere.exception.CustomException;
 import booklet.menuhere.test.IntegrationTest;
 import booklet.menuhere.test.config.TestProfile;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
@@ -95,24 +96,84 @@ public class UserServiceTest extends IntegrationTest {
 
     @DisplayName("로그인 실패 (아이디 불일치)")
     @Test
-    void LoginIdMismatch() throws CustomException {
+    void LoginIdMismatch() throws Exception{
         // given
         final String nonExistentEmail = "nonexistent@test.com";
         final String password = "Password123!";
 
         // when & then
-        assertThrows(CustomException.class, () -> userService.login(nonExistentEmail, password), "가입되지 않은 아이디 입니다.");
+        assertNull(userService.login(nonExistentEmail, password));
     }
 
     @DisplayName("로그인 실패 (비밀번호 불일치)")
     @Test
-    void LoginPasswordMismatch() throws CustomException {
+    void LoginPasswordMismatch() throws Exception {
         // given
         final User user = userSetUp.save();
-        final String wrongPassword = "failPassword123!";
+        final String password = "failPassword123!";
 
         // when & then
-        assertThrows(CustomException.class, () -> userService.login(user.getEmail().getValue(), wrongPassword), "비밀번호가 일치하지 않습니다.");
+        assertNull(userService.login(user.getEmail().getValue(), password));
     }
+
+    @DisplayName("getRole 성공")
+    @Test
+    void getRoleTest() {
+        // given
+        final User user = userSetUp.save();
+
+        // when
+        Role role = userService.getRole(user.getEmail().getValue());
+
+        // then
+        log.info(String.valueOf(role));
+        assertThat(role).isNotNull();
+        assertThat(role);
+    }
+
+    @DisplayName("getRole 실패")
+    @Test
+    void failGetRoleTest() {
+        // given
+        final String nonUser = "NonUser@test.com";
+
+        // when
+        Role role = userService.getRole(nonUser);
+
+        // then
+        log.info(String.valueOf(role));
+        assertThat(role).isNull();
+    }
+
+    @DisplayName("주문 고객 정보 api 테스트 성공")
+    @Test
+    void getUserInfo() {
+        // given
+        final User user = userSetUp.save();
+
+        // when
+        Optional<OrderUserInfoDto> userInfoDto = userService.OrderUserInfo(user.getEmail().getValue());
+
+        // then
+        log.info(String.valueOf(userInfoDto));
+        assertThat(userInfoDto).isNotNull();
+        assertThat(userInfoDto.get().getEmail()).isEqualTo(user.getEmail().getValue());
+        assertThat(userInfoDto.get().getUsername()).isEqualTo(user.getUsername());
+    }
+
+    @DisplayName("주문 고객 정보 api 테스트 실패")
+    @Test
+    void failGetUserInfo() {
+        // given
+        final String nonUser = "NonUser@test.com";
+
+        // when
+        Optional<OrderUserInfoDto> userInfoDto = userService.OrderUserInfo(nonUser);
+
+        // then
+        log.info(String.valueOf(userInfoDto));
+        assertThat(userInfoDto).isEmpty();
+    }
+
 
 }
