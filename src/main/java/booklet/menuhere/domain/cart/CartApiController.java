@@ -3,6 +3,7 @@ package booklet.menuhere.domain.cart;
 import booklet.menuhere.domain.cart.dtos.CartDto;
 import booklet.menuhere.domain.cart.dtos.CartListDto;
 import booklet.menuhere.exception.BaseResponse;
+import booklet.menuhere.exception.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -94,10 +95,10 @@ public class CartApiController {
 
                 return new BaseResponse(cartList);
             } else {
-                return new BaseResponse(null); // 유효하지 않은 인덱스인 경우
+                return new BaseResponse(BaseResponseStatus.NOT_FOUND_MENU); // 유효하지 않은 인덱스인 경우
             }
         } else {
-            return new BaseResponse(null) ;
+            return new BaseResponse(BaseResponseStatus.CART_NULL_EXCEPTION);
         }
     }
 

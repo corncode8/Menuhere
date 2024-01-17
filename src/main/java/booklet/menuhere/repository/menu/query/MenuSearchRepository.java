@@ -23,7 +23,6 @@ import static booklet.menuhere.domain.menu.QMenu.*;
 public class MenuSearchRepository {
 
     private final JPAQueryFactory queryFactory;
-    private final MenuViewDtoRepository menuViewDtoRepository;
 
     public Page<MenuViewDto> findAll(String search, Pageable pageable) {
 

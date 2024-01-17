@@ -14,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -22,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles(TestProfile.TEST)
 @Slf4j
-public class UserServiceTest extends IntegrationTest {
+class UserServiceTest extends IntegrationTest {
 
     @DisplayName("회원가입 성공")
     @Test
@@ -68,6 +69,7 @@ public class UserServiceTest extends IntegrationTest {
         final UserSignUpDto userSignUpDto = new UserSignUpDto("test@test.com", "Password123",
                 "testUsername", "010-1234-5678", address);
         User user = User.builder()
+                .email(Email.of("test1234@test.com"))
                 .username("testUsername")
                 .build();
         userRepository.save(user);
@@ -96,13 +98,15 @@ public class UserServiceTest extends IntegrationTest {
 
     @DisplayName("로그인 실패 (아이디 불일치)")
     @Test
-    void LoginIdMismatch() throws Exception{
+    void LoginIdMismatch() {
         // given
         final String nonExistentEmail = "nonexistent@test.com";
         final String password = "Password123!";
 
         // when & then
-        assertNull(userService.login(nonExistentEmail, password));
+        assertThrows(EntityNotFoundException.class, () -> {
+            userService.login(nonExistentEmail, password);
+        }, "해당 아이디를 찾을 수 없습니다: " + nonExistentEmail);
     }
 
     @DisplayName("로그인 실패 (비밀번호 불일치)")
@@ -113,7 +117,9 @@ public class UserServiceTest extends IntegrationTest {
         final String password = "failPassword123!";
 
         // when & then
-        assertNull(userService.login(user.getEmail().getValue(), password));
+        assertThrows(EntityNotFoundException.class, () -> {
+            userService.login(user.getEmail().getValue(), password);
+        }, "비밀번호가 일치하지 않습니다.");
     }
 
     @DisplayName("getRole 성공")
@@ -128,7 +134,7 @@ public class UserServiceTest extends IntegrationTest {
         // then
         log.info(String.valueOf(role));
         assertThat(role).isNotNull();
-        assertThat(role);
+        assertThat(role).isEqualTo(Role.USER);
     }
 
     @DisplayName("getRole 실패")
@@ -137,12 +143,10 @@ public class UserServiceTest extends IntegrationTest {
         // given
         final String nonUser = "NonUser@test.com";
 
-        // when
-        Role role = userService.getRole(nonUser);
-
-        // then
-        log.info(String.valueOf(role));
-        assertThat(role).isNull();
+        // when & then
+        assertThrows(EntityNotFoundException.class, () -> {
+            userService.getRole(nonUser);
+        }, "해당 아이디를 찾을 수 없습니다. " + nonUser);
     }
 
     @DisplayName("주문 고객 정보 api 테스트 성공")
@@ -152,27 +156,26 @@ public class UserServiceTest extends IntegrationTest {
         final User user = userSetUp.save();
 
         // when
-        Optional<OrderUserInfoDto> userInfoDto = userService.OrderUserInfo(user.getEmail().getValue());
+        OrderUserInfoDto userInfoDto = userService.OrderUserInfo(user.getEmail().getValue());
 
         // then
         log.info(String.valueOf(userInfoDto));
         assertThat(userInfoDto).isNotNull();
-        assertThat(userInfoDto.get().getEmail()).isEqualTo(user.getEmail().getValue());
-        assertThat(userInfoDto.get().getUsername()).isEqualTo(user.getUsername());
+        assertThat(userInfoDto.getEmail()).isEqualTo(user.getEmail().getValue());
+        assertThat(userInfoDto.getUsername()).isEqualTo(user.getUsername());
     }
 
     @DisplayName("주문 고객 정보 api 테스트 실패")
     @Test
     void failGetUserInfo() {
         // given
-        final String nonUser = "NonUser@test.com";
+        final String nonExistentEmail = "nonexistent@example.com";
 
-        // when
-        Optional<OrderUserInfoDto> userInfoDto = userService.OrderUserInfo(nonUser);
+        // when & then
+        assertThrows(EntityNotFoundException.class, () -> {
+            userService.OrderUserInfo(nonExistentEmail);
+        }, "해당 아이디를 찾을 수 없습니다. " + nonExistentEmail);
 
-        // then
-        log.info(String.valueOf(userInfoDto));
-        assertThat(userInfoDto).isEmpty();
     }
 
 

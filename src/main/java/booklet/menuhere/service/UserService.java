@@ -5,7 +5,6 @@ import booklet.menuhere.domain.User.User;
 import booklet.menuhere.domain.User.dtos.UserSignUpDto;
 import booklet.menuhere.domain.model.Email;
 import booklet.menuhere.domain.order.dtos.OrderUserInfoDto;
-import booklet.menuhere.exception.BaseResponseStatus;
 import booklet.menuhere.exception.CustomException;
 import booklet.menuhere.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.NoSuchElementException;
+import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -48,9 +48,14 @@ public class UserService {
 
     // 로그인 로직
     public User login(String id, String password) throws CustomException{
+        // 아이디로 사용자 찾기
         User user = userRepository.findByEmailValue(id)
-                .filter(m -> passwordEncoder.matches(password, m.getPassword()))
-                .orElse(null);
+                .orElseThrow(() -> new EntityNotFoundException("해당 아이디를 찾을 수 없습니다: " + id));
+
+        // 비밀번호 검증
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new EntityNotFoundException("비밀번호가 일치하지 않습니다.");
+        }
         return user;
     }
 
@@ -59,16 +64,17 @@ public class UserService {
     }
 
     public Role getRole(String email) {
-        Optional<User> user = findEmail(email);
-        if (user.isPresent()) {
-            return user.get().getRole();
-        } else {
-            return null;
-        }
+        User user = findEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("해당 아이디를 찾을 수 없습니다. " + email));
+
+        return user.getRole();
+
     }
 
-    public Optional<OrderUserInfoDto> OrderUserInfo(String email) {
+    public OrderUserInfoDto OrderUserInfo(String email) {
         return findEmail(email)
-                .map(u -> new OrderUserInfoDto(u.getUsername(), u.getAddress(), u.getPhone(), u.getEmail().getValue()));
+                .map(u -> new OrderUserInfoDto(u.getUsername(), u.getAddress(), u.getPhone(), u.getEmail().getValue()))
+                .orElseThrow(() -> new EntityNotFoundException("해당 아이디를 찾을 수 없습니다. " + email));
     }
+
 }

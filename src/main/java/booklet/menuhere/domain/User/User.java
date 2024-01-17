@@ -52,6 +52,9 @@ public class User extends BaseEntity {
     public void authorizeUser() {
         this.role = Role.USER;
     }
+    public void authorizeManager() {
+        this.role = Role.MANAGER;
+    }
     public void passwordEncode (PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(this.password);
     }

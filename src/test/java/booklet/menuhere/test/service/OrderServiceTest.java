@@ -1,37 +1,33 @@
 package booklet.menuhere.test.service;
 
-import booklet.menuhere.domain.Payment;
+
 import booklet.menuhere.domain.User.User;
-import booklet.menuhere.domain.menu.Menu;
 import booklet.menuhere.domain.order.Order;
 import booklet.menuhere.domain.order.dtos.MakeOrderDto;
-import booklet.menuhere.domain.orderStatus;
-import booklet.menuhere.domain.ordermenu.OrderMenu;
+import booklet.menuhere.domain.OrderStatus;
 import booklet.menuhere.domain.ordermenu.dtos.OrderMenuDto;
 import booklet.menuhere.test.IntegrationTest;
 import booklet.menuhere.test.config.TestProfile;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles(TestProfile.TEST)
 @Slf4j
-public class OrderServiceTest extends IntegrationTest {
+class OrderServiceTest extends IntegrationTest {
 
     @DisplayName("주문 생성 테스트 성공 (회원)")
     @Test
     void userOrder() {
         //given
         User user = userSetUp.save();
-        MakeOrderDto orderDto = new MakeOrderDto(orderStatus.ORDER, "test 요청사항", 52000, "Dine-in",
+        MakeOrderDto orderDto = new MakeOrderDto(OrderStatus.ORDER, "test 요청사항", 52000, "Dine-in",
                 "KakaoPay", "결제 완료", getMenuDtos(), 5, user.getEmail().getValue());
 
 
@@ -60,7 +56,7 @@ public class OrderServiceTest extends IntegrationTest {
     @Test
     void nonUserOrder() {
         //given
-        MakeOrderDto orderDto = new MakeOrderDto(orderStatus.ORDER, "test 요청사항", 52000, "Dine-in",
+        MakeOrderDto orderDto = new MakeOrderDto(OrderStatus.ORDER, "test 요청사항", 52000, "Dine-in",
                 "KakaoPay", "결제 완료", getMenuDtos(), 5, "Non-Members");
 
 
@@ -89,7 +85,7 @@ public class OrderServiceTest extends IntegrationTest {
     @Test
     void failOrder() {
         //given
-        MakeOrderDto orderDto = new MakeOrderDto(orderStatus.ORDER, "test 요청사항", 52000, "Dine-in",
+        MakeOrderDto orderDto = new MakeOrderDto(OrderStatus.ORDER, "test 요청사항", 52000, "Dine-in",
                 "KakaoPay", "결제 완료", getMenuDtos(), null, "Non-Members");
 
 

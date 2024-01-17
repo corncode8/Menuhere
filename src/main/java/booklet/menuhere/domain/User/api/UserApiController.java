@@ -3,6 +3,7 @@ package booklet.menuhere.domain.User.api;
 import booklet.menuhere.config.jwt.JwtService;
 import booklet.menuhere.domain.order.dtos.OrderUserInfoDto;
 import booklet.menuhere.exception.BaseResponse;
+import booklet.menuhere.exception.BaseResponseStatus;
 import booklet.menuhere.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,11 +36,11 @@ public class UserApiController {
         Optional<String> emailOpt = jwtService.extractEmail(token);
         if (emailOpt.isPresent()) {
             String email = emailOpt.get();
-            Optional<OrderUserInfoDto> orderUserInfoDto = userService.OrderUserInfo(email);
+            OrderUserInfoDto orderUserInfoDto = userService.OrderUserInfo(email);
             log.info("orderUserInfoDto : {}", orderUserInfoDto);
             return new BaseResponse(orderUserInfoDto);
         } else {
-            return new BaseResponse(false);
+            return new BaseResponse(BaseResponseStatus.INVALID_TOKEN);
         }
     }
 

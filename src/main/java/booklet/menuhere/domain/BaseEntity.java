@@ -6,15 +6,15 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.MappedSuperclass;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Getter @Setter
 public abstract class BaseEntity {
 
     @CreationTimestamp
-    private Timestamp createdDate;
+    private LocalDateTime createdDate;
     @UpdateTimestamp
-    private Timestamp modifiedDate;
+    private LocalDateTime modifiedDate;
 
 }

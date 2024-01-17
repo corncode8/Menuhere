@@ -58,6 +58,4 @@ public class UserController {
         return "jwtTest 요청 성공";
     }
 
-
-
 }

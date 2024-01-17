@@ -1,5 +1,6 @@
 package booklet.menuhere.service;
 
+import booklet.menuhere.domain.User.User;
 import booklet.menuhere.domain.menu.Category;
 import booklet.menuhere.domain.menu.Menu;
 import booklet.menuhere.domain.menu.file.FileStore;
@@ -17,6 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -47,44 +50,33 @@ public class MenuService {
 
     // 메뉴 수정 폼
     public MenuEditDto editView(Long menuId) {
-        Optional<Menu> menuOpt = menuRepository.findById(menuId);
-        if (menuOpt.isPresent()) {
-            Menu menu = menuOpt.get();
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 메뉴를 찾을 수 없습니다. " + menuId));
 
-            MenuEditDto editDto = new MenuEditDto();
-            editDto.setMenuEditDto(menu.getName(), menu.getContent(), menu.getPrice(), menu.isSale(), menu.getUploadFile().getStoreFileName(), menu.getCategory());
-//            editDto.setSaleHold(menu.isSale());
-//            editDto.setCategory(menu.getCategory());
-//            editDto.setContent(menu.getContent());
-//            editDto.setPrice(menu.getPrice());
-//            editDto.setName(menu.getName());
-//            editDto.setStoreFileName(menu.getUploadFile().getStoreFileName());
+        MenuEditDto editDto = new MenuEditDto();
+        editDto.setMenuEditDto(menu.getName(), menu.getContent(), menu.getPrice(), menu.isSale(), menu.getUploadFile().getStoreFileName(), menu.getCategory());
 
-            return editDto;
-        } else{
-            return null;
-        }
+        return editDto;
+
     }
 
     // 메뉴 수정하기
-    public Boolean editMenu(MenuEditDto editDto, Long menuId) throws Exception{
-        Optional<Menu> menuOpt = menuRepository.findById(menuId);
+    public Menu editMenu(MenuEditDto editDto, Long menuId) throws Exception{
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 메뉴를 찾을 수 없습니다. " + menuId));
 
-        if (menuOpt.isPresent()) {
-            Menu menu = menuOpt.get();
-
-            if (editDto.getAttachFile() != null && !editDto.getAttachFile().isEmpty()) {
-                UploadFile attachFile = fileStore.storeFile(editDto.getAttachFile());
-                menu.updateFile(attachFile);
-            }
-            if (menu.isSale() == true) {
-                menu.EditMenu(UUID.randomUUID().toString(), editDto.getContent(), editDto.getPrice(), editDto.getCategory(), editDto.isSaleHold());
-            }
+        if (editDto.getAttachFile() != null && !editDto.getAttachFile().isEmpty()) {
+            UploadFile attachFile = fileStore.storeFile(editDto.getAttachFile());
+            menu.updateFile(attachFile);
+        }
+        if (editDto.isSaleHold() == true) {
+            menu.EditMenu(UUID.randomUUID().toString(), editDto.getContent(), editDto.getPrice(), editDto.getCategory(), true);
+        } else {
             menu.EditMenu(editDto.getName(), editDto.getContent(), editDto.getPrice(), editDto.getCategory(), editDto.isSaleHold());
-            menuRepository.save(menu);
-            return Boolean.TRUE;
-        } else
-            return Boolean.FALSE;
+        }
+
+        return menuRepository.save(menu);
+
     }
 
 
@@ -116,6 +108,7 @@ public class MenuService {
         return menuRepository.findById(menuId);
     }
     public Menu getMenuName(String name) {
-        return menuRepository.findByName(name).orElse(null);
+        return menuRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("해당 메뉴를 찾을 수 없습니다. " + name));
     }
+
 }

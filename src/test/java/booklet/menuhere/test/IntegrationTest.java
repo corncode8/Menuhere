@@ -9,10 +9,14 @@ import booklet.menuhere.service.UserService;
 import booklet.menuhere.test.domain.MenuSetUp;
 import booklet.menuhere.test.domain.UserSetUp;
 
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
 
 @SpringBootTest(properties = "spring.config.location=" +
         "classpath:/application.yml" +
@@ -45,5 +49,8 @@ public class IntegrationTest {
 
     @Autowired
     public MenuService menuService;
+
+    @Autowired
+    public PasswordEncoder passwordEncoder;
 
 }

@@ -33,6 +33,11 @@ public class UserSetUp {
         return userRepository.save(user);
     }
 
+    public User saveManager() {
+        final User user = buildManager(signUpDto);
+        return userRepository.save(user);
+    }
+
     public User build() {
         return buildUser(signUpDto);
     }
@@ -49,4 +54,18 @@ public class UserSetUp {
         user.authorizeUser(); user.passwordEncode(passwordEncoder); user.updateRefreshToken(refreshToken);
         return user;
     }
+
+    private User buildManager(UserSignUpDto signUpDto) {
+        User user = User.builder()
+                .email(Email.of(signUpDto.getEmail()))
+                .username(signUpDto.getUsername())
+                .phone(signUpDto.getPhone())
+                .password(signUpDto.getPassword())
+                .address(signUpDto.getAddress())
+                .build();
+        String refreshToken = jwtService.createRefreshToken();
+        user.authorizeManager(); user.passwordEncode(passwordEncoder); user.updateRefreshToken(refreshToken);
+        return user;
+    }
+
 }

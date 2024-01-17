@@ -45,12 +45,6 @@ public class MenuController {
                     CartViewForm cartViewForm = new CartViewForm();
                     cartViewForm.setCartViewForm(menu.getId(), menu.getName(), menu.getPrice(), cartDto.getAmount(), menu.getUploadFile());
 
-//                    cartViewForm.setUploadFile(menu.getUploadFile());
-//                    cartViewForm.setName(menu.getName());
-//                    cartViewForm.setPrice(menu.getPrice());
-//                    cartViewForm.setAmount(cartDto.getAmount());
-//                    cartViewForm.setMenuId(menu.getId());
-
                     cartViewForms.add(cartViewForm);
                 }
             }
@@ -78,7 +72,8 @@ public class MenuController {
 
     @PostMapping("/menu/{menuId}/edit")
     public String editMenu(@PathVariable Long menuId, @Valid MenuEditDto menuEditDto, RedirectAttributes redirectAttributes) throws Exception{
-        if (menuService.editMenu(menuEditDto, menuId)) {
+        Menu menu = menuService.editMenu(menuEditDto, menuId);
+        if (menu != null) {
             redirectAttributes.addFlashAttribute("successMessage", "메뉴를 수정하였습니다.");
         } else {
             redirectAttributes.addFlashAttribute("failMessage", "메뉴를 찾을 수 없습니다. 메뉴 수정에 실패하였습니다.");

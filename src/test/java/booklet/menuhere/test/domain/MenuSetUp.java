@@ -13,7 +13,6 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 
 @Profile(TestProfile.TEST)
 @Component
@@ -25,8 +24,13 @@ public class MenuSetUp {
     @Autowired
     private FileStore fileStore;
 
-    public void save(int num) throws Exception{
-        for (int i = 0; i < num; i++) {
+    public Menu save(int num) throws Exception{
+        Menu menu = setMenu(setDto(num));
+        return menuRepository.save(menu);
+    }
+
+    public void saveMenus(int num) throws Exception{
+        for (int i = 0; i <= num; i++) {
             Menu menu = setMenu(setDto(i));
             menuRepository.save(menu);
         }
