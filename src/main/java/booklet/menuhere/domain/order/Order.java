@@ -1,15 +1,18 @@
 package booklet.menuhere.domain.order;
 
 import booklet.menuhere.domain.BaseEntity;
+import booklet.menuhere.domain.Delivery;
 import booklet.menuhere.domain.ordermenu.OrderMenu;
 import booklet.menuhere.domain.Payment;
 import booklet.menuhere.domain.User.User;
-import booklet.menuhere.domain.orderStatus;
+import booklet.menuhere.domain.OrderStatus;
 import lombok.Getter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -20,7 +23,7 @@ public class Order extends BaseEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private orderStatus orderStatus;
+    private OrderStatus orderStatus;
 
     private String requests;
 
@@ -42,7 +45,11 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "payment_id")
     private Payment payment;
 
-    public void createOrder(orderStatus orderStatus, String requests, int orderPrice, int tableNo, String orderType, Payment payment) {
+    @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "delivery_id")
+    private Delivery delivery;
+
+    public void createOrder(OrderStatus orderStatus, String requests, int orderPrice, int tableNo, String orderType, Payment payment) {
         this.orderStatus = orderStatus;
         this.requests = requests;
         this.orderPrice = orderPrice;

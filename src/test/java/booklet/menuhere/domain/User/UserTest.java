@@ -1,7 +1,6 @@
 package booklet.menuhere.domain.User;
 
 import booklet.menuhere.domain.Role;
-import booklet.menuhere.domain.model.Email;
 import booklet.menuhere.test.IntegrationTest;
 import booklet.menuhere.test.config.TestProfile;
 import lombok.extern.slf4j.Slf4j;

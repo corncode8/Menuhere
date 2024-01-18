@@ -1,6 +1,5 @@
 package booklet.menuhere.service;
 
-import booklet.menuhere.domain.User.User;
 import booklet.menuhere.domain.menu.Category;
 import booklet.menuhere.domain.menu.Menu;
 import booklet.menuhere.domain.menu.file.FileStore;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
+
 import java.util.Optional;
 import java.util.UUID;
 
@@ -69,10 +68,10 @@ public class MenuService {
             UploadFile attachFile = fileStore.storeFile(editDto.getAttachFile());
             menu.updateFile(attachFile);
         }
-        if (editDto.isSaleHold() == true) {
+        if (editDto.isSaleHold()) {
             menu.EditMenu(UUID.randomUUID().toString(), editDto.getContent(), editDto.getPrice(), editDto.getCategory(), true);
         } else {
-            menu.EditMenu(editDto.getName(), editDto.getContent(), editDto.getPrice(), editDto.getCategory(), editDto.isSaleHold());
+            menu.EditMenu(editDto.getName(), editDto.getContent(), editDto.getPrice(), editDto.getCategory(), false);
         }
 
         return menuRepository.save(menu);

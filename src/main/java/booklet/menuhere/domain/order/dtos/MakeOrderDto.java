@@ -1,6 +1,6 @@
 package booklet.menuhere.domain.order.dtos;
 
-import booklet.menuhere.domain.orderStatus;
+import booklet.menuhere.domain.OrderStatus;
 import booklet.menuhere.domain.ordermenu.dtos.OrderMenuDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MakeOrderDto {
-    private orderStatus orderStatus;
+    private OrderStatus orderStatus;
     private String requests;
     private int orderPrice;
     private String orderType;

@@ -10,8 +10,4 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderSetUp {
 
-    @Autowired
-    private OrderRepository orderRepository;
-
-
 }
