@@ -21,7 +21,7 @@ public class Menu extends BaseEntity {
     private String name;
     private String content;
     private int price;
-    private int orderNum = 0;       // TODO: 메뉴 주문 횟수
+    private int orderNum = 0;       // 메뉴 주문 횟수
     private boolean sale;
 
     @Enumerated(EnumType.STRING)
@@ -56,6 +56,10 @@ public class Menu extends BaseEntity {
     }
     public void updateFile(UploadFile uploadFile) {
         this.uploadFile = uploadFile;
+    }
+
+    public void plusOrderNum(int num) {
+        this.orderNum += num;
     }
 
 }

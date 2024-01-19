@@ -39,6 +39,7 @@ dependencies {
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
 
 	// QueryDSL
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"

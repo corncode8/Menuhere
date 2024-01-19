@@ -1,10 +1,12 @@
-package booklet.menuhere.domain.User.api;
+package booklet.menuhere.controller.api;
 
 import booklet.menuhere.config.jwt.JwtService;
 import booklet.menuhere.domain.order.dtos.OrderUserInfoDto;
 import booklet.menuhere.exception.BaseResponse;
 import booklet.menuhere.exception.BaseResponseStatus;
 import booklet.menuhere.service.UserService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,15 +23,16 @@ public class UserApiController {
     private final JwtService jwtService;
     private final UserService userService;
 
+    @Operation(summary = "토큰이 유효한지 확인")
     @GetMapping("/api/validate-token")
     public BaseResponse tokenValid(String token) {
         boolean tokenValid = jwtService.isTokenValid(token);
 
-        if (tokenValid) return new BaseResponse(true) ;
-        else return new BaseResponse(false);
+        if (tokenValid) return new BaseResponse(BaseResponseStatus.SUCCESS) ;
+        else return new BaseResponse(BaseResponseStatus.INVALID_TOKEN);
     }
 
-    // 유저 Details Api
+    @Operation(summary = "유저 Details Api", description = "토큰으로 유저정보 확인")
     @GetMapping("/api/user/details")
     public BaseResponse getUserDetails(@RequestHeader("Authorization") String authorizationHeader) {
         String token = authorizationHeader.replace("Bearer ", "");

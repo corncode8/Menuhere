@@ -1,5 +1,6 @@
-package booklet.menuhere.domain.User;
+package booklet.menuhere.controller;
 
+import booklet.menuhere.domain.User.User;
 import booklet.menuhere.domain.User.dtos.LoginForm;
 import booklet.menuhere.domain.User.dtos.UserSignUpDto;
 import booklet.menuhere.exception.BaseResponse;
@@ -25,13 +26,13 @@ public class UserController {
         return "form/addUserForm";
     }
     @PostMapping("/sign-up")
-    public String signUp (@Validated @RequestBody UserSignUpDto userSignUpDto, BindingResult result) throws Exception {
+    public BaseResponse signUp (@Validated @RequestBody UserSignUpDto userSignUpDto, BindingResult result) throws Exception {
         log.info("userSignUpDto : {}", userSignUpDto);
         if(result.hasErrors()){
-            return "login";
+            return new BaseResponse(BaseResponseStatus.FAIL_SIGNUP);
         }
         userService.signUp(userSignUpDto);
-        return "회원가입 성공";
+        return new BaseResponse(BaseResponseStatus.SUCCESS);
     }
 
     @GetMapping("/sign-in")

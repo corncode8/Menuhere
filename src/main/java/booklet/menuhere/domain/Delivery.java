@@ -4,8 +4,6 @@ import booklet.menuhere.domain.model.Address;
 import booklet.menuhere.domain.order.Order;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 

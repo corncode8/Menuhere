@@ -1,4 +1,4 @@
-package booklet.menuhere.domain.menu.api;
+package booklet.menuhere.controller.api;
 
 import booklet.menuhere.config.jwt.JwtService;
 import booklet.menuhere.domain.Role;
@@ -6,6 +6,7 @@ import booklet.menuhere.domain.menu.file.FileStore;
 import booklet.menuhere.exception.BaseResponse;
 import booklet.menuhere.exception.BaseResponseStatus;
 import booklet.menuhere.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -24,6 +25,7 @@ public class MenuApiController {
     private final JwtService jwtService;
     private final UserService userService;
 
+    @Operation(summary = "토큰으로 유저의 권한 확인")
     @GetMapping("/api/role")
     public BaseResponse getRole(@RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
 
@@ -54,21 +56,6 @@ public class MenuApiController {
 
         return new UrlResource("file:" + fileStore.getFullPath(filename));
     }
-
-    // category api
-    //    @GetMapping("/menus/{category}")
-//    public BaseResponse MenusByCategory(@PathVariable Category category) {
-//        log.info("List<MenuViewDto> : {}", menuService.findCategory(category));
-//        List<MenuViewDto> menuViewDtos = menuService.findCategory(category);
-//
-//        return new BaseResponse(menuViewDtos);
-//    }
-
-    // search api
-//    @GetMapping("/api/search/menu")
-//    public BaseResponse MenuSearch(MenuSearchDto search) {
-//        return new BaseResponse(menuService.MenuSearch(search.getSearch()));
-//    }
 
 
 }

@@ -29,7 +29,7 @@ function userOrder(tableNoValue) {
         tableNo: tableNoValue
     };
     $.ajax({
-        url: '/new/order',
+        url: '/api/new/order',
         headers: { 'Authorization': 'Bearer ' + token },
         type: 'POST',
         contentType: 'application/json',
@@ -58,7 +58,7 @@ function nonUserOeder(tableNoValue) {
         tableNo: tableNoValue
     };
     $.ajax({
-        url: '/new/order',
+        url: '/api/new/order',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(orderData),

@@ -165,7 +165,7 @@
 
     function updateTotalCost() {
         $.ajax({
-            url: '/update/price/cart',
+            url: '/api/update/price/cart',
             type: 'GET',
             success: function (response) {
                 console.log(response);
@@ -208,7 +208,7 @@
 
     function removeOne(element) {
         const index = element.getAttribute('data-index');
-        fetch(`/menu/cart/${index}`, {
+        fetch(`/api/menu/cart/${index}`, {
             method: 'DELETE'
         })
             .then(response => response.json())
@@ -231,7 +231,7 @@
             });
     }
     function updateCart(menuName, quantity) {
-        fetch(`/update/amount/${menuName}`, {
+        fetch(`/api/update/amount/${menuName}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

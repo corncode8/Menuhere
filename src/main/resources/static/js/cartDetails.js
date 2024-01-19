@@ -4,7 +4,7 @@ function addCart(menuName, menuPrice) {
     // Ajax를 사용하여 서버에 메뉴 정보를 전송
     $.ajax({
         type: "POST",
-        url: "/add/cart",
+        url: "/api/add/cart",
         data: { menuName: menuName, menuPrice:menuPrice},
         success: function (response) {
             // 성공 시 처리

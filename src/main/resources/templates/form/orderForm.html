@@ -100,7 +100,7 @@
 
         async function fetchAmount() {
             try {
-                const response = await fetch('/order/amount');
+                const response = await fetch('/api//order/amount');
                 if (response.ok) {
                     const data = await response.json();
                     amount = data.result;
@@ -156,7 +156,6 @@
                     </label>
                 </div>
             </div>
-<!--                TODO: 데이터 검증-->
                 <div class="mb-3 table-no">
                     <label for="formGroupExampleInput" class="form-label table-no" style="text-align: start;" >테이블 번호</label>
                     <input type="text" class="form-control" id="table-no" placeholder="테이블 번호를 입력해주세요." required>

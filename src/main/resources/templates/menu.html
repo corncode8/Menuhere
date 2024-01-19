@@ -225,18 +225,18 @@
                 headers: { 'Authorization': 'Bearer ' + token},
                 type: 'GET',
                 success: function(response) {
-                    if (response.result.userRole === 'ROLE_MANAGER') {
+                    if (response.isSuccess === true) {
                         let menu = document.getElementById('manager-menu');
                         menu.style.display = 'block';
 
                         let buttons = document.querySelectorAll('#manager-button'); // 모든 '메뉴 수정' 버튼 선택
                         buttons.forEach(button => {
                             button.style.display = 'block'; // 각 버튼에 대해 display 설정
-                        });
+                        })
                     }
                 },
                 error: function (error) {
-                    // console.error("Error isUser", error);
+                    console.error("Error isUser", error);
                 }
             })
         }
@@ -245,7 +245,7 @@
 
     function updateCartCnt() {
         $.ajax({
-            url: '/update/amount/cart',
+            url: '/api/update/amount/cart',
             type: 'GET',
             success: function (response) {
                 // console.log(response);

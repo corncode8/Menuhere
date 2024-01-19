@@ -1,5 +1,6 @@
 package booklet.menuhere.config.jwt;
 
+import booklet.menuhere.domain.User.User;
 import booklet.menuhere.repository.UserRepository;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -155,12 +156,10 @@ public class JwtService {
     /**
      * RefreshToken DB 저장(업데이트)
      */
-    public void updateRefreshToken(String email, String refreshToken) {
-        userRepository.findByEmailValue(email)
-                .ifPresentOrElse(
-                        user -> user.updateRefreshToken(refreshToken),
-                        () -> new Exception("일치하는 회원이 없습니다.")
-                );
+    public void updateRefreshToken(String email, String refreshToken) throws Exception{
+        User user = userRepository.findByEmailValue(email)
+                .orElseThrow(() -> new Exception("일치하는 회원이 없습니다."));
+        user.updateRefreshToken(refreshToken);
     }
 
     public boolean isTokenValid(String token) {
