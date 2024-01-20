@@ -1,13 +1,14 @@
 package booklet.menuhere.controller;
 
-import booklet.menuhere.domain.User.User;
+
 import booklet.menuhere.domain.cart.dtos.CartListDto;
-import booklet.menuhere.domain.menu.Menu;
+
 import booklet.menuhere.domain.order.Order;
-import booklet.menuhere.domain.order.dtos.OrderSearch;
-import booklet.menuhere.service.MenuService;
+import booklet.menuhere.domain.order.dtos.OrderSearchDto;
+
+import booklet.menuhere.domain.order.dtos.OrderViewDto;
 import booklet.menuhere.service.OrderService;
-import booklet.menuhere.service.UserService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -37,8 +38,8 @@ public class OrderController {
     }
 
     @GetMapping("/orders")
-    public String orderList(@ModelAttribute("orderSearch") OrderSearch orderSearch, Model model) {
-        List<Order> orders = orderService.findOrders();
+    public String orderList(Model model) {
+        List<OrderViewDto> orders = orderService.findOrders();
         model.addAttribute("orders", orders);
 
         return "/orderList";

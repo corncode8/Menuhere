@@ -5,7 +5,7 @@ import booklet.menuhere.domain.order.dtos.OrderUserInfoDto;
 import booklet.menuhere.exception.BaseResponse;
 import booklet.menuhere.exception.BaseResponseStatus;
 import booklet.menuhere.service.UserService;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -8,16 +8,16 @@ import javax.persistence.*;
 
 @Entity
 @Getter @Setter
-public class MenuOption extends BaseEntity {
+public class MenuOption{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "menuoption_id", updatable = false)
+    @Column(name = "menu_option_id", updatable = false)
     private Long id;
 
     private String option;
     private int price;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "menu_id")
-    private Menu menu;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "menu_id")
+//    private Menu menu;
 
 }

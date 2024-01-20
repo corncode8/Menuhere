@@ -4,13 +4,14 @@ import booklet.menuhere.domain.model.Address;
 import booklet.menuhere.domain.order.Order;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.Getter;
 
 import javax.persistence.*;
 
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-@Data
+@Getter
 public class Delivery {
 
     @Id
@@ -24,5 +25,10 @@ public class Delivery {
 
     @Embedded
     private Address address;
+
+    public void setDelivery(Order order, Address address) {
+        this.order = order;
+        this.address = address;
+    }
 
 }

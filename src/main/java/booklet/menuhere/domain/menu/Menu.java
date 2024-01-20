@@ -34,9 +34,9 @@ public class Menu extends BaseEntity {
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL)
     private List<OrderMenu> orderMenus = new ArrayList<>();
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL)
-    private List<MenuOption> menuOptions = new ArrayList<>();
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL)
+//    private List<MenuOption> menuOptions = new ArrayList<>();
 
 
     public void UpdateMenu(String name, String content, int price, Category category, boolean sale, UploadFile uploadFile) {

@@ -62,6 +62,10 @@ public class Order extends BaseEntity {
         this.user = user;
     }
 
+    public void addDelivery(Delivery delivery) {
+        this.delivery = delivery;
+    }
+
     public void setOrderMenus(List<OrderMenu> orderMenus) {
         this.orderMenus = orderMenus;
     }
