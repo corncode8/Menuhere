@@ -14,16 +14,16 @@ public class OrderQueryDto {
     private String username;                // 주문자 이름
     private String orderType;           // 주문 유형 (예약, 배달, 매장 내 식사)
     private LocalDateTime orderDate;    // 주문시간
-    private OrderStatus orderStatus;    // 주문, 배달중, 배달완료, 주문취소
+    private OrderStatus status;    // 주문, 배달중, 배달완료, 주문취소
     private Address address;            // 주소
     private List<OrderViewMenuDto> orderMenus;
 
-    public OrderQueryDto(Long orderId, String username, String orderType , LocalDateTime orderDate, OrderStatus orderStatus, Address address) {
+    public OrderQueryDto(Long orderId, String username, String orderType , LocalDateTime orderDate, OrderStatus status, Address address) {
         this.orderId = orderId;
         this.username = username;
         this.orderType = orderType;
         this.orderDate = orderDate;
-        this.orderStatus = orderStatus;
+        this.status = status;
         this.address = address;
     }
 }

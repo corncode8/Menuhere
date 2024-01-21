@@ -40,7 +40,7 @@ class OrderServiceTest extends IntegrationTest {
         assertThat(order).isNotNull();
         assertThat(order.getUser()).isEqualTo(user);
 
-        assertThat(order.getOrderStatus()).isEqualTo(orderDto.getOrderStatus());
+        assertThat(order.getStatus()).isEqualTo(orderDto.getStatus());
         assertThat(order.getRequests()).isEqualTo(orderDto.getRequests());
         assertThat(order.getOrderPrice()).isEqualTo(orderDto.getOrderPrice());
         assertThat(order.getOrderMenus()).hasSameSizeAs(orderDto.getOrderMenus());
@@ -69,7 +69,7 @@ class OrderServiceTest extends IntegrationTest {
         assertThat(order).isNotNull();
         assertThat(order.getUser()).isNull();
 
-        assertThat(order.getOrderStatus()).isEqualTo(orderDto.getOrderStatus());
+        assertThat(order.getStatus()).isEqualTo(orderDto.getStatus());
         assertThat(order.getRequests()).isEqualTo(orderDto.getRequests());
         assertThat(order.getOrderPrice()).isEqualTo(orderDto.getOrderPrice());
         assertThat(order.getOrderMenus()).hasSameSizeAs(orderDto.getOrderMenus());

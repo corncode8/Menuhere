@@ -3,7 +3,6 @@ package booklet.menuhere.domain;
 import booklet.menuhere.domain.model.Address;
 import booklet.menuhere.domain.order.Order;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
 import lombok.Getter;
 
 import javax.persistence.*;

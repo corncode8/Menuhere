@@ -13,7 +13,7 @@ public class OrderSearchDto {
     @Nullable
     private String userName; //회원 이름
     @Nullable
-    private OrderStatus orderStatus; //주문 상태[ORDER, DELIVERING, COMPLETE , CANCLE]
+    private OrderStatus status; //주문 상태[ORDER, DELIVERING, COMPLETE , CANCLE]
     @Nullable
     private String orderType; // 주문 유형 (예약, 배달, 매장 내 식사)
     @NotNull

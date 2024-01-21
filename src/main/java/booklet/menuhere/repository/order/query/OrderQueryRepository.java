@@ -62,14 +62,14 @@ public class OrderQueryRepository {
                         user.username,
                         order.orderType,
                         order.createdDate,
-                        order.orderStatus,
+                        order.status,
                         delivery.address
                 ))
                 .from(order)
                 // 명시적인 join - cross join을 방지
                 .join(order.user, user)
                 .join(order.delivery, delivery)
-                .where(order.createdDate.before(threeMonthsAgo))
+                .where(order.createdDate.after(threeMonthsAgo))
                 .fetch();
 
         return content;

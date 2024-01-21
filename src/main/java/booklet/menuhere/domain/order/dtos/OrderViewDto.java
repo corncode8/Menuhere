@@ -14,7 +14,7 @@ public class OrderViewDto {
     private Long orderId;
     private String username;
     private List<OrderViewMenuDto> orderMenus;
-    private OrderStatus orderStatus;
+    private OrderStatus status;
     private String orderType;
     private LocalDateTime orderDate;
 }

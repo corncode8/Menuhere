@@ -5,7 +5,6 @@ import booklet.menuhere.domain.cart.dtos.CartListDto;
 import booklet.menuhere.exception.BaseResponse;
 import booklet.menuhere.exception.BaseResponseStatus;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.info.Info;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

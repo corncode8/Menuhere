@@ -3,9 +3,8 @@ package booklet.menuhere.controller;
 
 import booklet.menuhere.domain.cart.dtos.CartListDto;
 
-import booklet.menuhere.domain.order.Order;
-import booklet.menuhere.domain.order.dtos.OrderSearchDto;
 
+import booklet.menuhere.domain.order.dtos.OrderSearchDto;
 import booklet.menuhere.domain.order.dtos.OrderViewDto;
 import booklet.menuhere.service.OrderService;
 
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -38,8 +38,8 @@ public class OrderController {
     }
 
     @GetMapping("/orders")
-    public String orderList(Model model) {
-        List<OrderViewDto> orders = orderService.findOrders();
+    public String orderList(@ModelAttribute("orderSearch") OrderSearchDto orderSearch, Model model) {
+        List<OrderViewDto> orders = orderService.findOrders(orderSearch);
         model.addAttribute("orders", orders);
 
         return "/orderList";

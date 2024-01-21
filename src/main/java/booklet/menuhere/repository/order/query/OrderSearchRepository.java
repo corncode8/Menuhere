@@ -62,11 +62,11 @@ public class OrderSearchRepository {
                         user.username,
                         order.orderType,
                         order.createdDate,
-                        order.orderStatus,
+                        order.status,
                         delivery.address
                 ))
-                // 명시적인 join - cross join을 방지
                 .from(order)
+                // 명시적인 join - cross join을 방지
                 .join(order.user, user)
                 .join(order.delivery, delivery)
                 .fetch();
@@ -94,8 +94,8 @@ public class OrderSearchRepository {
             condition.and(order.orderType.eq(searchDto.getOrderType()));
         }
 
-        if (searchDto.getOrderStatus() != null) {
-            condition.and(order.orderStatus.eq(searchDto.getOrderStatus()));
+        if (searchDto.getStatus() != null) {
+            condition.and(order.status.eq(searchDto.getStatus()));
         }
 
         List<OrderViewMenuDto> content = queryFactory
@@ -121,7 +121,7 @@ public class OrderSearchRepository {
         QOrder order = QOrder.order;
 
         BooleanExpression memberNameEq = searchDto.getUserName() != null ? order.user.username.eq(searchDto.getUserName()) : null;
-        BooleanExpression orderStatusEq = searchDto.getOrderStatus() != null ? order.orderStatus.eq(searchDto.getOrderStatus()) : null;
+        BooleanExpression orderStatusEq = searchDto.getStatus() != null ? order.status.eq(searchDto.getStatus()) : null;
         BooleanExpression orderTypeEq = searchDto.getOrderType() != null ? order.orderType.eq(searchDto.getOrderType()) : null;
 
         BooleanBuilder condition = new BooleanBuilder(memberNameEq).and(orderStatusEq).and(orderTypeEq);

@@ -13,6 +13,7 @@ public class MenuOption{
     @Column(name = "menu_option_id", updatable = false)
     private Long id;
 
+    @Column(name = "options")
     private String option;
     private int price;
 

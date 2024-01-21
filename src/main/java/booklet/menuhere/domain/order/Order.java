@@ -18,12 +18,13 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @Table(name = "orders")
 public class Order extends BaseEntity {
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id", updatable = false)
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
+    private OrderStatus status;
 
     private String requests;
 
@@ -50,7 +51,7 @@ public class Order extends BaseEntity {
     private Delivery delivery;
 
     public void createOrder(OrderStatus orderStatus, String requests, int orderPrice, int tableNo, String orderType, Payment payment) {
-        this.orderStatus = orderStatus;
+        this.status = orderStatus;
         this.requests = requests;
         this.orderPrice = orderPrice;
         this.tableNo = tableNo;

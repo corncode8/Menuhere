@@ -46,13 +46,13 @@ public class OrderService {
 
         try {
             if (makeOrderDto.getEmail().equals("Non-Members")) {
-                order.createOrder(makeOrderDto.getOrderStatus(), makeOrderDto.getRequests(), makeOrderDto.getOrderPrice(),
+                order.createOrder(makeOrderDto.getStatus(), makeOrderDto.getRequests(), makeOrderDto.getOrderPrice(),
                         makeOrderDto.getTableNo(), makeOrderDto.getOrderType(), payment);
             } else {
                 Optional<User> emailOpt = userService.findEmail(makeOrderDto.getEmail());
                 if (emailOpt.isPresent()) {
                     User user = emailOpt.get();
-                    order.createOrder(makeOrderDto.getOrderStatus(), makeOrderDto.getRequests(), makeOrderDto.getOrderPrice(),
+                    order.createOrder(makeOrderDto.getStatus(), makeOrderDto.getRequests(), makeOrderDto.getOrderPrice(),
                             makeOrderDto.getTableNo(), makeOrderDto.getOrderType(), payment);
                     order.addUser(user);
                     if (makeOrderDto.getOrderType().equals("delivery")) {   // TODO: delivery 추가 test code
@@ -91,23 +91,6 @@ public class OrderService {
 
     }
 
-    public List<OrderViewDto> findOrders() {
-        List<OrderQueryDto> queryDtos = orderQueryRepository.findAll_optimization();
-
-        List<OrderViewDto> viewDtos = queryDtos.stream()
-                .map(queryDto -> new OrderViewDto(
-                        queryDto.getOrderId(),
-                        queryDto.getUsername(),
-                        queryDto.getOrderMenus(),
-                        queryDto.getOrderStatus(),
-                        queryDto.getOrderType(),
-                        queryDto.getOrderDate()
-                ))
-                .collect(Collectors.toList());
-
-        return viewDtos;
-    }
-
     public List<OrderViewDto> findOrders(OrderSearchDto orderSearch) {
         List<OrderQueryDto> queryDtos = orderSearchRepository.findAll_optimization(orderSearch);
 
@@ -116,7 +99,7 @@ public class OrderService {
                         queryDto.getOrderId(),
                         queryDto.getUsername(),
                         queryDto.getOrderMenus(),
-                        queryDto.getOrderStatus(),
+                        queryDto.getStatus(),
                         queryDto.getOrderType(),
                         queryDto.getOrderDate()
                 ))
