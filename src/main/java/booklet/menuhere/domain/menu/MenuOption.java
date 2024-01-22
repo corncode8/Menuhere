@@ -1,6 +1,6 @@
 package booklet.menuhere.domain.menu;
 
-import booklet.menuhere.domain.BaseEntity;
+
 import lombok.Getter;
 import lombok.Setter;
 

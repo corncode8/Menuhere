@@ -200,7 +200,7 @@
         updateCartCnt();
         const token = await getToken();
         const sign = document.getElementById('sign');
-        test();
+        getRole();
 
         if (token) {
             sign.onclick = Logout;
@@ -219,7 +219,7 @@
         })
 
 
-        function test() {
+        function getRole() {
             $.ajax({
                 url: '/api/role',
                 headers: { 'Authorization': 'Bearer ' + token},

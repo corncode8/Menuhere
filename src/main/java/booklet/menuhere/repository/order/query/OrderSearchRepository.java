@@ -15,27 +15,32 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 
+import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class OrderSearchRepository {
 
     private final JPAQueryFactory queryFactory;
 
-
+    // findAll과 findOrderViewMenus를 분리하여 호출함으로써 N+1 쿼리 문제를 피함
     public List<OrderQueryDto> findAll_optimization(OrderSearchDto searchDto) {
         List<OrderQueryDto> result = findAll(searchDto);
 
-        Map<Long, List<OrderViewMenuDto>> orderViewMenus = findOrderViewMenus(orderIds(result), searchDto);
+        Map<Long, List<OrderViewMenuDto>> orderViewMenus = findOrderViewMenus(orderIds(result));
 
         result.forEach(o -> o.setOrderMenus(orderViewMenus.get(o.getOrderId())));
 
+//        log.info("repository result : {}", result);
         return result;
     }
 
@@ -70,14 +75,13 @@ public class OrderSearchRepository {
                 .join(order.user, user)
                 .join(order.delivery, delivery)
                 .fetch();
-
         return content;
     }
 
     /**
      * 1:N 조회
      * */
-    private Map<Long, List<OrderViewMenuDto>> findOrderViewMenus(List<Long> orderId, OrderSearchDto searchDto) {
+    private Map<Long, List<OrderViewMenuDto>> findOrderViewMenus(List<Long> orderId) {
 
         QOrderMenu orderMenu = QOrderMenu.orderMenu;
         QMenu menu = QMenu.menu;
@@ -85,18 +89,6 @@ public class OrderSearchRepository {
 
         BooleanBuilder condition = new BooleanBuilder();
         condition.and(orderMenu.order.id.in(orderId));
-
-        if (searchDto.getUserName() != null) {
-            condition.and(order.user.username.eq(searchDto.getUserName()));
-        }
-
-        if (searchDto.getOrderType() != null) {
-            condition.and(order.orderType.eq(searchDto.getOrderType()));
-        }
-
-        if (searchDto.getStatus() != null) {
-            condition.and(order.status.eq(searchDto.getStatus()));
-        }
 
         List<OrderViewMenuDto> content = queryFactory
                 .select(Projections.constructor(
@@ -111,6 +103,8 @@ public class OrderSearchRepository {
                 .join(orderMenu.order, order)
                 .where(condition)
                 .fetch();
+
+
         return content.stream()
                 .collect(Collectors.groupingBy(OrderViewMenuDto::getOrderId));
     }
@@ -120,23 +114,36 @@ public class OrderSearchRepository {
 
         QOrder order = QOrder.order;
 
-        BooleanExpression memberNameEq = searchDto.getUserName() != null ? order.user.username.eq(searchDto.getUserName()) : null;
+        BooleanExpression memberNameEq = searchDto.getUserName() != null ? order.user.username.like("%" + searchDto.getUserName() + "%") : null;
         BooleanExpression orderStatusEq = searchDto.getStatus() != null ? order.status.eq(searchDto.getStatus()) : null;
         BooleanExpression orderTypeEq = searchDto.getOrderType() != null ? order.orderType.eq(searchDto.getOrderType()) : null;
 
-        BooleanBuilder condition = new BooleanBuilder(memberNameEq).and(orderStatusEq).and(orderTypeEq);
-
-        if (searchDto.getStartTime() != null) {
-            condition.and(order.createdDate.after(searchDto.getStartTime()));
+        BooleanBuilder condition = new BooleanBuilder();
+        if (memberNameEq != null) {
+            condition.and(memberNameEq);
         }
-        if (searchDto.getEndTime() != null) {
-            condition.and(order.createdDate.before(searchDto.getEndTime()));
+        if (orderStatusEq != null) {
+            condition.and(orderStatusEq);
+        }
+        if (orderTypeEq != null) {
+            condition.and(orderTypeEq);
+        }
+
+        if (searchDto.getStartTime() != null && searchDto.getEndTime() != null) {
+            condition.or(order.createdDate.between(
+                    searchDto.getStartTime().atStartOfDay(),
+                    searchDto.getEndTime().atTime(23, 59, 59)
+            ));
+        } else if (searchDto.isEmpty()) {
+            LocalDateTime localDateTime = LocalDateTime.now().minusMonths(3);
+            condition.and(order.createdDate.after(localDateTime));
         }
 
         JPAQuery<Order> query = queryFactory
                 .selectFrom(order)
                 .where(condition);
 
+//        log.info(query.stream().toList().toString());
         return query;
     }
 

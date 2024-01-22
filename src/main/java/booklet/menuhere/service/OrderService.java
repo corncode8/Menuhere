@@ -1,18 +1,14 @@
 package booklet.menuhere.service;
 
 import booklet.menuhere.domain.Delivery;
-import booklet.menuhere.domain.order.dtos.OrderSearchDto;
-import booklet.menuhere.domain.order.dtos.OrderQueryDto;
-import booklet.menuhere.domain.order.dtos.OrderViewDto;
+import booklet.menuhere.domain.order.dtos.*;
 import booklet.menuhere.domain.ordermenu.OrderMenu;
 import booklet.menuhere.domain.Payment;
 import booklet.menuhere.domain.User.User;
 import booklet.menuhere.domain.menu.Menu;
 import booklet.menuhere.domain.order.Order;
-import booklet.menuhere.domain.order.dtos.MakeOrderDto;
 import booklet.menuhere.domain.ordermenu.dtos.OrderMenuDto;
 import booklet.menuhere.repository.order.OrderRepository;
-import booklet.menuhere.repository.order.query.OrderQueryRepository;
 import booklet.menuhere.repository.order.query.OrderSearchRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +30,6 @@ public class OrderService {
     private final UserService userService;
     private final MenuService menuService;
     private final OrderSearchRepository orderSearchRepository;
-    private final OrderQueryRepository orderQueryRepository;
 
 
     public Order createOrder(MakeOrderDto makeOrderDto) {
@@ -91,6 +86,7 @@ public class OrderService {
 
     }
 
+    // 최적화 쿼리
     public List<OrderViewDto> findOrders(OrderSearchDto orderSearch) {
         List<OrderQueryDto> queryDtos = orderSearchRepository.findAll_optimization(orderSearch);
 
@@ -108,4 +104,48 @@ public class OrderService {
         return viewDtos;
     }
 
+    // spring dataJPA
+    public List<OrderViewDto> dataJpaSimpleOrders(OrderSearchDto searchDto) {
+        List<Order> orders = orderRepository.findByUserUsernameContainingAndStatusAndOrderType(
+                searchDto.getUserName(),
+                searchDto.getStatus(),
+                searchDto.getOrderType()
+        );
+
+        return orders.stream().map(this::convertToOrderViewDto).collect(Collectors.toList());
+
+    }
+
+    // @Query
+    public List<OrderViewDto> QueryOrders(OrderSearchDto searchDto) {
+        List<Order> orders = orderRepository.findOrdersWithDetails(
+                searchDto.getUserName(),
+                searchDto.getStatus(),
+                searchDto.getOrderType()
+        );
+
+        return orders.stream().map(this::convertToOrderViewDto).collect(Collectors.toList());
+
+    }
+
+
+    private OrderViewDto convertToOrderViewDto(Order order) {
+        List<OrderViewMenuDto> menuDtos = order.getOrderMenus().stream()
+                .map(orderMenu -> new OrderViewMenuDto(
+                        orderMenu.getOrder().getId(),
+                        orderMenu.getMenu().getName(),
+                        orderMenu.getTotalPrice(),
+                        orderMenu.getQuantity()
+                ))
+                .collect(Collectors.toList());
+
+        return new OrderViewDto(
+                order.getId(),
+                order.getUser().getUsername(),
+                menuDtos,
+                order.getStatus(),
+                order.getOrderType(),
+                order.getCreatedDate()
+        );
+    }
 }

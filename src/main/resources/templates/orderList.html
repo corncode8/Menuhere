@@ -9,7 +9,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.js"></script>
 
-
     <style>
 
         input {
@@ -19,7 +18,7 @@
             background-color: #fff !important;
             color: #4CAF50 !important;
             font-weight: bold !important;
-            font-size: 15px !important;
+            font-size: 16px !important;
 
         }
 
@@ -187,18 +186,18 @@
                         </option>
                     </select>
                 </div>
-                <div class="form-group mx-sm-1 mb-2 ">
+                <div class="form-group mx-sm-1 mb-2">
                     <select th:field="*{orderType}" class="form-control">
                         <option value="">주문유형</option>
-                        <option value="예약">예약</option>
-                        <option value="배달">배달</option>
-                        <option value="매장 내 식사">매장 내 식사</option>
+                        <option value="reservation" text="예약">예약</option>
+                        <option value="delivery" text="배달">배달</option>
+                        <option value="dine-in" text="매장 내 식사">매장 내 식사</option>
                     </select>
                 </div>
                 <div class="form-group mx-sm-1 mb-2">
                     <div class="input-group input-daterange">
-                        <input type="text" class="form-control input1" placeholder="Start Date" readonly>
-                        <input type="text" class="form-control input2" placeholder="End Date" readonly>
+                        <input type="date" th:field="*{startTime}" class="form-control input1" placeholder="Start Date" readonly>
+                        <input type="date" th:field="*{endTime}" class="form-control input2" placeholder="End Date" readonly>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary mb-2">검색</button>
@@ -213,8 +212,8 @@
                 <th>주문메뉴 이름</th>
                 <th>총 주문가격</th>
                 <th>총 주문수량</th>
-                <th>상태</th>
-                <th>주문 타입</th>
+                <th>주문 상태</th>
+                <th>주문 유형</th>
                 <th>일시</th>
                 <th></th>
             </tr>
@@ -242,16 +241,29 @@
 </div>
 <script>
     $(document).ready(function () {
-        // input-daterange 클래스를 가진 요소에 대해 datepicker를 활성화합니다.
-        $('.input-daterange').datepicker({
+        // 시작 날짜 필드에 대한 datepicker 설정
+        $('.input1').datepicker({
             format: 'yyyy-mm-dd',
             endDate: 'd',
-            autoclose: true
-        })
-            .on('changeDate', function (e) {
-                //changeDate : 사용자가 클릭해서 날짜가 변경되면 호출 (개인적으로 가장 많이 사용함)
-                console.log(e.date);
-            })
+            autoclose: true,
+            language: 'ko'
+        }).on('changeDate', function (e) {
+            let formattedDate = e.format('yyyy-mm-dd');
+            $(this).val(formattedDate);
+            console.log("Start Date: " + formattedDate);
+        });
+
+        // 종료 날짜 필드에 대한 datepicker 설정
+        $('.input2').datepicker({
+            format: 'yyyy-mm-dd',
+            endDate: 'd',
+            autoclose: true,
+            language: 'ko'
+        }).on('changeDate', function (e) {
+            let formattedDate = e.format('yyyy-mm-dd');
+            $(this).val(formattedDate);
+            console.log("End Date: " + formattedDate);
+        });
     });
 </script>
 </body>

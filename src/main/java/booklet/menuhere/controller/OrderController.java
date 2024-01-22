@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -39,6 +40,7 @@ public class OrderController {
 
     @GetMapping("/orders")
     public String orderList(@ModelAttribute("orderSearch") OrderSearchDto orderSearch, Model model) {
+        log.info("orderController orderSearch ; " + orderSearch.toString());
         List<OrderViewDto> orders = orderService.findOrders(orderSearch);
         model.addAttribute("orders", orders);
 

@@ -5,6 +5,8 @@ import booklet.menuhere.domain.User.User;
 import booklet.menuhere.domain.order.Order;
 import booklet.menuhere.domain.order.dtos.MakeOrderDto;
 import booklet.menuhere.domain.OrderStatus;
+import booklet.menuhere.domain.order.dtos.OrderSearchDto;
+import booklet.menuhere.domain.order.dtos.OrderViewDto;
 import booklet.menuhere.domain.ordermenu.dtos.OrderMenuDto;
 import booklet.menuhere.test.IntegrationTest;
 import booklet.menuhere.test.config.TestProfile;
@@ -99,7 +101,6 @@ class OrderServiceTest extends IntegrationTest {
     }
 
 
-
     public List<OrderMenuDto> getMenuDtos() {
         List<OrderMenuDto> menuDtos = new ArrayList<>();
 
@@ -114,4 +115,69 @@ class OrderServiceTest extends IntegrationTest {
         return menuDtos;
     }
 
+
+    @DisplayName("주문내역 조회 테스트 (data JPA)")
+    @Test
+    void spring_data_JPA_Search() {
+        //given
+        OrderSearchDto searchDto = new OrderSearchDto();
+        searchDto.setUserName("UserName");
+        searchDto.setStatus(OrderStatus.CANCLE);
+        searchDto.setOrderType("delivery");
+
+        //when
+        long startTime = System.currentTimeMillis();
+
+        List<OrderViewDto> viewDtos = orderService.dataJpaSimpleOrders(searchDto);
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("(data JPA) Execution time: " + (endTime - startTime) + "ms");
+        log.info("viewDtos.size = " + viewDtos.size());
+
+        //then
+//        assertThat(viewDtos.get(0)).isEqualTo(1531L);
+    }
+    @DisplayName("주문내역 조회 테스트 (Query)")
+    @Test
+    void Query_Search() {
+        //given
+        OrderSearchDto searchDto = new OrderSearchDto();
+        searchDto.setUserName("UserName");
+        searchDto.setStatus(OrderStatus.CANCLE);
+        searchDto.setOrderType("delivery");
+
+        //when
+        long startTime = System.currentTimeMillis();
+
+        List<OrderViewDto> viewDtos = orderService.QueryOrders(searchDto);
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("(Query) Execution time: " + (endTime - startTime) + "ms");
+        log.info("viewDtos.size = " + viewDtos.size());
+
+        //then
+
+    }
+
+    @DisplayName("주문내역 조회 테스트 (QueryDSL)")
+    @Test
+    void optimization_Search() {
+        //given
+        OrderSearchDto searchDto = new OrderSearchDto();
+        searchDto.setUserName("UserName");
+        searchDto.setStatus(OrderStatus.CANCLE);
+        searchDto.setOrderType("delivery");
+
+        //when
+        long startTime = System.currentTimeMillis();
+
+        List<OrderViewDto> viewDtos = orderService.findOrders(searchDto);
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("(QueryDSL) Execution time: " + (endTime - startTime) + "ms");
+        log.info("viewDtos.size = " + viewDtos.size());
+
+
+        //then
+    }
 }
