@@ -20,7 +20,6 @@ import org.springframework.stereotype.Repository;
 
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -75,6 +74,7 @@ public class OrderSearchRepository {
                 .join(order.user, user)
                 .join(order.delivery, delivery)
                 .fetch();
+
         return content;
     }
 

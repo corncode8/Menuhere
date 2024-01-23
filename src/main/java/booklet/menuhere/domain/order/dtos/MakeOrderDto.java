@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MakeOrderDto {
+
     @NotNull
     private OrderStatus status;
     @Nullable

@@ -55,18 +55,17 @@ public class OrderService {
                         delivery.setDelivery(order, user.getAddress());
                         order.addDelivery(delivery);
                     }
-                } else {
-                    log.info("!emailOpt.isPresent() : {}", emailOpt.isPresent());
                 }
             }
 
             for (OrderMenuDto orderMenu : makeOrderDto.getOrderMenus()) {
                 Optional<Menu> menuOpt = menuService.findById(orderMenu.getMenuId());
-                log.info("menuOpt : {}", menuOpt);
+//                log.info("menuOpt : {}", menuOpt);
 
                 if (menuOpt.isPresent()) {
                     Menu menu =  menuOpt.get();
                     log.info(String.valueOf(menu));
+
                     int totalPrice = menu.getPrice() * orderMenu.getQuantity();
                     menu.plusOrderNum(orderMenu.getQuantity());
                     OrderMenu newOrderMenu = new OrderMenu(totalPrice, orderMenu.getQuantity(), order, menu);

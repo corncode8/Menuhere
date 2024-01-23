@@ -9,6 +9,7 @@ import booklet.menuhere.service.MenuService;
 import booklet.menuhere.service.OrderService;
 import booklet.menuhere.service.UserService;
 import booklet.menuhere.test.domain.MenuSetUp;
+import booklet.menuhere.test.domain.OrderSetUp;
 import booklet.menuhere.test.domain.UserSetUp;
 
 
@@ -42,6 +43,9 @@ public class IntegrationTest {
 
     @Autowired
     public MenuSetUp menuSetUp;
+
+    @Autowired
+    public OrderSetUp orderSetUp;
 
     @Autowired
     public OrderService orderService;

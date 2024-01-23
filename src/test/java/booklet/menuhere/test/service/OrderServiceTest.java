@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,15 +117,20 @@ class OrderServiceTest extends IntegrationTest {
         return menuDtos;
     }
 
+    private OrderSearchDto setDto() {
+        OrderSearchDto searchDto = new OrderSearchDto();
+        searchDto.setUserName("uniqueUser");
+        searchDto.setStatus(OrderStatus.ORDER);
+        searchDto.setOrderType("dine-in");
+        return searchDto;
+    }
+
 
     @DisplayName("주문내역 조회 테스트 (data JPA)")
     @Test
     void spring_data_JPA_Search() {
         //given
-        OrderSearchDto searchDto = new OrderSearchDto();
-        searchDto.setUserName("UserName");
-        searchDto.setStatus(OrderStatus.CANCLE);
-        searchDto.setOrderType("delivery");
+        OrderSearchDto searchDto = setDto();
 
         //when
         long startTime = System.currentTimeMillis();
@@ -133,18 +140,14 @@ class OrderServiceTest extends IntegrationTest {
         long endTime = System.currentTimeMillis();
         System.out.println("(data JPA) Execution time: " + (endTime - startTime) + "ms");
         log.info("viewDtos.size = " + viewDtos.size());
+        // 5.4 sec
 
-        //then
-//        assertThat(viewDtos.get(0)).isEqualTo(1531L);
     }
     @DisplayName("주문내역 조회 테스트 (Query)")
     @Test
     void Query_Search() {
         //given
-        OrderSearchDto searchDto = new OrderSearchDto();
-        searchDto.setUserName("UserName");
-        searchDto.setStatus(OrderStatus.CANCLE);
-        searchDto.setOrderType("delivery");
+        OrderSearchDto searchDto = setDto();
 
         //when
         long startTime = System.currentTimeMillis();
@@ -154,8 +157,7 @@ class OrderServiceTest extends IntegrationTest {
         long endTime = System.currentTimeMillis();
         System.out.println("(Query) Execution time: " + (endTime - startTime) + "ms");
         log.info("viewDtos.size = " + viewDtos.size());
-
-        //then
+        // 5.2 sec
 
     }
 
@@ -163,10 +165,7 @@ class OrderServiceTest extends IntegrationTest {
     @Test
     void optimization_Search() {
         //given
-        OrderSearchDto searchDto = new OrderSearchDto();
-        searchDto.setUserName("UserName");
-        searchDto.setStatus(OrderStatus.CANCLE);
-        searchDto.setOrderType("delivery");
+        OrderSearchDto searchDto = setDto();
 
         //when
         long startTime = System.currentTimeMillis();
@@ -176,8 +175,17 @@ class OrderServiceTest extends IntegrationTest {
         long endTime = System.currentTimeMillis();
         System.out.println("(QueryDSL) Execution time: " + (endTime - startTime) + "ms");
         log.info("viewDtos.size = " + viewDtos.size());
+        // 2.8 sec
+
+    }
 
 
-        //then
+    @DisplayName("테스트")
+    @Test
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    void 테스트() {
+        orderSetUp.save(5000);
+        orderSetUp.save2(5000);
+        orderSetUp.save3(5000);
     }
 }
