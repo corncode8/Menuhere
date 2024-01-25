@@ -34,8 +34,8 @@
 ![Architecture](https://github.com/corncode8/Menuhere/assets/127717982/e11500b7-4dc3-41dc-9abf-6968076b93a4)
 <p align="center" width="100%">
   <img width="100%" src="https://github.com/corncode8/Menuhere/assets/127717982/6121a494-2186-4909-9cde-05957b896d14"> 
-
 </p>
+
 ## Application Preview
 
 ### 메인 페이지 화면
