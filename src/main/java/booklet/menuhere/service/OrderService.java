@@ -12,6 +12,9 @@ import booklet.menuhere.repository.order.OrderRepository;
 import booklet.menuhere.repository.order.query.OrderSearchRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,7 +77,7 @@ public class OrderService {
             }
 
             order.setOrderMenus(orderMenus);
-            log.info("order : {}", order);
+//            log.info("order : {}", order);
             orderRepository.save(order);
             return order;
 
@@ -86,8 +89,8 @@ public class OrderService {
     }
 
     // 최적화 쿼리
-    public List<OrderViewDto> findOrders(OrderSearchDto orderSearch) {
-        List<OrderQueryDto> queryDtos = orderSearchRepository.findAll_optimization(orderSearch);
+    public Page<OrderViewDto> findOrders(OrderSearchDto orderSearch, Pageable pageable) {
+        Page<OrderQueryDto> queryDtos = orderSearchRepository.findAll_optimization(orderSearch, pageable);
 
         List<OrderViewDto> viewDtos = queryDtos.stream()
                 .map(queryDto -> new OrderViewDto(
@@ -100,7 +103,7 @@ public class OrderService {
                 ))
                 .collect(Collectors.toList());
 
-        return viewDtos;
+        return new PageImpl<>(viewDtos, pageable, queryDtos.getTotalElements());
     }
 
     // spring dataJPA

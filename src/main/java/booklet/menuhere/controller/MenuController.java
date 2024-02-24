@@ -125,11 +125,11 @@ public class MenuController {
 
         model.addAttribute("menuList", categoryView);
 
-        int currentPage = categoryView.getNumber();
-        int totalPage = categoryView.getTotalPages();
-
-        model.addAttribute("currentPage", currentPage);
-        model.addAttribute("totalPages", totalPage);
+//        int currentPage = categoryView.getNumber();
+//        int totalPage = categoryView.getTotalPages();
+//
+//        model.addAttribute("currentPage", currentPage);
+//        model.addAttribute("totalPages", totalPage);
 
         return "menu";
     }

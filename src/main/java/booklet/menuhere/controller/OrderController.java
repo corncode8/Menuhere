@@ -10,6 +10,9 @@ import booklet.menuhere.service.OrderService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,10 +41,16 @@ public class OrderController {
     }
 
     @GetMapping("/orders")
-    public String orderList(@ModelAttribute("orderSearch") OrderSearchDto orderSearch, Model model) {
+    public String orderList(@ModelAttribute("orderSearch") OrderSearchDto orderSearch, Model model, @PageableDefault(size = 20) Pageable pageable) {
         log.info("orderController orderSearch ; " + orderSearch.toString());
-        List<OrderViewDto> orders = orderService.findOrders(orderSearch);
+        Page<OrderViewDto> orders = orderService.findOrders(orderSearch, pageable);
+
+//        int currentPage = orders.getNumber();
+//        int totalPage = orders.getTotalPages();
+
         model.addAttribute("orders", orders);
+//        model.addAttribute("currentPage", currentPage);
+//        model.addAttribute("totalPages", totalPage);
 
         return "/orderList";
     }

@@ -100,9 +100,10 @@
 
         async function fetchAmount() {
             try {
-                const response = await fetch('/api//order/amount');
+                const response = await fetch('/api/order/amount');
                 if (response.ok) {
                     const data = await response.json();
+                    console.log(data);
                     amount = data.result;
                 } else {
                     console.error('fetchAmount else Failed to fetch amount');

@@ -7,8 +7,6 @@ import booklet.menuhere.domain.ordermenu.dtos.OrderMenuDto;
 import booklet.menuhere.repository.order.OrderRepository;
 import booklet.menuhere.service.OrderService;
 import booklet.menuhere.test.config.TestProfile;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;

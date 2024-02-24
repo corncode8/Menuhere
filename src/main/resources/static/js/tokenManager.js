@@ -27,8 +27,7 @@ async function isTokenValid(token) {
         }
 
         const data = await response.json();
-        // console.log(data);
-        return data.result
+        return data.isSuccess
     } catch (error) {
         console.error('Error validating token:', error);
         throw error; // 에러가 발생하면 에러를 전파

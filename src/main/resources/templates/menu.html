@@ -147,7 +147,7 @@
                     <div class="col-7 col-sm-7">
                         <div class="card-body text-start px-1">
                             <h4 class="card-title" th:text="${menus.name}"></h4>
-                            <p class="card-text" th:text="${menus.content}"></p>
+                            <p class="card-text" th:text="${menus.content}" style="font-size: 12px"></p>
                             <div class="d-flex justify-content-between align-items-end">
                                 <p class="card-text my-2" th:text="${menus.price} + '원'"></p>
                                 <div class="d-flex justify-content-end">
@@ -225,7 +225,8 @@
                 headers: { 'Authorization': 'Bearer ' + token},
                 type: 'GET',
                 success: function(response) {
-                    if (response.isSuccess === true) {
+                    // console.log(response)
+                    if (response.isSuccess) {
                         let menu = document.getElementById('manager-menu');
                         menu.style.display = 'block';
 
@@ -249,11 +250,14 @@
             type: 'GET',
             success: function (response) {
                 // console.log(response);
-                if (response.result.cartAmount == null) {
-                    document.getElementById('cart-count').innerText = 0;
-                } else {
-                    document.getElementById('cart-count').innerText = response.result.cartAmount;
+                if (response.isSuccess) {
+                    if (response.result.cartAmount == null) {
+                        document.getElementById('cart-count').innerText = 0;
+                    } else {
+                        document.getElementById('cart-count').innerText = response.result.cartAmount;
+                    }
                 }
+
             },
             error: function (error) {
                 console.error("Error cart cnt", error);

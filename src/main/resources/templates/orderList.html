@@ -236,8 +236,29 @@
 
             </tbody>
         </table>
-    </div>
+        <nav aria-label="Page navigation" style="position:relative; z-index: 1">
+            <ul class="pagination pagination-sm justify-content-center" style="margin-bottom: 80px">
+                <!-- Previous Page Link -->
+                <li th:classappend="${orders.number == 0} ? 'disabled' : ''" class="page-item">
+                    <a th:href="@{/orders(page=${orders.number - 1})}" class="page-link" aria-label="Previous">&laquo;</a>
+                </li>
 
+                <!-- Page Number Links -->
+                <!-- Show page 1 always, and only show other pages if they exist -->
+                <li th:classappend="${orders.number == 0} ? 'active' : ''" class="page-item">
+                    <a th:href="@{/orders(page=0)}" class="page-link">1</a>
+                </li>
+                <li th:if="${orders.totalPages > 1}" th:each="pageNum : ${#numbers.sequence(1, orders.totalPages - 1)}" th:classappend="${pageNum == orders.number} ? 'active' : ''" class="page-item">
+                    <a th:href="@{/orders(page=${pageNum})}" th:text="${pageNum + 1}" class="page-link"></a>
+                </li>
+
+                <!-- Next Page Link -->
+                <li th:classappend="${orders.number + 1 >= orders.totalPages} ? 'disabled' : ''" class="page-item">
+                    <a th:href="@{/orders(page=${orders.number + 1})}" class="page-link" aria-label="Next">&raquo;</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </div>
 <script>
     $(document).ready(function () {

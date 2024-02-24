@@ -3,7 +3,6 @@ package booklet.menuhere.repository.order.query;
 import booklet.menuhere.domain.QDelivery;
 import booklet.menuhere.domain.User.QUser;
 import booklet.menuhere.domain.menu.QMenu;
-import booklet.menuhere.domain.order.Order;
 import booklet.menuhere.domain.order.QOrder;
 import booklet.menuhere.domain.order.dtos.OrderSearchDto;
 import booklet.menuhere.domain.order.dtos.OrderQueryDto;
@@ -12,10 +11,12 @@ import booklet.menuhere.domain.ordermenu.QOrderMenu;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 
@@ -32,15 +33,18 @@ public class OrderSearchRepository {
     private final JPAQueryFactory queryFactory;
 
     // findAll과 findOrderViewMenus를 분리하여 호출함으로써 N+1 쿼리 문제를 피함
-    public List<OrderQueryDto> findAll_optimization(OrderSearchDto searchDto) {
-        List<OrderQueryDto> result = findAll(searchDto);
+    public Page<OrderQueryDto> findAll_optimization(OrderSearchDto searchDto, Pageable pageable) {
+        Page<OrderQueryDto> queryResults = findAll(searchDto, pageable);
+
+        List<OrderQueryDto> result = queryResults.getContent();
+        long total = queryResults.getTotalElements();
 
         Map<Long, List<OrderViewMenuDto>> orderViewMenus = findOrderViewMenus(orderIds(result));
 
         result.forEach(o -> o.setOrderMenus(orderViewMenus.get(o.getOrderId())));
 
-//        log.info("repository result : {}", result);
-        return result;
+//        log.info("repository queryResults : {}", queryResults);
+        return new PageImpl<>(result, pageable, total);
     }
 
     private List<Long> orderIds(List<OrderQueryDto> result) {
@@ -52,14 +56,14 @@ public class OrderSearchRepository {
     /**
      * toOne을 한번에 조회
      * */
-    private List<OrderQueryDto> findAll(OrderSearchDto searchDto) {
+    private Page<OrderQueryDto> findAll(OrderSearchDto searchDto, Pageable pageable) {
 
         QOrder order = QOrder.order;
         QUser user = QUser.user;
         QDelivery delivery = QDelivery.delivery;
-        JPAQuery<Order> searchQuery = searchOrders(searchDto);
+        BooleanBuilder searchQuery = searchOrders(searchDto);
 
-        List<OrderQueryDto> content = searchQuery
+        List<OrderQueryDto> content = queryFactory
                 .select(Projections.constructor(
                         OrderQueryDto.class,
                         order.id,
@@ -73,9 +77,20 @@ public class OrderSearchRepository {
                 // 명시적인 join - cross join을 방지
                 .join(order.user, user)
                 .join(order.delivery, delivery)
+                .where(searchQuery)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
-        return content;
+        long total = queryFactory
+                .select(order.count())
+                .from(order)
+                .join(order.user, user)
+                .join(order.delivery, delivery)
+                .where(searchQuery)
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, total);
     }
 
     /**
@@ -110,7 +125,7 @@ public class OrderSearchRepository {
     }
 
 
-    private JPAQuery<Order> searchOrders(OrderSearchDto searchDto) {
+    private BooleanBuilder searchOrders(OrderSearchDto searchDto) {
 
         QOrder order = QOrder.order;
 
@@ -139,12 +154,9 @@ public class OrderSearchRepository {
             condition.and(order.createdDate.after(localDateTime));
         }
 
-        JPAQuery<Order> query = queryFactory
-                .selectFrom(order)
-                .where(condition);
 
 //        log.info(query.stream().toList().toString());
-        return query;
+        return condition;
     }
 
 }
