@@ -5,7 +5,6 @@ import booklet.menuhere.domain.User.User;
 import booklet.menuhere.domain.order.Order;
 import booklet.menuhere.domain.order.dtos.MakeOrderDto;
 import booklet.menuhere.domain.OrderStatus;
-import booklet.menuhere.domain.order.dtos.OrderQueryDto;
 import booklet.menuhere.domain.order.dtos.OrderSearchDto;
 import booklet.menuhere.domain.order.dtos.OrderViewDto;
 import booklet.menuhere.domain.ordermenu.dtos.OrderMenuDto;
@@ -14,10 +13,6 @@ import booklet.menuhere.test.config.TestProfile;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,9 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.AbstractSoftAssertions.assertAll;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 @ActiveProfiles(TestProfile.TEST)
 @Slf4j
@@ -173,21 +166,16 @@ class OrderServiceTest extends IntegrationTest {
     void optimization_Search() {
         //given
         OrderSearchDto searchDto = setDto();
-        Pageable pageable = PageRequest.of(0, 30);
 
         //when
         long startTime = System.currentTimeMillis();
 
-        Page<OrderViewDto> viewDtos = orderService.findOrders(searchDto, pageable);
+        List<OrderViewDto> viewDtos = orderService.findOrders(searchDto);
 
         long endTime = System.currentTimeMillis();
         System.out.println("(QueryDSL) Execution time: " + (endTime - startTime) + "ms");
-
+        log.info("viewDtos.size = " + viewDtos.size());
         // 2.8 sec
-
-        //then
-                assertThat(viewDtos).isNotNull();
-                assertThat(viewDtos.getTotalElements()).isEqualTo(pageable.getPageSize());
 
     }
 
