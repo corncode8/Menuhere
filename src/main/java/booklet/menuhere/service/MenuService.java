@@ -1,5 +1,6 @@
 package booklet.menuhere.service;
 
+import booklet.menuhere.config.S3Config;
 import booklet.menuhere.domain.menu.Category;
 import booklet.menuhere.domain.menu.Menu;
 import booklet.menuhere.domain.menu.file.FileStore;
@@ -12,6 +13,7 @@ import booklet.menuhere.repository.menu.query.MenuSearchRepository;
 import booklet.menuhere.repository.menu.query.MenuViewDtoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,7 @@ public class MenuService {
     private final MenuSearchRepository menuSearchRepository;
     private final MenuRepository menuRepository;
     private final FileStore fileStore;
+
 
     public Menu addMenu(MenuAddDto form) throws Exception{
 
