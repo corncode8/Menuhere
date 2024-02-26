@@ -111,11 +111,6 @@ public class MenuController {
         model.addAttribute("cartList", cartList);
         model.addAttribute("menuList", menuPage);
 
-        int currentPage = menuPage.getNumber();
-        int totalPage = menuPage.getTotalPages();
-        model.addAttribute("currentPage", currentPage);
-        model.addAttribute("totalPages", totalPage);
-
         return "menu";
     }
 

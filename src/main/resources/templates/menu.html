@@ -168,24 +168,46 @@
             </div>
         </div>
     </div>
-        <nav aria-label="z-1 Page navigation" style="position:relative; z-index: 1">
-            <ul class="pagination pagination-sm justify-content-center" style="margin-bottom: 80px">
-                <!-- Previous Page Link -->
-                <li th:classappend="${menuList.number == 0} ? 'disabled' : ''" class="page-item">
-                    <a th:href="@{/menu(page=${menuList.number - 1})}" class="page-link">&laquo;</a>
-                </li>
+<!--        <nav aria-label="z-1 Page navigation" style="position:relative; z-index: 1">-->
+<!--            <ul class="pagination pagination-sm justify-content-center" style="margin-bottom: 80px">-->
+<!--                &lt;!&ndash; Previous Page Link &ndash;&gt;-->
+<!--                <li th:classappend="${menuList.number == 0} ? 'disabled' : ''" class="page-item">-->
+<!--                    <a th:href="@{/menu(page=${menuList.number - 1})}" class="page-link">&laquo;</a>-->
+<!--                </li>-->
 
-                <!-- Page Number Links -->
-                <li th:each="pageNum : ${#numbers.sequence(0, menuList.totalPages -1)}" th:classappend="${pageNum == menuList.number} ? 'active' : ''" class="page-item">
-                    <a th:href="@{/menu(page=${pageNum})}" th:text="${pageNum + 1}" class="page-link"></a>
-                </li>
+<!--                &lt;!&ndash; Page Number Links &ndash;&gt;-->
+<!--                <li th:each="pageNum : ${#numbers.sequence(0, menuList.totalPages -1)}" th:classappend="${pageNum == menuList.number} ? 'active' : ''" class="page-item">-->
+<!--                    <a th:href="@{/menu(page=${pageNum})}" th:text="${pageNum + 1}" class="page-link"></a>-->
+<!--                </li>-->
 
-                <!-- Next Page Link -->
-                <li th:classappend="${menuList.number + 1 == menuList.totalPages} ? 'disabled' : ''" class="page-item">
-                    <a th:href="@{/menu(page=${menuList.number + 1})}" class="page-link">&raquo;</a>
-                </li>
-            </ul>
-        </nav>
+<!--                &lt;!&ndash; Next Page Link &ndash;&gt;-->
+<!--                <li th:classappend="${menuList.number + 1 == menuList.totalPages} ? 'disabled' : ''" class="page-item">-->
+<!--                    <a th:href="@{/menu(page=${menuList.number + 1})}" class="page-link">&raquo;</a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </nav>-->
+    <nav aria-label="Page navigation" style="position:relative; z-index: 1">
+        <ul class="pagination pagination-sm justify-content-center" style="margin-bottom: 80px">
+            <!-- Previous Page Link -->
+            <li th:classappend="${menuList.number == 0} ? 'disabled' : ''" class="page-item">
+                <a th:href="@{/menu(page=${menuList.number - 1})}" class="page-link" aria-label="Previous">&laquo;</a>
+            </li>
+
+            <!-- Page Number Links -->
+            <!-- Show page 1 always, and only show other pages if they exist -->
+            <li th:classappend="${menuList.number == 0} ? 'active' : ''" class="page-item">
+                <a th:href="@{/menu(page=0)}" class="page-link">1</a>
+            </li>
+            <li th:if="${menuList.totalPages > 1}" th:each="pageNum : ${#numbers.sequence(1, menuList.totalPages - 1)}" th:classappend="${pageNum == menuList.number} ? 'active' : ''" class="page-item">
+                <a th:href="@{/menu(page=${pageNum})}" th:text="${pageNum + 1}" class="page-link"></a>
+            </li>
+
+            <!-- Next Page Link -->
+            <li th:classappend="${menuList.number + 1 >= menuList.totalPages} ? 'disabled' : ''" class="page-item">
+                <a th:href="@{/menu(page=${menuList.number + 1})}" class="page-link" aria-label="Next">&raquo;</a>
+            </li>
+        </ul>
+    </nav>
     <nav class="z-2 navbar fixed-bottom shadow" style="background-color: white">
         <div class="container-fluid d-flex justify-content-center" style="text-align: center; height: 45px">
             <button class="btn btn-primary btn-lg" th:onclick="|location.href='@{/menu/cart}'|"><i
