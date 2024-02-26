@@ -44,8 +44,7 @@ public class IntegrationTest {
     @Autowired
     public MenuSetUp menuSetUp;
 
-    @Autowired
-    public OrderSetUp orderSetUp;
+
 
     @Autowired
     public OrderService orderService;
