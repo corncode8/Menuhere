@@ -19,4 +19,9 @@ public class IndexController {
         return "main";
     }
 
+    @GetMapping("/check")
+    public String testpage() {
+        return "test success";
+    }
+
 }
