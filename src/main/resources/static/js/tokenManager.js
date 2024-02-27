@@ -9,7 +9,7 @@ async function getToken() {
         return refreshToken;
     }
     else {
-        console.error('no token');
+        // console.error('no token');
         if (localStorage.getItem('AccessToken')) {
             localStorage.removeItem('AccessToken');
         } else if (localStorage.getItem('RefreshToken')) {

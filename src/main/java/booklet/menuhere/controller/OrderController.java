@@ -37,7 +37,7 @@ public class OrderController {
         }
         model.addAttribute("payAmount", cartList.cartTotalPrice);
 
-        return "/form/orderForm";
+        return "form/orderForm";
     }
 
     @GetMapping("/orders")
@@ -52,7 +52,7 @@ public class OrderController {
 //        model.addAttribute("currentPage", currentPage);
 //        model.addAttribute("totalPages", totalPage);
 
-        return "/orderList";
+        return "orderList";
     }
 
 }

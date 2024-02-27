@@ -22,7 +22,7 @@ public class IndexController {
     @GetMapping("/check")
     @ResponseBody
     public String testpage() {
-        return "CI/CD timeout test ";
+        return "CI/CD test success";
     }
 
 }
