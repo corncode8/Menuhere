@@ -29,7 +29,7 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @GetMapping("/menu/cart/orders")
+    @GetMapping("/menu/cart/ordersheet")
     public String order(Model model, HttpSession session) {
         CartListDto cartList = (CartListDto) session.getAttribute("cartList");
         if (cartList == null) {
@@ -42,15 +42,10 @@ public class OrderController {
 
     @GetMapping("/orders")
     public String orderList(@ModelAttribute("orderSearch") OrderSearchDto orderSearch, Model model, @PageableDefault(size = 20) Pageable pageable) {
+
         log.info("orderController orderSearch ; " + orderSearch.toString());
         Page<OrderViewDto> orders = orderService.findOrders(orderSearch, pageable);
-
-//        int currentPage = orders.getNumber();
-//        int totalPage = orders.getTotalPages();
-
         model.addAttribute("orders", orders);
-//        model.addAttribute("currentPage", currentPage);
-//        model.addAttribute("totalPages", totalPage);
 
         return "orderList";
     }
