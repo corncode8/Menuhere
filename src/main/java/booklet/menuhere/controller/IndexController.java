@@ -22,7 +22,7 @@ public class IndexController {
     @GetMapping("/check")
     @ResponseBody
     public String testpage() {
-        return "test success";
+        return "CI/CD test success";
     }
 
 }
