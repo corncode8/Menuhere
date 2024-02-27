@@ -144,7 +144,7 @@
             <hr>
         </div>
         <div class="container-fluid d-flex justify-content-center" style="text-align: center; height: 45px">
-            <button class="btn btn-primary btn-lg order-btn">
+            <button class="btn btn-primary btn-lg order-btn" th:onclick="|location.href='@{/menu/cart/ordersheet}'|">
                 <span class="order-btn" th:text="${cartList.cartTotalPrice}"></span>
                 <span>원 주문하기</span>
             </button>
@@ -263,7 +263,6 @@
 
     document.querySelector(".order-btn").addEventListener("click", () => {
         saveOrderInfo();
-        window.location.href = '/menu/cart/ordersheet';
     })
 </script>
 </body>
