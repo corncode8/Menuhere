@@ -36,13 +36,14 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                 response.sendRedirect("/menu"); // 소셜 로그인 성공 후 프론트의 회원가입 추가 정보 입력 폼으로 리다이렉트
 
                 jwtService.sendAccessAndRefreshToken(response, accessToken, null);
-//                User findUser = userRepository.findByEmail(oAuth2User.getEmail())
+//                User findUser = userRepository.findByEmailValue(oAuth2User.getEmail())
 //                                .orElseThrow(() -> new IllegalArgumentException("이메일에 해당하는 유저가 없습니다."));
 //                findUser.authorizeUser();
             } else {
                 loginSuccess(response, oAuth2User); // 로그인에 성공한 경우 access, refresh 토큰 생성
             }
         } catch (Exception e) {
+            log.error("로그인 처리 중 오류 발생", e);
             throw new RuntimeException(e);
         }
 

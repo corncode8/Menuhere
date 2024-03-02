@@ -45,7 +45,7 @@ public class SecurityConfig {
                 .cors().and() // CORS 활성화
                 .csrf().disable() // CSRF 보호 기능 비활성화
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션관리 정책을 STATELESS(세션이 있으면 쓰지도 않고, 없으면 만들지도 않는다)
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션관리 정책을 STATELESS(세션이 있으면 쓰지도 않고, 없으면 만들지도 않는다)
                 .and()
                 .authorizeRequests() // 요청에 대한 인증 설정
                 .antMatchers("/token/**").permitAll() // 토큰 발급을 위한 경로는 모두 허용
@@ -57,10 +57,11 @@ public class SecurityConfig {
 //                .anyRequest().authenticated() // 그 외의 모든 요청은 인증이 필요하다.
                 .and()
                 .oauth2Login() // OAuth2 로그인 설정시작
-                .userInfoEndpoint().userService(customOAuth2UserService) // OAuth2 로그인시 사용자 정보를 가져오는 엔드포인트와 사용자 서비스를 설정
-                .and()
+                .successHandler(oAuth2LoginSuccessHandler) // OAuth2 로그인 성공시 처리할 핸들러를 지정해준다.
                 .failureHandler(oAuth2LoginFailureHandler) // OAuth2 로그인 실패시 처리할 핸들러를 지정해준다.
-                .successHandler(oAuth2LoginSuccessHandler); // OAuth2 로그인 성공시 처리할 핸들러를 지정해준다.
+//                .and()
+                .userInfoEndpoint().userService(customOAuth2UserService); // OAuth2 로그인시 사용자 정보를 가져오는 엔드포인트와 사용자 서비스를 설정
+
 
 // [PART4]
         // 원래 스프링 시큐리티 필터 순서가 LogoutFilter 이후에 로그인 필터 동작
